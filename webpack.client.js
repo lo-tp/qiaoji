@@ -1,8 +1,11 @@
 module.exports = {
-  entry: './client/main.jsx',
+  entry: [
+    './client/main.jsx',
+  ],
   output: {
     path: './static',
     filename: 'main.bundle.js',
+    publicPath: '/',
   },
   devtool: '#source-map',
   module: {
@@ -10,10 +13,7 @@ module.exports = {
       {
         test: /\.js|jsx$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'react'],
-        },
+        loaders: ['react-hot', 'babel-loader'],
       },
     ],
   },

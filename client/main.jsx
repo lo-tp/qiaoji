@@ -1,7 +1,15 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 
+import HelloWorld from './greeting';
+
+const Main = () => (
+  <div >
+    <HelloWorld />
+  </div>
+);
+
 ReactDOM.render(
-  <h1>hello, world!</h1>,
+  <Main />,
   document.getElementById('root'),
 );
