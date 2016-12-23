@@ -1,12 +1,11 @@
 {
   "name": "pi",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "webpack-client": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.client.js",
     "webpack-server": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.server.js",
-    "webpack-dev-server": "node_modules/webpack-dev-server/bin/webpack-dev-server.js  --config webpack.client.js --content-base static/   --inline --hot",
+    "webpack-dev-server": "node hotLoader.js",
     "nodemon": "node_modules/nodemon/bin/nodemon.js bin/main.bundle.js"
   },
   "dependencies": {
@@ -26,8 +25,9 @@
     "eslint-plugin-react": "^6.6.0",
     "json-loader": "^0.5.4",
     "nodemon": "^1.11.0",
-    "react-hot-loader": "^1.3.1",
+    "react-hot-loader": "3.0.0-beta.6",
     "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-middleware": "^1.9.0",
+    "webpack-hot-middleware": "^2.13.2"
   }
 }
