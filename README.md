@@ -1,10 +1,13 @@
 ### Features
 ------
 1. ES6 Support
+
    Enjoy the juice of ES6 on both client and server side.
 1. Hot Reloading Without Page Refreshing
+
    Hot reload not only the traditional React components but also the stateless ones on the fly.
 1. Minimum
+
    No redundant dependencies.
 
 
