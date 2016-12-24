@@ -1,8 +1,3 @@
----
-title: temp
-tags:
----
-
 ### Features
 ------
 1. ES6 Support
