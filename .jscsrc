@@ -1,3 +1,5 @@
 {
   "preset":"airbnb",
+  "requireTrailingComma":false,
+  "requireSpaceBeforeObjectValues": true
 }

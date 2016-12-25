@@ -1,0 +1,6 @@
+static/*
+node_modules/*
+hotLoader.js
+LICENSE
+webpack.client.js
+webpack.server.js
