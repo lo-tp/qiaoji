@@ -11,14 +11,28 @@ var compiler = webpack(config);
 app.use(devMiddleware(compiler, {
   publicPath: config.output.publicPath,
   historyApiFallback: true,
+  noInfo: false,
 }));
 
 app.use(hotMiddleware(compiler));
 
-console.info(path.join(__dirname, 'dist'));
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'static', 'index.html'));
+app.use((req, res, next) => {
+  if (req.originalUrl.match(/^\/static/)) {
+    next();
+  } else {
+    res.sendFile(path.join(__dirname, 'static', 'index.html'));
+  }
 });
+
+app.use('/static', express.static('static'));
+
+// app.get('*', function (req, res) {
+// res.sendFile(path.join(__dirname, 'static', 'index.html'));
+// });
+
+// app.get('*.css', function (req, res) {
+// res.sendFile(path.join(__dirname, 'static', 'semantic.css'));
+// });
 
 app.listen(3200, function (err) {
   if (err) {

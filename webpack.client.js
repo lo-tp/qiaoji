@@ -1,5 +1,6 @@
-var webpack = require('webpack')
+var webpack = require('webpack');
 var path = require('path');
+
 module.exports = {
   devtool: 'cheap-module-source-map',
   entry: [
@@ -10,7 +11,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'static'),
     filename: 'main.bundle.js',
-    publicPath: '/',
+    publicPath: '/static/',
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -19,6 +20,10 @@ module.exports = {
   ],
   module: {
     loaders: [
+      {
+        test: /\.scss$/,
+        loaders: ['style-loader', 'css-loader', 'sass-loader'],
+      },
       {
         test: /\.js|jsx$/,
         exclude: /node_modules/,
