@@ -51,4 +51,6 @@ bin
 static/*.json
 static/*.map
 static/*.js
+static/themes/
+static/semantic.css
 
