@@ -3,18 +3,16 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "lint":"node_modules/eslint/bin/eslint.js . --ext .jsx .js",
+    "lint": "node_modules/eslint/bin/eslint.js . --ext .jsx .js",
     "webpack-client": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.client.js",
     "webpack-server": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.server.js",
-    "webpack-dev-server": "node hotLoader.js",
+    "webpack-dev-server": "node_modules/nodemon/bin/nodemon.js hotLoader.js",
     "nodemon": "node_modules/nodemon/bin/nodemon.js bin/main.bundle.js"
   },
   "dependencies": {
     "babel-preset-stage-0": "^6.16.0",
-    "css-loader": "^0.26.1",
     "express": "^4.14.0",
     "material-ui": "^0.16.6",
-    "node-sass": "^4.1.1",
     "ramda": "^0.22.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
@@ -24,8 +22,6 @@
     "redux": "^3.6.0",
     "redux-form": "^6.4.1",
     "redux-logger": "^2.7.4",
-    "sass-loader": "^4.1.1",
-    "style-loader": "^0.13.1",
     "validator": "^6.2.0"
   },
   "devDependencies": {
