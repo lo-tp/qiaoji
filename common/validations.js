@@ -1,6 +1,26 @@
 import validator from 'validator';
 
 const validations = {
+  lastName: ({ errors, values }) => {
+    if (values.lastName === undefined || !validator.isAlpha(values.lastName)) {
+      return {
+        values,
+        errors: { ...errors, lastName: 'Last name is not valid' },
+      };
+    }
+
+    return { errors, values };
+  },
+  firstName: ({ errors, values }) => {
+    if (values.firstName === undefined || !validator.isAlpha(values.firstName)) {
+      return {
+        values,
+        errors: { ...errors, firstName: 'First name is not valid' },
+      };
+    }
+
+    return { errors, values };
+  },
   userName: ({ errors, values }) => {
     if (values.userName === undefined || !validator.isEmail(values.userName)) {
       return {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import SignupForm from './signupForm';
 import LoginForm from './loginForm/component';
 
 const styles = {
@@ -17,18 +18,11 @@ function handleActive(tab) {
 
 const TabsExampleSimple = () => (
   <Tabs>
-    <Tab label = 'Login' >
-      <div>
-        <LoginForm />
-      </div>
+    <Tab label = 'Signup' >
+      <SignupForm />
     </Tab>
-    <Tab label = 'Item Two' >
-      <div>
-        <h2 style = { styles.headline }>Tab Two</h2>
-        <p>
-          This is another example tab.
-        </p>
-      </div>
+    <Tab label = 'Login' >
+      <LoginForm />
     </Tab>
     <Tab
       label = 'onActive'

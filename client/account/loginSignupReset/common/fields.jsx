@@ -26,6 +26,25 @@ Submit.propTypes = {
   invalid: PropTypes.bool,
 };
 
+export const LastName = () => (
+  <Field
+    normalize = { trim }
+    name = 'lastName'
+    component = { renderTextField }
+    label = 'Last Name'
+    style = { fullWidth }
+  />
+);
+export const FirstName = () => (
+  <Field
+    normalize = { trim }
+    name = 'firstName'
+    component = { renderTextField }
+    label = 'First Name'
+    style = { fullWidth }
+  />
+);
+
 export const UserName = () => (
   <Field
     normalize = { trim }
