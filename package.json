@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "lint":"node_modules/eslint/bin/eslint.js . --ext .jsx .js",
     "webpack-client": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.client.js",
     "webpack-server": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.server.js",
     "webpack-dev-server": "node hotLoader.js",

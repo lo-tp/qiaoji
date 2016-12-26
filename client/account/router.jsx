@@ -1,15 +1,15 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
-import Login from './login';
+import LoginSignupReset from './loginSignupReset/component';
 
 const Account = (
   <Route
     path = 'account'
   >
-    <IndexRedirect to = 'login' />
+    <IndexRedirect to = 'loginSignupReset' />
     <Route
-      path = 'login'
-      component = { Login }
+      path = 'loginSignupReset'
+      component = { LoginSignupReset }
     />
   </Route>
 );
