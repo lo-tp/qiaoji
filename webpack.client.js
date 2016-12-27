@@ -32,6 +32,9 @@ module.exports = {
     ],
   },
   resolve: {
+    alias:{
+      config: path.join(__dirname, 'config', 'development'),
+    },
     extensions: ['', '.jsx', '.js', '.json'],
   },
 };
