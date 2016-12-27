@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "lint": "node_modules/eslint/bin/eslint.js . --ext .jsx .js",
+    "lint": "node_modules/eslint/bin/eslint.js . --ext .jsx --ext js -c .eslintrc.js --ignore-path .eslintignore",
     "webpack-client": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.client.js",
     "webpack-server": "node_modules/webpack/bin/webpack.js --progress --colors --watch --config webpack.server.js",
     "webpack-dev-server": "node hotLoader.js",
@@ -12,6 +12,8 @@
   "dependencies": {
     "babel-polyfill": "^6.20.0",
     "babel-preset-stage-0": "^6.16.0",
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
     "express": "^4.14.0",
     "material-ui": "^0.16.6",
     "ramda": "^0.22.1",

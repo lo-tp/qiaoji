@@ -1,3 +1,4 @@
+  // eslint-disable-next-line import/no-extraneous-dependencies
 import { AppContainer } from 'react-hot-loader';
 import createSegaMiddleware from 'redux-saga';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -15,7 +16,7 @@ import Reducer from './reducer';
 import sagaManager from './sagaManager';
 
 const sagaMiddleware = createSegaMiddleware();
-const logger = createLogger();
+// const logger = createLogger();
 // const middlewares = applyMiddleware(logger, sagaMiddleware);
 const middlewares = applyMiddleware(sagaMiddleware);
 const store = middlewares(createStore)(Reducer);

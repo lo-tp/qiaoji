@@ -5,11 +5,11 @@ import LoginForm from './loginForm/component';
 
 const TabsExampleSimple = () => (
   <Tabs>
-    <Tab label = 'Signup' >
-      <SignupForm />
-    </Tab>
     <Tab label = 'Login' >
       <LoginForm />
+    </Tab>
+    <Tab label = 'Signup' >
+      <SignupForm />
     </Tab>
   </Tabs>
 );

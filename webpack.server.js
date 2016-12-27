@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
   entry: './server/main.js',
   target: 'node',
@@ -20,5 +22,10 @@ module.exports = {
         },
       },
     ],
+  },
+  resolve: {
+    alias:{
+      config: path.join(__dirname, 'config', 'development'),
+    },
   },
 };

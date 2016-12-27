@@ -3,12 +3,16 @@ import Ramda from 'ramda';
 import { reduxForm } from 'redux-form';
 import validations from '../../../../common/validations';
 import { Submit, UserName, Password } from '../common/fields';
+import { LOGIN } from '../../saga';
 
 const validate = values => (
   Ramda.compose(validations.password, validations.userName)({ errors: {}, values }).errors
 );
-const onSubmit = values => {
-  console.info(values);
+const onSubmit = (values, dispatch) => {
+  dispatch({
+    type: LOGIN,
+    ...values,
+  });
 };
 
 const styles = {
@@ -46,4 +50,8 @@ export default reduxForm({
   form: 'login',
   onSubmit,
   validate,
+  initialValues: {
+    userName: 'qqdsjfl@tc.com',
+    password: 'www@sina.com',
+  },
 })(loginForm);
