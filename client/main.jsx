@@ -1,4 +1,5 @@
 import { AppContainer } from 'react-hot-loader';
+import createSegaMiddleware from 'redux-saga';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ReactDOM from 'react-dom';
 import React from 'react';
@@ -7,17 +8,21 @@ import { Provider } from 'react-redux';
 import createLogger from 'redux-logger';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+import 'babel-polyfill';
+
 import AppRouter from './router';
 import Reducer from './reducer';
+import sagaManager from './sagaManager';
 
-
+const sagaMiddleware = createSegaMiddleware();
 const logger = createLogger();
-const store = createStore(
-  Reducer,
-  applyMiddleware(logger)
-);
+// const middlewares = applyMiddleware(logger, sagaMiddleware);
+const middlewares = applyMiddleware(sagaMiddleware);
+const store = middlewares(createStore)(Reducer);
 
 injectTapEventPlugin();
+
+sagaManager.startSagas(sagaMiddleware);
 
 const rootEl = document.getElementById('root');
 ReactDOM.render(
@@ -34,8 +39,14 @@ ReactDOM.render(
 );
 
 if (module.hot) {
+  module.hot.accept('./sagaManager', () => {
+    sagaManager.cancelSagas(store);
+
+    // eslint-disable-next-line global-require
+    require('./sagaManager').default.startSagas(sagaMiddleware);
+  });
   module.hot.accept('./router', () => {
-  // eslint-disable-next-line global-require
+    // eslint-disable-next-line global-require
     const NextApp = require('./router').default;
     ReactDOM.render(
       <MuiThemeProvider >
