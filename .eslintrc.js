@@ -1,13 +1,8 @@
 module.exports = {
   extends: ['airbnb'],
-  globals:{
-      DOMParser:true,
-      cordova:true,
-      window:true,
-      document:true,
-      Connection:true,
-      navigator:true,
-      localStorage:true,
+  env:{
+      'browser':true,
+      'node':true,
     },
   parser: 'babel-eslint',
   plugins: [

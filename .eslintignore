@@ -1,5 +1,6 @@
+bin/*
 static/*
-node_modules/*
+.node_modules
 hotLoader.js
 LICENSE
 webpack.client.js
