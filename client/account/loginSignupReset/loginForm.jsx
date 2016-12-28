@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import Ramda from 'ramda';
 import { reduxForm } from 'redux-form';
-import validations from '../../../../common/validations';
-import { Submit, UserName, Password } from '../common/fields';
-import { LOGIN } from '../../saga';
+import validations from '../../../common/validations';
+import { Submit, UserName, Password } from './common/fields';
+import { LOGIN } from '../saga';
 
 const validate = values => (
   Ramda.compose(validations.password,

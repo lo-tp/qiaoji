@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import SignupForm from './signupForm';
-import LoginForm from './loginForm/component';
+import LoginForm from './loginForm';
 import { setUi } from '../../action';
-import ProgressDialog from '../../common/progressDialog';
-import Snackbar from '../../common/snackbar';
+import ProgressDialog from '../../common/components/progressDialog';
+import Snackbar from '../../common/components/snackbar';
 
 const tabsExampleSimple = ({ value, onChange }) => (
   <div>
