@@ -12,7 +12,8 @@ const validations = {
     return { errors, values };
   },
   firstName: ({ errors, values }) => {
-    if (values.firstName === undefined || !validator.isAlpha(values.firstName)) {
+    if (values.firstName === undefined ||
+        !validator.isAlpha(values.firstName)) {
       return {
         values,
         errors: { ...errors, firstName: 'First name is not valid' },

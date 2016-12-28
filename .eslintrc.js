@@ -9,6 +9,14 @@ module.exports = {
     'babel',
   ],
   rules:{
+    'max-len':[
+      2,
+      {
+        code:80,
+        ignoreUrls:true,
+        ignoreStrings:true,
+      }
+    ],
     'arrow-parens':[
       2,
       'as-needed',

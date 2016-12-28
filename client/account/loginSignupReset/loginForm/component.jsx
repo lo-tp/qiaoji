@@ -6,7 +6,8 @@ import { Submit, UserName, Password } from '../common/fields';
 import { LOGIN } from '../../saga';
 
 const validate = values => (
-  Ramda.compose(validations.password, validations.userName)({ errors: {}, values }).errors
+  Ramda.compose(validations.password,
+                validations.userName)({ errors: {}, values }).errors
 );
 const onSubmit = (values, dispatch) => {
   dispatch({
