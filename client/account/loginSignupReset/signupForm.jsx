@@ -5,6 +5,8 @@ import validations from '../../../common/validations';
 import { LastName, FirstName,
   Submit, UserName, Password } from './common/fields';
 
+import { SIGNUP } from '../saga';
+
 const validate = values => (
   Ramda.compose(validations.password,
                 validations.userName,
@@ -12,8 +14,11 @@ const validate = values => (
                 validations.lastName,
                )({ errors: {}, values }).errors
 );
-const onSubmit = values => {
-  console.info(values);
+const onSubmit = (values, dispatch) => {
+  dispatch({
+    type: SIGNUP,
+    ...values,
+  });
 };
 
 const styles = {
@@ -53,4 +58,10 @@ export default reduxForm({
   form: 'signup',
   onSubmit,
   validate,
+  initialValues: {
+    userName: 'qqdsjfl@tc.com',
+    password: 'www@sina.com',
+    firstName: 'first',
+    lastName: 'last',
+  },
 })(loginForm);

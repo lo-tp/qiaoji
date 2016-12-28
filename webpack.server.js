@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var path = require('path');
 var fs = require('fs');
 
@@ -17,6 +18,7 @@ module.exports = {
     path: './bin',
     filename: 'main.bundle.js',
   },
+  devtool:'sourcemap',
   module: {
     loaders: [
       {
@@ -38,5 +40,8 @@ module.exports = {
       config: path.join(__dirname, 'config', 'development'),
     },
   },
+  plugins: [
+    new webpack.BannerPlugin('require("source-map-support").install();',{ raw: true, entryOnly: false }),
+  ],
   externals: nodeModules,
 };

@@ -1,9 +1,21 @@
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import { DEV, HOT_LOAD_URL } from 'config';
+import 'babel-polyfill';
 import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
+import userService from './service/user';
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect('mongodb://localhost:27000');
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.on('open', function () {
+  console.info('connected');
+});
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,6 +32,8 @@ app.use(express.static('static'));
 app.post('/login', (req, res) => {
   res.json(req.body);
 });
+
+app.post('/signup', userService.signUp);
 
 app.listen(3000, () => {
   // eslint-disable-next-line no-console

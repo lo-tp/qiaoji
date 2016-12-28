@@ -1,0 +1,10 @@
+version: '2'
+services:
+  mongodb:
+    container_name: qjDb
+    image: mongo:3.2.8
+    volumes:
+      - ./db/ :/data/db/
+    ports:
+      - "27000:27017"
+    command: [mongod]

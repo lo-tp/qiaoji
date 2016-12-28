@@ -53,4 +53,5 @@ static/*.map
 static/*.js
 static/themes/
 static/semantic.css
+docker/db
 

@@ -16,9 +16,10 @@ import Reducer from './reducer';
 import sagaManager from './sagaManager';
 
 const sagaMiddleware = createSegaMiddleware();
-// const logger = createLogger();
-// const middlewares = applyMiddleware(logger, sagaMiddleware);
-const middlewares = applyMiddleware(sagaMiddleware);
+const logger = createLogger();
+const middlewares = applyMiddleware(logger, sagaMiddleware);
+
+// const middlewares = applyMiddleware(sagaMiddleware);
 const store = middlewares(createStore)(Reducer);
 
 injectTapEventPlugin();
@@ -45,6 +46,10 @@ if (module.hot) {
 
     // eslint-disable-next-line global-require
     require('./sagaManager').default.startSagas(sagaMiddleware);
+  });
+  module.hot.accept('./reducer', () => {
+    // eslint-disable-next-line global-require
+    store.replaceReducer(require('./reducer').default);
   });
   module.hot.accept('./router', () => {
     // eslint-disable-next-line global-require
