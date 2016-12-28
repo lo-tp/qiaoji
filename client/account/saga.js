@@ -63,6 +63,7 @@ function* signup(action) {
                       });
     }
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.info(e);
   } finally {
     yield put(setUi({

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Field } from 'redux-form';
-import { renderTextField } from '../../../common/formFields';
+import { renderTextField } from '../../../common/components/formFields';
 import { fullWidth } from './styles';
 import { trim } from '../../../../common/normalizations';
 

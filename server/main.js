@@ -12,8 +12,11 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27000');
 const db = mongoose.connection;
+
+// eslint-disable-next-line no-console
 db.on('error', console.error.bind(console, 'connection error:'));
-db.on('open', function () {
+db.on('open', () => {
+  // eslint-disable-next-line no-console
   console.info('connected');
 });
 
