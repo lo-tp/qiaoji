@@ -1,4 +1,14 @@
 var path = require('path');
+var fs = require('fs');
+
+var nodeModules = {};
+fs.readdirSync('node_modules')
+  .filter(function(x) {
+        return ['.bin'].indexOf(x) === -1;
+          })
+    .forEach(function(mod) {
+          nodeModules[mod] = 'commonjs ' + mod;
+});
 
 module.exports = {
   entry: './server/main.js',
@@ -28,4 +38,5 @@ module.exports = {
       config: path.join(__dirname, 'config', 'development'),
     },
   },
+  externals: nodeModules,
 };
