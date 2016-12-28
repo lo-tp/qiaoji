@@ -53,5 +53,6 @@ static/*.map
 static/*.js
 static/themes/
 static/semantic.css
+static/normalize.css
 docker/db
 
