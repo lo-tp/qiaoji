@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react';
+import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
 
-const progressDialog = ({ open, title }) =>
+const progressDialog = ({ intl: { formatMessage: fm }, open, title }) =>
 (
   <Dialog
-    title = { title }
+    title = { fm(title) }
     modal = { false }
     open = { open }
     // open = { false }
@@ -19,8 +20,9 @@ const progressDialog = ({ open, title }) =>
   </Dialog>
 );
 progressDialog.propTypes = {
+  intl: intlShape.isRequired,
   open: PropTypes.bool,
-  title: PropTypes.string,
+  title: PropTypes.object,
 };
 
 export default connect(
@@ -28,4 +30,4 @@ export default connect(
     open: state.ui.progressDialogVisible,
     title: state.ui.progressDialogText,
   }),
-)(progressDialog);
+)(injectIntl(progressDialog));

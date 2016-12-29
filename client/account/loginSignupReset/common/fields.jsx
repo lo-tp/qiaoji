@@ -1,16 +1,16 @@
+import { injectIntl, intlShape } from 'react-intl';
 import React, { PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Field } from 'redux-form';
-import { renderTextField } from '../../../common/components/formFields';
+import { RenderTextField } from '../../../common/components/formFields';
 import { fullWidth } from './styles';
 import { trim } from '../../../../common/normalizations';
 
-
-export const Submit = ({ pristine, submitting, invalid, label }) => (
+const submit = ({ intl, pristine, submitting, invalid, label }) => (
   <RaisedButton
     type = 'submit'
     disabled = { pristine || submitting || invalid }
-    label = { label }
+    label = { intl.formatMessage(label) }
     primary = { true }
     style = { {
       ...fullWidth,
@@ -19,19 +19,22 @@ export const Submit = ({ pristine, submitting, invalid, label }) => (
   />
 );
 
-Submit.propTypes = {
-  label: PropTypes.string,
+submit.propTypes = {
+  intl: intlShape.isRequired,
+  label: PropTypes.object,
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
 };
 
+export const Submit = injectIntl(submit);
+
 export const LastName = () => (
   <Field
     normalize = { trim }
     name = 'lastName'
-    component = { renderTextField }
-    label = 'Last Name'
+    component = { RenderTextField }
+    label = { { id: 'account.lastName' } }
     style = { fullWidth }
   />
 );
@@ -39,8 +42,8 @@ export const FirstName = () => (
   <Field
     normalize = { trim }
     name = 'firstName'
-    component = { renderTextField }
-    label = 'First Name'
+    component = { RenderTextField }
+    label = { { id: 'account.firstName' } }
     style = { fullWidth }
   />
 );
@@ -49,8 +52,8 @@ export const UserName = () => (
   <Field
     normalize = { trim }
     name = 'userName'
-    component = { renderTextField }
-    label = 'Email Address'
+    component = { RenderTextField }
+    label = { { id: 'account.userName' } }
     style = { fullWidth }
   />
 );
@@ -58,8 +61,8 @@ export const Password = () => (
   <Field
     normalize = { trim }
     name = 'password'
-    component = { renderTextField }
-    label = 'Password'
+    component = { RenderTextField }
+    label = { { id: 'account.password' } }
     style = { fullWidth }
   />
 );

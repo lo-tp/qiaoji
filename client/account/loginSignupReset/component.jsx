@@ -1,3 +1,4 @@
+import { injectIntl, intlShape } from 'react-intl';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -7,7 +8,7 @@ import { setUi } from '../../action';
 import ProgressDialog from '../../common/components/progressDialog';
 import Snackbar from '../../common/components/snackbar';
 
-const tabsExampleSimple = ({ value, onChange }) => (
+const tabsExampleSimple = ({ intl, value, onChange }) => (
   <div>
     <ProgressDialog />
     <Snackbar />
@@ -17,12 +18,12 @@ const tabsExampleSimple = ({ value, onChange }) => (
     >
       <Tab
         value = { 0 }
-        label = 'Login'
+        label = { intl.formatMessage({ id: 'account.login' }) }
       >
         <LoginForm />
       </Tab>
       <Tab
-        label = 'Signup'
+        label = { intl.formatMessage({ id: 'account.signup' }) }
         value = { 1 }
       >
         <SignupForm />
@@ -32,6 +33,7 @@ const tabsExampleSimple = ({ value, onChange }) => (
 );
 
 tabsExampleSimple.propTypes = {
+  intl: intlShape.isRequired,
   value: PropTypes.number,
   onChange: PropTypes.func,
 };
@@ -44,4 +46,4 @@ export default connect(
     onChange: value => dispatch(setUi({
       tabValue: value,
     })),
-  }))(tabsExampleSimple);
+  }))(injectIntl(tabsExampleSimple));

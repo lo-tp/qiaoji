@@ -32,7 +32,7 @@ const loginForm = ({ handleSubmit, pristine, submitting, invalid }) => (
     <UserName />
     <Password />
     <Submit
-      label = 'Login'
+      label = { { id: 'account.confirm' } }
       pristine = { pristine }
       submitting = { submitting }
       invalid = { invalid }

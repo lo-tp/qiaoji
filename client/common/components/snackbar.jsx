@@ -1,21 +1,24 @@
 import React, { PropTypes } from 'react';
+import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Snackbar from 'material-ui/Snackbar';
 
-const snackbar = ({ open, msg, btnMsg, operation }) =>
+const snackbar = ({ intl: { formatMessage: fm },
+                  open, msg, btnMsg, operation }) =>
 (
   <Snackbar
     open = { open }
-    message = { msg }
-    action = { btnMsg }
+    message = { fm(msg) }
+    action = { fm(btnMsg) }
     onActionTouchTap = { operation }
   />
 );
 snackbar.propTypes = {
   open: PropTypes.bool,
-  msg: PropTypes.string.isRequired,
-  btnMsg: PropTypes.string.isRequired,
+  msg: PropTypes.object.isRequired,
+  btnMsg: PropTypes.object.isRequired,
   operation: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default connect(
@@ -32,4 +35,4 @@ export default connect(
     ...stateProps,
     operation: () => dispatchProps.temp(stateProps.operation),
   }),
-)(snackbar);
+)(injectIntl(snackbar));

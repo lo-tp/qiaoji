@@ -18,10 +18,10 @@ const closeSnackbar = dispatch => dispatch(setUi({ snackbarVisible: false }));
 
 function* showResult(msg, operation = closeSnackbar) {
   yield put(setUi({
-    snackbarBtnMessage: 'close',
+    snackbarBtnMessage: { id: 'btn.close' },
   }));
   yield put(setUi({
-    snackbarMessage: msg,
+    snackbarMessage: { id: msg },
   }));
   yield put(setUi({
     snackbarOperation: operation,
@@ -36,7 +36,7 @@ function* signup(action) {
     // eslint-disable-next-line no-param-reassign
     delete action.type;
     yield put(setUi({
-      progressDialogText: 'Signing Up',
+      progressDialogText: { id: 'ing.signup' },
     }));
     yield put(setUi({
       progressDialogVisible: true,
@@ -52,12 +52,12 @@ function* signup(action) {
     if (res.status === 500) {
       const { reason } = yield res.json();
       if (reason) {
-        yield showResult('Failed to Sign Up');
+        yield showResult('failure.signup');
       } else {
-        yield showResult('This Email Has Been Used');
+        yield showResult('failure.signupAccountUsed');
       }
     } else {
-      yield showResult('Sign Up Successfully',
+      yield showResult('success.signup',
                       dispatch => {
                         dispatch(setUi({ snackbarVisible: false }));
                         dispatch(setUi({ tabValue: 0 }));
@@ -66,7 +66,7 @@ function* signup(action) {
   } catch (e) {
     // eslint-disable-next-line no-console
     console.info(e);
-    yield showResult('Failed to Sign Up');
+    yield showResult('failure.signup');
   } finally {
     yield put(setUi({
       progressDialogVisible: false,
@@ -79,7 +79,7 @@ function* login(action) {
     // eslint-disable-next-line no-param-reassign
     delete action.type;
     yield put(setUi({
-      progressDialogText: 'Loging in',
+      progressDialogText: { id: 'ing.login' },
     }));
     yield put(setUi({
       progressDialogVisible: true,
@@ -93,19 +93,18 @@ function* login(action) {
     );
     const res = yield call(fetch, req);
     if (res.status === 500) {
-      yield showResult('Wrong Password or Email');
+      yield showResult('failure.loginWrongInfo');
       removeCpsItem('cookieId');
     } else {
       const { cid } = yield res.json();
-      console.info(cid);
       saveCpsItem('cookieId', cid);
-      yield showResult('Login Successfully');
+      yield showResult('success.login');
     }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.info(e);
     removeCpsItem('cookieId');
-    yield showResult('Failed to Login');
+    yield showResult('failure.login');
   } finally {
     yield put(setUi({
       progressDialogVisible: false,

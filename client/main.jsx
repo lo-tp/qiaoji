@@ -1,5 +1,6 @@
   // eslint-disable-next-line import/no-extraneous-dependencies
 import { AppContainer } from 'react-hot-loader';
+import 'babel-polyfill';
 import createSegaMiddleware from 'redux-saga';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ReactDOM from 'react-dom';
@@ -8,8 +9,10 @@ import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import createLogger from 'redux-logger';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import { addLocaleData, IntlProvider } from 'react-intl';
+import zhLocaleData from 'react-intl/locale-data/zh';
+import zhTranslation from '../common/i18n/zh';
 
-import 'babel-polyfill';
 
 import AppRouter from './router';
 import Reducer from './reducer';
@@ -21,22 +24,30 @@ const middlewares = applyMiddleware(logger, sagaMiddleware);
 
 // const middlewares = applyMiddleware(sagaMiddleware);
 const store = middlewares(createStore)(Reducer);
+addLocaleData(zhLocaleData);
 
 injectTapEventPlugin();
 
 sagaManager.startSagas(sagaMiddleware);
 
+let translation = zhTranslation;
+
 const rootEl = document.getElementById('root');
 ReactDOM.render(
-  <MuiThemeProvider >
-    <Provider
-      store = { store }
-    >
-      <AppContainer>
-        <AppRouter />
-      </AppContainer>
-    </Provider>
-  </MuiThemeProvider>,
+  <IntlProvider
+    locale = 'zh'
+    messages = { translation }
+  >
+    <MuiThemeProvider >
+      <Provider
+        store = { store }
+      >
+        <AppContainer>
+          <AppRouter />
+        </AppContainer>
+      </Provider>
+    </MuiThemeProvider>
+  </IntlProvider>,
   rootEl,
 );
 
@@ -51,20 +62,46 @@ if (module.hot) {
     // eslint-disable-next-line global-require
     store.replaceReducer(require('./reducer').default);
   });
+  module.hot.accept('../common/i18n/zh', () => {
+    // eslint-disable-next-line global-require
+    translation = require('../common/i18n/zh').default;
+    ReactDOM.render(
+      <IntlProvider
+        locale = 'zh'
+        messages = { translation }
+      >
+        <MuiThemeProvider >
+          <Provider
+            store = { store }
+          >
+            <AppContainer>
+              <AppRouter />
+            </AppContainer>
+          </Provider>
+        </MuiThemeProvider>
+      </IntlProvider>,
+     rootEl,
+    );
+  });
   module.hot.accept('./router', () => {
     // eslint-disable-next-line global-require
     const NextApp = require('./router').default;
     ReactDOM.render(
-      <MuiThemeProvider >
-        <Provider
-          store = { store }
-        >
-          <AppContainer>
-            <NextApp />
-          </AppContainer>
-        </Provider>
-      </MuiThemeProvider>,
-     rootEl,
+      <IntlProvider
+        locale = 'zh'
+        messages = { translation }
+      >
+        <MuiThemeProvider >
+          <Provider
+            store = { store }
+          >
+            <AppContainer>
+              <NextApp />
+            </AppContainer>
+          </Provider>
+        </MuiThemeProvider>
+      </IntlProvider>,
+      rootEl,
     );
   });
 }
