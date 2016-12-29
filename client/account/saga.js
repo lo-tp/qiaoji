@@ -1,10 +1,12 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { race, put, call, takeLatest } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import SERVER_URL from 'config';
 import { setUi } from '../action';
 import { removeCpsItem, saveCpsItem } from '../common/utilities/localStorage';
+import { loginSignupTimeout } from '../../common/constant';
 
 export const LOGIN = 'LOGIN';
 export const SIGNUP = 'SIGNUP';
@@ -48,20 +50,27 @@ function* signup(action) {
         body: JSON.stringify(action),
       },
     );
-    const res = yield call(fetch, req);
-    if (res.status === 500) {
-      const { reason } = yield res.json();
-      if (reason) {
-        yield showResult('failure.signup');
+    const { res } = yield race({
+      res: call(fetch, req),
+      timeout: call(delay, loginSignupTimeout),
+    });
+    if (res) {
+      if (res.status === 500) {
+        const { reason } = yield res.json();
+        if (reason) {
+          yield showResult('failure.signup');
+        } else {
+          yield showResult('failure.signupAccountUsed');
+        }
       } else {
-        yield showResult('failure.signupAccountUsed');
-      }
-    } else {
-      yield showResult('success.signup',
+        yield showResult('success.signup',
                       dispatch => {
                         dispatch(setUi({ snackbarVisible: false }));
                         dispatch(setUi({ tabValue: 0 }));
                       });
+      }
+    } else {
+      yield showResult('timeout.signup');
     }
   } catch (e) {
     // eslint-disable-next-line no-console
@@ -91,14 +100,21 @@ function* login(action) {
         body: JSON.stringify(action),
       },
     );
-    const res = yield call(fetch, req);
-    if (res.status === 500) {
-      yield showResult('failure.loginWrongInfo');
-      removeCpsItem('cookieId');
+    const { res } = yield race({
+      res: call(fetch, req),
+      timeout: call(delay, loginSignupTimeout),
+    });
+    if (res) {
+      if (res.status === 500) {
+        yield showResult('failure.loginWrongInfo');
+        removeCpsItem('cookieId');
+      } else {
+        const { cid } = yield res.json();
+        saveCpsItem('cookieId', cid);
+        yield showResult('success.login');
+      }
     } else {
-      const { cid } = yield res.json();
-      saveCpsItem('cookieId', cid);
-      yield showResult('success.login');
+      yield showResult('timeout.login');
     }
   } catch (e) {
     // eslint-disable-next-line no-console

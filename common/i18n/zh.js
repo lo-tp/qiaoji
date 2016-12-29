@@ -19,4 +19,6 @@ export default {
   'success.login': '登陆成功',
   'ing.signup': '注册中',
   'ing.login': '登陆中',
+  'timeout.signup': '注册超时，请检查网络情况',
+  'timeout.login': '登陆超时，请检查网络情况',
 };
