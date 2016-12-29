@@ -1,8 +1,12 @@
 import validator from 'validator';
 
+const hasWhiteSpace = s => /\s/g.test(s);
+
 const validations = {
   lastName: ({ errors, values }) => {
-    if (values.lastName === undefined || !validator.isAlpha(values.lastName)) {
+    if (values.lastName === undefined ||
+        hasWhiteSpace(values.lastName) ||
+        !validator.isAlpha(values.lastName)) {
       return {
         values,
         errors: { ...errors, lastName: { id: 'validation.lastNameInvalid' } },
@@ -14,6 +18,7 @@ const validations = {
 
   firstName: ({ errors, values }) => {
     if (values.firstName === undefined ||
+        hasWhiteSpace(values.firstName) ||
         !validator.isAlpha(values.firstName)) {
       return {
         values,
@@ -25,7 +30,9 @@ const validations = {
   },
 
   userName: ({ errors, values }) => {
-    if (values.userName === undefined || !validator.isEmail(values.userName)) {
+    if (values.userName === undefined ||
+        hasWhiteSpace(values.userName) ||
+        !validator.isEmail(values.userName)) {
       return {
         values,
         errors: { ...errors, userName: { id: 'validation.userNameInvalid' } },
@@ -36,7 +43,9 @@ const validations = {
   },
 
   password: ({ errors, values }) => {
-    if (values.password === undefined || validator.isAlpha(values.password) ||
+    if (values.password === undefined ||
+        hasWhiteSpace(values.password) ||
+        validator.isAlpha(values.password) ||
         validator.isNumeric(values.password) || values.password.length < 7) {
       return {
         values,
