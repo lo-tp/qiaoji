@@ -4,6 +4,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import SERVER_URL from 'config';
 import { setUi } from '../action';
+import { removeCpsItem, saveCpsItem } from '../common/utilities/localStorage';
 
 export const LOGIN = 'LOGIN';
 export const SIGNUP = 'SIGNUP';
@@ -65,6 +66,7 @@ function* signup(action) {
   } catch (e) {
     // eslint-disable-next-line no-console
     console.info(e);
+    yield showResult('Failed to Sign Up');
   } finally {
     yield put(setUi({
       progressDialogVisible: false,
@@ -76,6 +78,12 @@ function* login(action) {
   try {
     // eslint-disable-next-line no-param-reassign
     delete action.type;
+    yield put(setUi({
+      progressDialogText: 'Loging in',
+    }));
+    yield put(setUi({
+      progressDialogVisible: true,
+    }));
     const req = new Request(
       `${SERVER_URL}/login`,
       {
@@ -86,12 +94,22 @@ function* login(action) {
     const res = yield call(fetch, req);
     if (res.status === 500) {
       yield showResult('Wrong Password or Email');
+      removeCpsItem('cookieId');
     } else {
+      const { cid } = yield res.json();
+      console.info(cid);
+      saveCpsItem('cookieId', cid);
       yield showResult('Login Successfully');
     }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.info(e);
+    removeCpsItem('cookieId');
+    yield showResult('Failed to Login');
+  } finally {
+    yield put(setUi({
+      progressDialogVisible: false,
+    }));
   }
 }
 

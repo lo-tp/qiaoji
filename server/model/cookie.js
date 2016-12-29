@@ -5,7 +5,6 @@ import { cookieExpiration } from '../../common/constant';
 const cookieScheme = mongoose.Schema({
   uid: {
     type: String,
-    unique: true,
     required: true,
   },
   expireAt: {

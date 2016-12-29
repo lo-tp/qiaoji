@@ -61,15 +61,15 @@ const login = async (req, res) => {
       cookie.expireAt = new Date();
       cookie.uid = user._id;
       cookie.save();
+      res.json({
+        cid: cookie._id,
+      });
 
       // eslint-disable-next-line no-param-reassign
-      req.session.id = cookie._id;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
-      res.status(500).json({
-        reason: 0,
-      });
+      res.status(500);
     }
   }
 

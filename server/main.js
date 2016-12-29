@@ -5,7 +5,6 @@ import 'babel-polyfill';
 import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
-import cookieSession from 'cookie-session';
 import mongoose from 'mongoose';
 import userService from './service/user';
 
@@ -31,10 +30,6 @@ if (DEV) {
   app.use(cors(corsOptions));
 }
 
-app.use(cookieSession({
-  secret: 'hello man',
-  secure: false,
-}));
 app.use(express.static('static'));
 
 app.get('/tem', userService.login);
