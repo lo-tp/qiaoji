@@ -3,7 +3,7 @@ import { reducer as reduxFormReducer } from 'redux-form';
 import { SET, UI } from './action';
 
 const uiInitialState = {
-  tabValue: 1,
+  tabValue: 0,
   progressDialogVisible: false,
   snackbarVisible: false,
   snackbarMessage: '',

@@ -84,9 +84,13 @@ function* login(action) {
       },
     );
     const res = yield call(fetch, req);
-    const data = yield res.json();
-    console.info(data);
+    if (res.status === 500) {
+      yield showResult('Wrong Password or Email');
+    } else {
+      yield showResult('Login Successfully');
+    }
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.info(e);
   }
 }
