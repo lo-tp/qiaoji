@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 import List from './list';
-import Drawer from '../common/components/drawer';
 
 const Quiz = (
   <Route

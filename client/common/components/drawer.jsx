@@ -14,7 +14,7 @@ const drawer = ({ close, open, intl: { formatMessage: fm }, children }) => (
       onRequestChange = { close }
     >
       <MenuItem>{ fm({ id: 'menu.frontEnd' }) }</MenuItem>
-      <MenuItem>Menu Item 2</MenuItem>
+      <MenuItem>{ fm({ id: 'menu.logout' }) }</MenuItem>
     </Drawer>
     {children}
   </div>
