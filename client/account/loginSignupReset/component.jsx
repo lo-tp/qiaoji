@@ -5,13 +5,9 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import SignupForm from './signupForm';
 import LoginForm from './loginForm';
 import { setUi } from '../../action';
-import ProgressDialog from '../../common/components/progressDialog';
-import Snackbar from '../../common/components/snackbar';
 
 const tabsExampleSimple = ({ intl, value, onChange }) => (
   <div>
-    <ProgressDialog />
-    <Snackbar />
     <Tabs
       inkBarStyle = { {
         height: 0,

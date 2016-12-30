@@ -3,6 +3,21 @@ import { createRoutes, IndexRedirect, browserHistory, Router, Route } from 'reac
 import Account from './account/router';
 import Quiz from './quiz/router';
 import Drawer from './common/components/drawer';
+import onEnter from './onEnter';
+import ProgressDialog from './common/components/progressDialog';
+import Snackbar from './common/components/snackbar';
+
+const msgComponent = ({ children }) => (
+  <div >
+    <ProgressDialog />
+    <Snackbar />
+    {children}
+  </div>
+);
+
+msgComponent.propTypes = {
+  children: PropTypes.element,
+};
 
 const injectStoreToRoutes = (store, routes) => (
     routes && routes.map(r => ({
@@ -16,12 +31,14 @@ const injectStoreToRoutes = (store, routes) => (
 const rawRoutes = (
   <Route
     path = '/'
+    component = { msgComponent }
   >
     <IndexRedirect
       to = 'functions'
     />
     {Account}
     <Route
+      onEnter = { onEnter.functions }
       component = { Drawer }
       path = 'functions'
     >

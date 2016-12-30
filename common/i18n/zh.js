@@ -15,6 +15,7 @@ export default {
   'failure.loginWrongInfo': '登陆失败,请检查邮件地址和密码',
   'failure.signup': '注册失败',
   'failure.signupAccountUsed': '邮件地址已被占用',
+  'failure.unauthorized': '请登陆',
   'success.signup': '注册成功',
   'success.login': '登陆成功',
   'ing.signup': '注册中',

@@ -7,6 +7,7 @@ import SERVER_URL from 'config';
 import { setUi } from '../action';
 import { removeCpsItem, saveCpsItem } from '../common/utilities/localStorage';
 import { loginSignupTimeout } from '../../common/constant';
+import { closableSnackbarMsg } from '../saga';
 
 export const LOGIN = 'LOGIN';
 export const SIGNUP = 'SIGNUP';
@@ -16,22 +17,6 @@ const postReqTemplate = {
     'Content-Type': 'application/json',
   },
 };
-const closeSnackbar = dispatch => dispatch(setUi({ snackbarVisible: false }));
-
-function* showResult(msg, operation = closeSnackbar) {
-  yield put(setUi({
-    snackbarBtnMessage: { id: 'btn.close' },
-  }));
-  yield put(setUi({
-    snackbarMessage: { id: msg },
-  }));
-  yield put(setUi({
-    snackbarOperation: operation,
-  }));
-  yield put(setUi({
-    snackbarVisible: true,
-  }));
-}
 
 function* signup(action) {
   try {
@@ -58,24 +43,24 @@ function* signup(action) {
       if (res.status === 500) {
         const { reason } = yield res.json();
         if (reason) {
-          yield showResult('failure.signup');
+          yield closableSnackbarMsg('failure.signup');
         } else {
-          yield showResult('failure.signupAccountUsed');
+          yield closableSnackbarMsg('failure.signupAccountUsed');
         }
       } else {
-        yield showResult('success.signup',
+        yield closableSnackbarMsg('success.signup',
                       dispatch => {
                         dispatch(setUi({ snackbarVisible: false }));
                         dispatch(setUi({ tabValue: 0 }));
                       });
       }
     } else {
-      yield showResult('timeout.signup');
+      yield closableSnackbarMsg('timeout.signup');
     }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.info(e);
-    yield showResult('failure.signup');
+    yield closableSnackbarMsg('failure.signup');
   } finally {
     yield put(setUi({
       progressDialogVisible: false,
@@ -106,21 +91,21 @@ function* login(action) {
     });
     if (res) {
       if (res.status === 500) {
-        yield showResult('failure.loginWrongInfo');
+        yield closableSnackbarMsg('failure.loginWrongInfo');
         removeCpsItem('cookieId');
       } else {
         const { cid } = yield res.json();
         saveCpsItem('cookieId', cid);
-        yield showResult('success.login');
+        yield closableSnackbarMsg('success.login');
       }
     } else {
-      yield showResult('timeout.login');
+      yield closableSnackbarMsg('timeout.login');
     }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.info(e);
     removeCpsItem('cookieId');
-    yield showResult('failure.login');
+    yield closableSnackbarMsg('failure.login');
   } finally {
     yield put(setUi({
       progressDialogVisible: false,

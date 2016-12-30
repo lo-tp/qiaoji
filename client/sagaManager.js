@@ -4,8 +4,9 @@ import { take, fork, cancel } from 'redux-saga/effects';
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import { DEV } from 'config';
 import accountSagas from './account/saga';
+import commonSagas from './saga';
 
-const sagas = [...accountSagas];
+const sagas = [...accountSagas, ...commonSagas];
 
 export const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 
