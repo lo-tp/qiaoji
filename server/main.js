@@ -32,10 +32,10 @@ if (DEV) {
 
 app.use(express.static('static'));
 
-app.get('/tem', userService.login);
 app.post('/login', userService.login);
 
 app.post('/signup', userService.signUp);
+app.post('/renewCookie', userService.renewCookie);
 
 app.listen(3000, () => {
   // eslint-disable-next-line no-console

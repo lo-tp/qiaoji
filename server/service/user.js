@@ -76,7 +76,27 @@ const login = async (req, res) => {
   res.end();
 };
 
+const renewCookie = async (req, res) => {
+  const cookie = await Cookie.findOne({
+    _id:req.body.cookieId
+  });
+  if (cookie === null) {
+    res.json({
+      success: 0
+    });
+  } else {
+    cookie.expireAt = new Date();
+    cookie.save();
+    res.json({
+      success: 1
+    });
+  }
+
+  res.end();
+};
+
 export default {
   login,
   signUp,
+  renewCookie
 };
