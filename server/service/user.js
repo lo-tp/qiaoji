@@ -78,17 +78,17 @@ const login = async (req, res) => {
 
 const renewCookie = async (req, res) => {
   const cookie = await Cookie.findOne({
-    _id:req.body.cookieId
+    _id: req.body.cookieId,
   });
   if (cookie === null) {
     res.json({
-      success: 0
+      success: 0,
     });
   } else {
     cookie.expireAt = new Date();
     cookie.save();
     res.json({
-      success: 1
+      success: 1,
     });
   }
 
@@ -98,5 +98,5 @@ const renewCookie = async (req, res) => {
 export default {
   login,
   signUp,
-  renewCookie
+  renewCookie,
 };
