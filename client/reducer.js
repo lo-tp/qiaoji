@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as reduxFormReducer } from 'redux-form';
-import { SET, UI } from './action';
+import { SET, UI, TEM } from './action';
 
 const uiInitialState = {
   tabValue: 0,
@@ -9,7 +9,15 @@ const uiInitialState = {
   snackbarMessage: { id: 'failure.login' },
   snackbarBtnMessage: { id: 'failure.login' },
   progressDialogText: { id: 'ing.login' },
-  drawerVisible: true,
+  drawerVisible: false,
+};
+
+const tem = (state = {}, action) => {
+  if (action.type === TEM && action.target === SET) {
+    return { ...state, ...action.arg };
+  }
+
+  return state;
 };
 
 const ui = (state = { ...uiInitialState }, action) => {
@@ -23,6 +31,7 @@ const ui = (state = { ...uiInitialState }, action) => {
 const Reducer = combineReducers({
   form: reduxFormReducer,
   ui,
+  tem,
 });
 
 export default Reducer;

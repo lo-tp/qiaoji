@@ -1,22 +1,62 @@
 import { race, put, call, takeLatest } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
+import { browserHistory } from 'react-router';
 
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import SERVER_URL from 'config';
-import { setUi } from '../action';
 import { removeCpsItem, saveCpsItem } from '../common/utilities/localStorage';
 import { loginSignupTimeout } from '../../common/constant';
 import { closableSnackbarMsg } from '../saga';
+import { showClosableSnackBarMsg, setUi } from '../action';
 
 export const LOGIN = 'LOGIN';
 export const SIGNUP = 'SIGNUP';
+export const RENEW_COOKIE = 'RENEW_COOKIE';
+export const UNAUTHORIZED = 'UNAUTHORIZED';
+
 const postReqTemplate = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
 };
+function* gotoLoginAndRemoveCookie() {
+  removeCpsItem('cookieId');
+  browserHistory.push('/account');
+  yield put(showClosableSnackBarMsg, {
+    msg: 'failure.unauthorized',
+  });
+}
+
+function* renewCookie({ cookieId }) {
+  try {
+    yield put(setUi({
+      progressDialogText: { id: 'ing.login' },
+    }));
+    yield put(setUi({
+      progressDialogVisible: true,
+    }));
+    const req = new Request(
+      `${SERVER_URL}/renewCookie`,
+      {
+        ...postReqTemplate,
+        body: JSON.stringify({ cookieId }),
+      },
+    );
+    yield race({
+      res: call(fetch, req),
+      timeout: call(delay, loginSignupTimeout),
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.info(e);
+  } finally {
+    yield put(setUi({
+      progressDialogVisible: false,
+    }));
+  }
+}
 
 function* signup(action) {
   try {
@@ -96,6 +136,7 @@ function* login(action) {
       } else {
         const { cid } = yield res.json();
         saveCpsItem('cookieId', cid);
+        browserHistory.push('/');
         yield closableSnackbarMsg('success.login');
       }
     } else {
@@ -116,6 +157,8 @@ function* login(action) {
 function* watchLogin() {
   yield takeLatest(LOGIN, login);
   yield takeLatest(SIGNUP, signup);
+  yield takeLatest(RENEW_COOKIE, renewCookie);
+  yield takeLatest(UNAUTHORIZED, gotoLoginAndRemoveCookie);
 }
 
 export default [watchLogin];

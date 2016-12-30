@@ -1,17 +1,22 @@
 import Ramda from 'ramda';
 import { getCpsItem } from './common/utilities/localStorage';
-import { showCloableSnackBarMsg } from './action';
+import { setTem, showClosableSnackBarMsg } from './action';
 
 export default {
   // eslint-disable-next-line no-unused-vars
   functions: Ramda.curry((store, nextState, replace) => {
     const cookieId = getCpsItem('cookieId');
     if (cookieId) {
-      console.info('login');
+      store.dispatch({ type: 'RENEW_COOKIE', cookieId });
+      store.dispatch(setTem({cookieId}));
+      console.info("helo");
     } else {
-      store.dispatch(showCloableSnackBarMsg({
+      store.dispatch(showClosableSnackBarMsg({
         msg: 'failure.unauthorized',
       }));
+      replace({
+        pathname: '/account',
+      });
     }
   }),
 };
