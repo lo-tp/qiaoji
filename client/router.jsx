@@ -1,6 +1,8 @@
 import React from 'react';
 import { IndexRedirect, browserHistory, Router, Route } from 'react-router';
 import Account from './account/router';
+import Quiz from './quiz/router';
+import Drawer from './common/components/drawer';
 
 const routes = (
   <Route
@@ -10,6 +12,12 @@ const routes = (
       to = 'account'
     />
     {Account}
+    <Route 
+      component = { Drawer }
+      path = 'functions'
+    >
+      {Quiz}
+    </Route>
   </Route>
 );
 

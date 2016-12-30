@@ -9,6 +9,7 @@ const uiInitialState = {
   snackbarMessage: { id: 'failure.login' },
   snackbarBtnMessage: { id: 'failure.login' },
   progressDialogText: { id: 'ing.login' },
+  drawerVisible: true,
 };
 
 const ui = (state = { ...uiInitialState }, action) => {
