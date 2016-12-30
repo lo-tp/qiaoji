@@ -13,16 +13,30 @@ const tabsExampleSimple = ({ intl, value, onChange }) => (
     <ProgressDialog />
     <Snackbar />
     <Tabs
+      inkBarStyle = { {
+        height: 0,
+      } }
       value = { value }
       onChange = { onChange }
     >
       <Tab
+        style = { {
+          position: 'relative',
+          width: 170,
+          left: '50%',
+          marginLeft: -170,
+        } }
         value = { 0 }
         label = { intl.formatMessage({ id: 'account.login' }) }
       >
         <LoginForm />
       </Tab>
       <Tab
+        style = { {
+          position: 'relative',
+          width: 170,
+          left: '50%',
+        } }
         label = { intl.formatMessage({ id: 'account.signup' }) }
         value = { 1 }
       >
