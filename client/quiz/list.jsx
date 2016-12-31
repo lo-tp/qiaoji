@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
@@ -15,7 +16,7 @@ const m = ({ preview, intl: { formatMessage: fm } }) => (
   >
     <MenuItem
       onTouchTap = { preview }
-      primaryText = { fm({ id: 'menu.preview' }) }
+      primaryText = { fm({ id: 'menu.add' }) }
     />
     <MenuItem primaryText = { fm({ id: 'menu.save' }) } />
   </IconMenu>
@@ -29,8 +30,8 @@ const menu = connect(
   ({ app: { quiz: { newItem: { preview } } } }) => ({
     status: preview,
   }),
-  dispatch => ({
-    preview: status => console.info('hel'),
+  () => ({
+    preview: () => browserHistory.push('/functions/quiz/new'),
   }),
   (stateProps, dispatchProps) => ({
     preview: () => dispatchProps.preview(!stateProps.status),

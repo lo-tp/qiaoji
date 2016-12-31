@@ -9,8 +9,6 @@ export default {
     if (cookieId) {
       store.dispatch({ type: 'RENEW_COOKIE', cookieId });
       store.dispatch(setTem({ cookieId }));
-  // eslint-disable-next-line no-console
-      console.info('helo');
     } else {
       store.dispatch(showClosableSnackBarMsg({
         msg: 'failure.unauthorized',

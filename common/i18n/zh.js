@@ -25,6 +25,7 @@ export default {
   'menu.frontEnd': '前端',
   'menu.logout': '注销',
   'menu.preview': '预览',
+  'menu.add': '添加',
   'menu.save': '保存',
   'textField.quizContent': '请以Markdown格式输入问题内容',
   'textField.quizTitle': '标题',
