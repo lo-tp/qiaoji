@@ -3,9 +3,11 @@ import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import { setUi } from '../../action';
+import { noShrinkStyle } from '../styles';
 
 const appBar = ({ Menu, title, leftHandler, intl: { formatMessage: fm } }) => (
   <AppBar
+    style = { {...noShrinkStyle} }
     title = { fm({ id: title }) }
     onLeftIconButtonTouchTap = { leftHandler }
     iconElementRight = { <Menu /> }

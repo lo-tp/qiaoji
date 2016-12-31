@@ -8,7 +8,9 @@ import ProgressDialog from './common/components/progressDialog';
 import Snackbar from './common/components/snackbar';
 
 const msgComponent = ({ children }) => (
-  <div >
+  <div
+    style = { { height: '100%' } }
+  >
     <ProgressDialog />
     <Snackbar />
     {children}

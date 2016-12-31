@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import AppBar from '../common/components/appBar';
 import Editor from '../common/components/markdown/editor';
 import { setNewPreview, setNewContent, setNewTitle } from './action';
+import { shrinkStyle, noShrinkStyle, parentStyle } from '../common/styles';
 import { injectIntl, intlShape } from 'react-intl';
 
 const m = ({ preview, intl: { formatMessage: fm } }) => (
@@ -38,10 +39,12 @@ const menu = connect(
   })
 )(injectIntl(m));
 
-const list = ({ intl: { formatMessage: fm }, preview, title,
+const n = ({ intl: { formatMessage: fm }, preview, title,
   content, changeContent, changeTitle }) =>
 (
-  <div >
+  <div
+    style = { parentStyle }
+  >
     <AppBar
       title = 'menu.frontEnd'
       Menu = { menu }
@@ -49,19 +52,24 @@ const list = ({ intl: { formatMessage: fm }, preview, title,
     <TextField
       style = { {
         width: '100%',
+        ...noShrinkStyle,
       } }
       onChange = { changeTitle }
       floatingLabelText = { fm({ id: 'textField.quizTitle' }) }
     />
-    <Editor
-      preview = { preview }
-      onChange = { changeContent }
-      content = { content }
-    />
+    <div
+      style = { shrinkStyle }
+    >
+      <Editor
+        preview = { preview }
+        onChange = { changeContent }
+        content = { content }
+      />
+    </div>
   </div>
 );
 
-list.propTypes = {
+n.propTypes = {
   preview: PropTypes.bool,
   intl: intlShape.isRequired,
   title: PropTypes.string,
@@ -80,4 +88,4 @@ export default connect(
     changeContent: event => dispatch(setNewContent(event.target.value)),
     changeTitle: event => dispatch(setNewTitle(event.target.value)),
   }),
-)(injectIntl(list));
+)(injectIntl(n));

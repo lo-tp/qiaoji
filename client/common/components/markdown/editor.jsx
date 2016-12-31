@@ -3,13 +3,16 @@ import React, { PropTypes } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import Preview from './preview';
 
-const Editor = ({ preview, intl: { formatMessage: fm }, content, onChange }) => (
+const Editor = ({ preview, intl: { formatMessage: fm }, content,
+  onChange }) =>
+(
   <div >
     <TextField
       style = { {
         width: '100%',
         display: preview ? 'none' : 'inline-block',
       } }
+      rows = { 2 }
       onChange = { onChange }
       floatingLabelText = { fm({ id: 'textField.quizContent' }) }
       multiLine = { true }

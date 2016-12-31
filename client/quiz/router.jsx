@@ -8,16 +8,14 @@ const Quiz = (
     path = 'quiz'
   >
     <IndexRedirect to = 'list' />
-    <div >
-      <Route
-        path = 'list'
-        component = { List }
-      />
-      <Route
-        path = 'new'
-        component = { New }
-      />
-    </div>
+    <Route
+      path = 'list'
+      component = { List }
+    />
+    <Route
+      path = 'new'
+      component = { New }
+    />
   </Route>
 );
 
