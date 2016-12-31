@@ -7,7 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { setUi } from '../../action';
 
 const drawer = ({ close, open, intl: { formatMessage: fm }, children }) => (
-  <div 
+  <div
     style = { { height: '100%' } }
   >
     <Drawer

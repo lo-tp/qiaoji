@@ -26,7 +26,6 @@ export default {
   'menu.logout': '注销',
   'menu.preview': '预览',
   'menu.save': '保存',
-  'menu.logout': '注销',
   'textField.quizContent': '请以Markdown格式输入问题内容',
   'textField.quizTitle': '标题',
 };

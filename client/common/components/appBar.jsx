@@ -2,22 +2,43 @@ import React, { PropTypes } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import MenuSvg from 'material-ui/svg-icons/navigation/menu';
 import { setUi } from '../../action';
 import { noShrinkStyle } from '../styles';
 
-const appBar = ({ Menu, title, leftHandler, intl: { formatMessage: fm } }) => (
+const openDrawer = ({ changeDrawer }) => (
+  <MenuSvg
+    onTouchTap = { changeDrawer }
+    color = 'white'
+  />
+);
+openDrawer.propTypes = {
+  changeDrawer: PropTypes.func,
+};
+
+const OpenDrawer = connect(
+  null,
+  dispatch => ({
+    changeDrawer: () => dispatch(setUi({ drawerVisible: true })),
+  }),
+)(openDrawer);
+
+const appBar = ({ LeftBtn = OpenDrawer, Menu, title,
+  intl: { formatMessage: fm } }) =>
+(
   <AppBar
-    style = { {...noShrinkStyle} }
+    style = { { ...noShrinkStyle } }
     title = { fm({ id: title }) }
-    onLeftIconButtonTouchTap = { leftHandler }
+    iconElementLeft = { <IconButton><LeftBtn /></IconButton> }
     iconElementRight = { <Menu /> }
   />
 );
 
 appBar.propTypes = {
+  LeftBtn: PropTypes.func,
   title: PropTypes.string,
   intl: intlShape.isRequired,
-  leftHandler: PropTypes.func,
   Menu: PropTypes.func,
 };
 
