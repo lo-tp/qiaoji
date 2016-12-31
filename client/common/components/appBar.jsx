@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import { setUi } from '../../action';
 
-const appBar = ({ title, leftHandler, intl: { formatMessage: fm } }) => (
+const appBar = ({ Menu, title, leftHandler, intl: { formatMessage: fm } }) => (
   <AppBar
     title = { fm({ id: title }) }
     onLeftIconButtonTouchTap = { leftHandler }
+    iconElementRight = { <Menu /> }
   />
 );
 
@@ -15,6 +16,7 @@ appBar.propTypes = {
   title: PropTypes.string,
   intl: intlShape.isRequired,
   leftHandler: PropTypes.func,
+  Menu: PropTypes.func,
 };
 
 export default connect(

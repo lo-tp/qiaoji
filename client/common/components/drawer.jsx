@@ -29,7 +29,7 @@ drawer.propTypes = {
 
 export default connect(
   state => ({
-    open: state.ui.drawerVisible,
+    open: state.app.ui.drawerVisible,
   }),
   dispatch => ({
     close: () => dispatch(setUi({ drawerVisible: false })),

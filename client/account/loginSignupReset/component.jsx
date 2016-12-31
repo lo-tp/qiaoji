@@ -50,7 +50,7 @@ tabsExampleSimple.propTypes = {
 
 export default connect(
   state => ({
-    value: state.ui.tabValue,
+    value: state.app.ui.tabValue,
   }),
   dispatch => ({
     onChange: value => dispatch(setUi({

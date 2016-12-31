@@ -23,10 +23,10 @@ snackbar.propTypes = {
 
 export default connect(
   state => ({
-    open: state.ui.snackbarVisible,
-    msg: state.ui.snackbarMessage,
-    btnMsg: state.ui.snackbarBtnMessage,
-    operation: state.ui.snackbarOperation,
+    open: state.app.ui.snackbarVisible,
+    msg: state.app.ui.snackbarMessage,
+    btnMsg: state.app.ui.snackbarBtnMessage,
+    operation: state.app.ui.snackbarOperation,
   }),
   dispatch => ({
     temp: operation => operation(dispatch),

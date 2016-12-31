@@ -27,7 +27,7 @@ progressDialog.propTypes = {
 
 export default connect(
   state => ({
-    open: state.ui.progressDialogVisible,
-    title: state.ui.progressDialogText,
+    open: state.app.ui.progressDialogVisible,
+    title: state.app.ui.progressDialogText,
   }),
 )(injectIntl(progressDialog));
