@@ -24,7 +24,7 @@ const app = express();
 app.use(bodyParser.json());
 if (DEV) {
   const corsOptions = {
-    origin: HOT_LOAD_URL,
+    origin: '*',
     optionsSuccessStatus: 200,
   };
   app.use(cors(corsOptions));
