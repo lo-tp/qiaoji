@@ -1,12 +1,14 @@
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
-import { DEV, HOT_LOAD_URL } from 'config';
+import { DEV } from 'config';
 import 'babel-polyfill';
 import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import userService from './service/user';
+import commonService from './service/common';
+import quizRouter from './service/quiz';
 
 mongoose.Promise = global.Promise;
 
@@ -31,6 +33,8 @@ if (DEV) {
 }
 
 app.use(express.static('static'));
+app.use('/functions', commonService.checkLoginStatus);
+app.use('/functions/quiz', quizRouter);
 
 app.post('/login', userService.login);
 

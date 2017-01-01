@@ -22,7 +22,7 @@ const GoBack = () => (
   />
 );
 
-const m = ({ preview, intl: { formatMessage: fm } }) => (
+const m = ({ preview, save, intl: { formatMessage: fm } }) => (
   <IconMenu
     iconButtonElement = { <IconButton><MoreVertIcon color = 'white' /></IconButton> }
     anchorOrigin = { { horizontal: 'right', vertical: 'top' } }
@@ -32,12 +32,16 @@ const m = ({ preview, intl: { formatMessage: fm } }) => (
       onTouchTap = { preview }
       primaryText = { fm({ id: 'menu.preview' }) }
     />
-    <MenuItem primaryText = { fm({ id: 'menu.save' }) } />
+    <MenuItem
+      primaryText = { fm({ id: 'menu.save' }) }
+      onTouchTap = { save }
+    />
   </IconMenu>
 );
 m.propTypes = {
   intl: intlShape.isRequired,
   preview: PropTypes.func,
+  save: PropTypes.func,
 };
 const menu = connect(
   ({ app: { quiz: { newItem: { preview } } } }) => ({
@@ -45,8 +49,10 @@ const menu = connect(
   }),
   dispatch => ({
     preview: status => dispatch(setNewPreview(status)),
+    save: () => dispatch({ type: 'NEW_QESTION' }),
   }),
   (stateProps, dispatchProps) => ({
+    ...dispatchProps,
     preview: () => dispatchProps.preview(!stateProps.status),
   })
 )(injectIntl(m));
