@@ -1,6 +1,8 @@
 import { browserHistory } from 'react-router';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { race, call, put, takeLatest } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import { setUi, SHOW_CLOSABLE_SNAKBAR } from './action';
+import { loginSignupTimeout } from '../common/constant';
 
 import { removeCpsItem } from './common/utilities/localStorage';
 
@@ -50,6 +52,36 @@ export function* unauthorizeHandler() {
 // eslint-disable-next-line require-yield
 export function* authorize(res) {
   return res.status !== 401;
+}
+
+export function* authorizedOperation({ req, operationName, successHandler }) {
+  try {
+    yield put(setUi({
+      progressDialogText: { id: `ing.${operationName}` },
+    }));
+    yield put(setUi({
+      progressDialogVisible: true,
+    }));
+    const { res } = yield race({
+      res: call(fetch, req),
+      timeout: call(delay, loginSignupTimeout),
+    });
+    if (res) {
+      if (yield call(authorize, res)) {
+        yield call(successHandler, res);
+      } else {
+        yield call(unauthorizeHandler);
+      }
+    } else {
+      yield closableSnackbarMsg(`timeout.${operationName}`);
+    }
+  } catch (e) {
+    yield closableSnackbarMsg(`failure.${operationName}`);
+  } finally {
+    yield put(setUi({
+      progressDialogVisible: false,
+    }));
+  }
 }
 
 export default [watch];

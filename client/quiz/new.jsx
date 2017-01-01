@@ -103,7 +103,7 @@ export default connect(
     content,
   }),
   dispatch => ({
-    changeContent: event => dispatch(setNewContent(event.target.value)),
-    changeTitle: event => dispatch(setNewTitle(event.target.value)),
+    changeContent: event => dispatch(setNewContent(event.target.value.trim())),
+    changeTitle: event => dispatch(setNewTitle(event.target.value.trim())),
   }),
 )(injectIntl(n));

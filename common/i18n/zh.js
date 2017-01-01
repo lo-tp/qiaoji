@@ -6,6 +6,7 @@ export default {
   'account.userName': '电子邮件',
   'account.firstName': '名',
   'account.lastName': '姓',
+  'validation.general': '输入信息有误',
   'validation.lastNameInvalid': '请输入正确的姓氏',
   'validation.firstNameInvalid': '请输入正确的名字',
   'validation.userNameInvalid': '请输入正确的邮件地址',

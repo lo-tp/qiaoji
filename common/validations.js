@@ -3,6 +3,27 @@ import validator from 'validator';
 const hasWhiteSpace = s => /\s/g.test(s);
 
 const validations = {
+  content: ({ errors, values }) => {
+    if (values.content === undefined ||
+        validator.isEmpty(values.content)) {
+      return {
+        values,
+        errors: { ...errors, content: { id: 'validation.contentInvalid' } },
+      };
+    }
+    return { errors, values };
+  },
+  title: ({ errors, values }) => {
+    if (values.title === undefined ||
+        validator.isEmpty(values.title)) {
+      return {
+        values,
+        errors: { ...errors, title: { id: 'validation.titleInvalid' } },
+      };
+    }
+
+    return { errors, values };
+  },
   lastName: ({ errors, values }) => {
     if (values.lastName === undefined ||
         hasWhiteSpace(values.lastName) ||

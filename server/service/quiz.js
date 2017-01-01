@@ -5,7 +5,6 @@ import User from '../model/user';
 
 const router = express.Router();
 router.post('/new', async (req, res) => {
-  console.info('hello');
   res.end();
 });
 
