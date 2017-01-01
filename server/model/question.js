@@ -1,23 +1,31 @@
 import mongoose from 'mongoose';
+import { getDaysSinceEpoch } from '../../common/tool';
 
 const questionScheme = mongoose.Schema({
   quiz: {
-    type: Number,
+    type: String,
     ref: 'Quiz',
     required: true,
   },
   user: {
-    type: Number,
+    type: String,
     ref: 'User',
     required: true,
   },
   answer: {
-    type: Number,
+    type: String,
     ref: 'Answer',
     required: false,
   },
+  dueDate: {
+    type: Number,
+    default: getDaysSinceEpoch(),
+    required: true,
+  },
   update: {
     type: Number,
+    default: getDaysSinceEpoch(),
+    required: true,
   },
   interval: {
     type: Number,

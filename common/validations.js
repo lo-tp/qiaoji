@@ -1,4 +1,5 @@
 import validator from 'validator';
+import Ramda from 'ramda';
 
 const hasWhiteSpace = s => /\s/g.test(s);
 
@@ -77,5 +78,8 @@ const validations = {
     return { errors, values };
   },
 };
+
+export const quizValidation = Ramda.compose(validations.title,
+                                            validations.content);
 
 export default validations;

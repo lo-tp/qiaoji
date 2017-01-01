@@ -6,12 +6,12 @@ const answerScheme = mongoose.Schema({
     required: true,
   },
   quiz: {
-    type: Number,
+    type: String,
     ref: 'Quiz',
     required: true,
   },
   user: {
-    type: Number,
+    type: String,
     ref: 'User',
     required: true,
   },

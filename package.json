@@ -30,6 +30,7 @@
     "redux-form": "^6.4.1",
     "redux-logger": "^2.7.4",
     "redux-saga": "^0.14.0",
+    "sm2-plus": "^1.0.4",
     "validator": "^6.2.0"
   },
   "devDependencies": {

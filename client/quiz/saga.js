@@ -1,11 +1,11 @@
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import SERVER_URL from 'config';
-import Ramda from 'ramda';
+import { browserHistory } from 'react-router';
 import { select, call, takeLatest } from 'redux-saga/effects';
 import { getCid } from '../common/utilities/tool';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
-import validations from '../../common/validations';
+import { quizValidation } from '../../common/validations';
 
 const postReqTemplate = {
   method: 'POST',
@@ -16,8 +16,7 @@ const postReqTemplate = {
 
 // eslint-disable-next-line require-yield
 function* validateItem(values) {
-  const { content, title } = Ramda.compose(validations.title,
-              validations.content)({ errors: {}, values }).errors;
+  const { content, title } = quizValidation({ errors: {}, values }).errors;
   if (content || title) {
     return false;
   }
@@ -45,7 +44,12 @@ function* newQuestion() {
       req,
       operationName: 'createNewQuiz',
       * successHandler(res) {
-        yield closableSnackbarMsg('success.createNewQuiz');
+        if (res.status === 500) {
+          yield closableSnackbarMsg('failure.createNewQuiz');
+        } else {
+          browserHistory.go(-1);
+          yield closableSnackbarMsg('success.createNewQuiz');
+        }
       },
     });
   } else {
