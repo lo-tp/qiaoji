@@ -12,6 +12,8 @@ export default {
   'validation.userNameInvalid': '请输入正确的邮件地址',
   'validation.passwordInvalid': '密码必须长8位，包含字母及数字',
   'btn.close': '关闭',
+  'btn.preview': '预览',
+  'btn.add': '添加',
   'failure.login': '登陆失败',
   'failure.loginWrongInfo': '登陆失败,请检查邮件地址和密码',
   'failure.createNewQuiz': '创建新题目失败',

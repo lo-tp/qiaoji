@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 import New from './new';
-import List from './list';
+import List from './list/component';
 import onLeave from './onLeave';
 
 const Quiz = (

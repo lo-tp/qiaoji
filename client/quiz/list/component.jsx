@@ -6,7 +6,8 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import AppBar from '../common/components/appBar';
+import AppBar from '../../common/components/appBar';
+import Item from './item';
 
 const m = ({ preview, intl: { formatMessage: fm } }) => (
   <IconMenu
@@ -44,9 +45,9 @@ const List = () => (
       Menu = { menu }
       title = 'menu.frontEnd'
     />
-    <h1 >
-      hellllllllllllllllllllllllll
-    </h1>
+    <Item />
+    <Item />
+    <Item />
   </div>
 );
 
