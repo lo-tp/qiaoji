@@ -30,7 +30,6 @@ router.post('/new', async (req, res) => {
         user: req.user._id,
       });
       await question.save();
-      console.info("hello");
     } catch (e) {
     // eslint-disable-next-line no-console
       console.info(e.message);
