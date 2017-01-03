@@ -3,11 +3,13 @@ import { browserHistory } from 'react-router';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import Pagination from 'material-ui-pagination';
 import MenuItem from 'material-ui/MenuItem';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import AppBar from '../../common/components/appBar';
 import Item from './item';
+// import Pagination from './pagination';
 
 const m = ({ preview, intl: { formatMessage: fm } }) => (
   <IconMenu
@@ -48,6 +50,12 @@ const List = () => (
     <Item />
     <Item />
     <Item />
+    <Pagination
+      total = { 100 }
+      display = { 7 }
+      current = { 13 }
+      onChange = { v => console.info(v) }
+    />
   </div>
 );
 

@@ -2461,6 +2461,15 @@ markdown@^0.5.0:
   dependencies:
     nopt "~2.1.1"
 
+material-ui-pagination@^1.0.0:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/material-ui-pagination/download/material-ui-pagination-1.0.0.tgz#c5ac80225ecce136829d0c30e97f3129072be3d8"
+  dependencies:
+    material-ui "^0.16.6"
+    react "^15.4.1"
+    react-dom "^15.4.1"
+    react-tap-event-plugin "^2.0.1"
+
 material-ui@^0.16.6:
   version "0.16.6"
   resolved "http://registry.npm.taobao.org/material-ui/download/material-ui-0.16.6.tgz#683a038c25a6d77e3703a53a4401f3af44bc1db1"
