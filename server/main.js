@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
-import { DEV } from 'config';
+import { DEV } from 'app-config';
 import 'babel-polyfill';
 import bodyParser from 'body-parser';
 import express from 'express';
