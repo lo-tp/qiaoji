@@ -1,39 +1,35 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
-var glob = require('glob');
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
+const glob = require('glob');
 
-var nodeModules = {};
+const nodeModules = {};
 fs.readdirSync('node_modules')
-  .filter(function (x) {
-    return ['.bin'].indexOf(x) === -1;
-  })
-    .forEach(function (mod) {
-      nodeModules[mod] = 'commonjs ' + mod;
+  .filter(x => ['.bin'].indexOf(x) === -1)
+    .forEach(mod => {
+      nodeModules[mod] = `commonjs ${mod}`;
     });
 
-var walkSync = function (dir, reg, result) {
-  var files = fs.readdirSync(dir);
-  result=result||{};
-  files.forEach(function (file) {
-    if (fs.statSync(dir + '/' + file).isDirectory()) {
-      walkSync(dir + '/' + file,  reg, result);
-    } else {
-      if (file.match(reg)) {
-        var entry = dir + '/' + file;
-        var out = entry.replace(/^\.\//, '');
-        result[out]=entry;
+const walkSync = function (dir, reg, result) {
+  const files = fs.readdirSync(dir);
+  result = result || {};
+  files.forEach(file => {
+    if (fs.statSync(`${dir}/${file}`).isDirectory()) {
+      walkSync(`${dir}/${file}`, reg, result);
+    } else if (file.match(reg)) {
+      const entry = `${dir}/${file}`;
+      const out = entry.replace(/^\.\//, '');
+      result[out] = entry;
 
         // filelist.push(dir + '/' + file);
         //
-      }
     }
   });
 
   return result;
 };
 
-var entries = walkSync('./server', /test\.js$/);
+const entries = walkSync('./server', /test\.js$/);
 
 module.exports = {
   entry: entries,

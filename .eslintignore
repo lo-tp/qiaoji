@@ -1,7 +1,9 @@
 bin/*
 static/*
+test/*
 .node_modules
 hotLoader.js
 LICENSE
+webpack.test.js
 webpack.client.js
 webpack.server.js

@@ -1,3 +1,6 @@
+// eslint-disable-next-line max-len
+// eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
+import { PAGE_NUMBER } from 'app-config';
 import express from 'express';
 
 import Quiz from '../model/quiz';
@@ -31,12 +34,32 @@ router.post('/new', async (req, res) => {
       });
       await question.save();
     } catch (e) {
-    // eslint-disable-next-line no-console
+      // eslint-disable-next-line no-console
       console.info(e.message);
       await Quiz.find({ _id: quiz.id }).remove();
       await Question.find({ _id: question.id }).remove();
       res.status(500);
     }
+  }
+
+  res.end();
+});
+
+router.get('/pageCount', async (req, res) => {
+  try {
+    const count = await Quiz.count();
+    let pageNumber = Math.round(count / PAGE_NUMBER - 0.5);
+    if (count % PAGE_NUMBER) {
+      pageNumber += 1;
+    }
+
+    res.json({
+      pageNumber,
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.info(e.message);
+    res.status(500);
   }
 
   res.end();

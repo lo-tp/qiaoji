@@ -1,14 +1,22 @@
+// eslint-disable-next-line max-len
+// eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
+import { PAGE_NUMBER } from 'app-config';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import chai from 'chai';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import chaiHttp from 'chai-http';
 import app from '../server';
 import Quiz from '../model/quiz';
 import Question from '../model/question';
 import User from '../model/user';
 import Cookie from '../model/cookie';
-import { dbSetupTest, dbClose, dbReset } from '../setup/db';
+import { dbSetupTest, dbClose } from '../setup/db';
+
 
 chai.use(chaiHttp);
 
+const path = '/functions/quiz';
+let dataTemplate;
 const assert = chai.assert;
 
 const createUerAndCookie = async () => {
@@ -25,7 +33,7 @@ const createUerAndCookie = async () => {
   return { cookie, user };
 };
 
-describe('initialization', () => {
+describe('quiz services', () => {
   let user;
   let cookie;
 
@@ -34,6 +42,9 @@ describe('initialization', () => {
     const tem = await createUerAndCookie();
     user = tem.user;
     cookie = tem.cookie;
+    dataTemplate = {
+      cookieId: cookie._id,
+    };
   });
   beforeEach(async () => {
     await Quiz.remove({});
@@ -41,7 +52,7 @@ describe('initialization', () => {
   it('unauthorized user should not be allowed to create new quiz', async () => {
     try {
       await chai.request(app)
-      .post('/functions/quiz/new')
+      .post(`${path}/new`)
       .send({
         content: 'content',
         title: 'title',
@@ -53,7 +64,7 @@ describe('initialization', () => {
   });
   it('create new quiz', async () => {
     const res = await chai.request(app)
-    .post('/functions/quiz/new')
+      .post(`${path}/new`)
       .send({
         content: 'content',
         title: 'title',
@@ -68,6 +79,55 @@ describe('initialization', () => {
     const newQuestion = await Question.findOne({ quiz: newQuiz._id });
     assert.equal(newQuestion.user, user._id);
   });
+
+  it('unauthorized user should not be allowed to get page count', async () => {
+    try {
+      await chai.request(app)
+      .get(`${path}/pageCount`)
+      .send();
+      assert.equal(1, 401);
+    } catch (e) {
+      assert.equal(e.status, 401);
+    }
+  });
+
+  it('get page count', async () => {
+    await Quiz.remove({});
+    for (let index = 0; index < PAGE_NUMBER + 1; index += 1) {
+      const q = new Quiz();
+      q.content = 'content';
+      q.title = 'title';
+      await q.save();
+    }
+
+    const res = await chai.request(app)
+      .get(`${path}/pageCount`)
+      .send(dataTemplate);
+    assert.equal(res.status, 200);
+    assert.equal(res.body.pageNumber, 2);
+  });
+
+  it('unauthorized user should not be allowed to get quiz list', async () => {
+    try {
+      await chai.request(app)
+      .get(`${path}/list`)
+      .send({
+        content: 'content',
+        title: 'title',
+      });
+      assert.equal(1, 401);
+    } catch (e) {
+      assert.equal(e.status, 401);
+    }
+  });
+
+  // it('get quiz list', async () => {
+  // await Quiz.remove({});
+  // const res = await chai.request(app)
+  // .post(`${path}/list`)
+  // .send(dataTemplate);
+  // assert.equal(res.status, 200);
+  // });
 
   after(done => {
     dbClose();
