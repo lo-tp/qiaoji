@@ -17,4 +17,12 @@ const answerScheme = mongoose.Schema({
   },
 });
 
-export default mongoose.model('Quiz', answerScheme);
+// eslint-disable-next-line import/no-mutable-exports
+let Answer;
+if (mongoose.models.Answer) {
+  Answer = mongoose.model('Answer');
+} else {
+  Answer = mongoose.model('Answer', answerScheme, 'answer');
+}
+
+export default Answer;

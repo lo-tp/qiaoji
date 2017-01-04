@@ -21,4 +21,12 @@ const userScheme = mongoose.Schema({
   },
 });
 
-export default mongoose.model('User', userScheme, 'users');
+// eslint-disable-next-line import/no-mutable-exports
+let User;
+if (mongoose.models.User) {
+  User = mongoose.model('User');
+} else {
+  User = mongoose.model('User', userScheme, 'users');
+}
+
+export default User;

@@ -21,4 +21,12 @@ cookieScheme.index(
     expires: cookieExpiration,
   });
 
-export default mongoose.model('Cookie', cookieScheme);
+// eslint-disable-next-line import/no-mutable-exports
+let Cookie;
+if (mongoose.models.Cookie) {
+  Cookie = mongoose.model('Cookie');
+} else {
+  Cookie = mongoose.model('Cookie', cookieScheme, 'cookies');
+}
+
+export default Cookie;

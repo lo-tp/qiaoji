@@ -35,4 +35,12 @@ const questionScheme = mongoose.Schema({
   },
 });
 
-export default mongoose.model('Question', questionScheme);
+// eslint-disable-next-line import/no-mutable-exports
+let Question;
+if (mongoose.models.Question) {
+  Question = mongoose.model('Question');
+} else {
+  Question = mongoose.model('Question', questionScheme, 'questions');
+}
+
+export default Question;
