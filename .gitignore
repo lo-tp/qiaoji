@@ -48,6 +48,7 @@ Thumbs.db
 # Ignore other files
 ###############################################################################################
 bin
+test/
 static/*.json
 static/*.map
 static/*.js

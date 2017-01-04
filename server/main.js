@@ -1,45 +1,8 @@
-// eslint-disable-next-line max-len
-// eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
-import { DEV } from 'app-config';
-import 'babel-polyfill';
-import bodyParser from 'body-parser';
-import express from 'express';
-import cors from 'cors';
-import mongoose from 'mongoose';
-import userService from './service/user';
-import commonService from './service/common';
-import quizRouter from './service/quiz';
+import app from './server';
+import { dbSetup } from './setup/db';
 
-mongoose.Promise = global.Promise;
+dbSetup();
 
-mongoose.connect('mongodb://localhost:27000');
-const db = mongoose.connection;
-
-// eslint-disable-next-line no-console
-db.on('error', console.error.bind(console, 'connection error:'));
-db.on('open', () => {
-  // eslint-disable-next-line no-console
-  console.info('connected');
-});
-
-const app = express();
-app.use(bodyParser.json());
-if (DEV) {
-  const corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200,
-  };
-  app.use(cors(corsOptions));
-}
-
-app.use(express.static('static'));
-app.use('/functions', commonService.checkLoginStatus);
-app.use('/functions/quiz', quizRouter);
-
-app.post('/login', userService.login);
-
-app.post('/signup', userService.signUp);
-app.post('/renewCookie', userService.renewCookie);
 
 app.listen(3000, () => {
   // eslint-disable-next-line no-console
