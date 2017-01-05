@@ -4,6 +4,7 @@ export const SET = 'SET';
 export const UI = 'UI';
 export const TEM = 'TEM';
 export const SHOW_CLOSABLE_SNAKBAR = 'SHOW_CLOSABLE_SNAKBAR';
+export const RESET_STATE = 'RESET_STATE';
 
 // defCstAct
 

@@ -33,7 +33,7 @@ module.exports = {
   },
   resolve: {
     alias:{
-      config: path.join(__dirname, 'config', 'development'),
+      'app-config': path.join(__dirname, 'config', 'development'),
     },
     extensions: ['', '.jsx', '.js', '.json'],
   },

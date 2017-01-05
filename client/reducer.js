@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as reduxFormReducer } from 'redux-form';
-import { SET, UI, TEM } from './action';
+import { RESET_STATE, SET, UI, TEM } from './action';
 import { QUIZ } from './quiz/action';
 import quiz, { quizInitialState } from './quiz/reducer';
 
@@ -30,12 +30,16 @@ const ui = (state = { ...uiInitialState }, action) => {
   return state;
 };
 
-const Reducer = (state = {
+const initialiState = {
   ui: uiInitialState,
   quiz: quizInitialState,
-}, action) => {
+};
+
+const Reducer = (state = initialiState, action) => {
   const { type } = action;
   switch (type) {
+    case RESET_STATE:
+      return { ...initialiState };
     case UI:
       return { ...state, ui: ui(state.ui, action) };
     case TEM:

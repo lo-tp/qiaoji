@@ -2,13 +2,20 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import SERVER_URL from 'app-config';
 import { browserHistory } from 'react-router';
-import { select, call, takeLatest } from 'redux-saga/effects';
+import { put, select, call, takeLatest } from 'redux-saga/effects';
 import { getCid } from '../common/utilities/tool';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import { quizValidation } from '../../common/validations';
+import { setMeta } from './action';
 
 const postReqTemplate = {
   method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};
+const getReqTemplate = {
+  method: 'GET',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -55,6 +62,37 @@ function* newQuestion() {
   } else {
     yield closableSnackbarMsg('validation.general');
   }
+}
+
+export function* getPageCountAndGetFirstPage() {
+  const req = new Request(
+    `${SERVER_URL}/functions/quiz/pageCount`,
+    {
+      ...getReqTemplate,
+      body: JSON.stringify({
+        cookieId: getCid(),
+      }),
+    });
+  yield call(authorizedOperation, {
+    req,
+    operationName: 'getPageCount',
+    * successHandler(res) {
+      if (res.status === 500) {
+        yield closableSnackbarMsg('failure.getPageCount');
+      } else {
+        const { pageNumber } = yield res.json();
+        yield put(
+          setMeta({
+            name: 'pageCount',
+            value: pageNumber,
+          })
+        );
+        yield put({
+          type: 'GET_ONE_PAGE_QUIZ',
+        });
+      }
+    },
+  });
 }
 
 function* watch() {
