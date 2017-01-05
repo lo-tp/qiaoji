@@ -10,6 +10,13 @@ fs.readdirSync('node_modules')
       nodeModules[mod] = `commonjs ${mod}`;
     });
 
+function extend(a, b) {
+  for (var key in b)
+            if (b.hasOwnProperty(key))
+                          a[key] = b[key];
+  return a;
+}
+
 const walkSync = function (dir, reg, result) {
   const files = fs.readdirSync(dir);
   result = result || {};
@@ -21,19 +28,19 @@ const walkSync = function (dir, reg, result) {
       const out = entry.replace(/^\.\//, '');
       result[out] = entry;
 
-        // filelist.push(dir + '/' + file);
-        //
+      // filelist.push(dir + '/' + file);
+      //
     }
   });
 
   return result;
 };
 
-const entries = walkSync('./server', /test\.js$/);
+// const entries = walkSync('./server', /test\.js$/);
+const entries =  extend(walkSync('./client', /test\.js$/),walkSync('./server',/test\.js$/)) ;
 
 module.exports = {
   entry: entries,
-  target: 'node',
   output: {
     path: './test',
     filename: '[name].js',
@@ -47,10 +54,10 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components|client)/,
+        exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015'],
+          presets: ['es2015', 'stage-0'],
         },
       },
     ],

@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
-import SERVER_URL from 'config';
+import SERVER_URL from 'app-config';
 import { removeCpsItem, saveCpsItem } from '../common/utilities/localStorage';
 import { loginSignupTimeout } from '../../common/constant';
 import { closableSnackbarMsg } from '../saga';

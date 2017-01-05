@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
-import SERVER_URL from 'config';
+import SERVER_URL from 'app-config';
 import { browserHistory } from 'react-router';
 import { select, call, takeLatest } from 'redux-saga/effects';
 import { getCid } from '../common/utilities/tool';
