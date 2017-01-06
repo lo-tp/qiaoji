@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import AppBar from '../../common/components/appBar';
 import Item from './item';
+import { shrinkStyle, parentStyle } from '../../common/styles';
 
 // import Pagination from './pagination';
 
@@ -42,30 +43,54 @@ const menu = connect(
   })
 )(injectIntl(m));
 
-const List = ({ pageCount, pageNumber }) => (
-  <div >
+const List = ({ list, pageCount, pageNumber }) => (
+  <div
+    style = { parentStyle }
+  >
     <AppBar
       Menu = { menu }
       title = 'menu.frontEnd'
     />
-    <Item />
-    <Item />
-    <Item />
-    <Pagination
-      total = { pageCount }
-      display = { 7 }
-      current = { pageNumber }
-      onChange = { v => console.info(v) }
-    />
+    <div
+      style = { shrinkStyle }
+    >
+      {
+        list.map((l, i) => (
+          <Item
+            key = { i }
+            title = { l.title }
+            content = { l.content }
+          />
+        ))
+      }
+      <Pagination
+        total = { pageCount }
+        display = { 7 }
+        current = { pageNumber }
+        onChange = { v => console.info(v) }
+      />
+    </div>
   </div>
 );
 List.propTypes = {
   pageCount: PropTypes.number,
   pageNumber: PropTypes.number,
+  list: PropTypes.array,
 };
 
 export default connect(
-  state => ({
-    pageCount: state.app.quiz.meta.get('pageCount'),
-    pageNumber: state.app.quiz.meta.get('pageNumber'),
-  }))(List);
+  state => {
+    const { app: { quiz: { meta, quizzes } } } = state;
+    const list = [];
+    meta.get('pages').forEach(id => {
+      list.push({
+        id,
+        ...quizzes.get(id),
+      });
+    });
+    return {
+      list,
+      pageCount: meta.get('pageCount'),
+      pageNumber: meta.get('pageNumber'),
+    };
+  })(List);

@@ -26,6 +26,8 @@ export default {
   'ing.signup': '注册中',
   'ing.login': '登陆中',
   'ing.createNewQuiz': '正在创建新题目',
+  'ing.getPageContent': '正在从服务器下载题目信息',
+  'ing.getPageCount': '正在从服务器题目信息',
   'timeout.createNewQuiz': '题目创建超时，请检查网络情况',
   'timeout.signup': '注册超时，请检查网络情况',
   'timeout.login': '登陆超时，请检查网络情况',
