@@ -5,7 +5,7 @@ import { SET } from '../action';
 export const quizInitialState = {
   newItem: { preview: false, title: '', content: '' },
   meta: Immutable.Map({
-    pageCount: 1,
+    pageCount: -1,
     pageNumber: 1,
   }),
   quizzes: Immutable.Map(),

@@ -3,6 +3,7 @@ import { Route, IndexRedirect } from 'react-router';
 import New from './new';
 import List from './list/component';
 import onLeave from './onLeave';
+import onEnter from './onEnter';
 
 const Quiz = (
   <Route
@@ -11,6 +12,7 @@ const Quiz = (
     <IndexRedirect to = 'list' />
     <Route
       path = 'list'
+      onEnter = { onEnter.list }
       component = { List }
     />
     <Route

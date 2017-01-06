@@ -9,6 +9,12 @@ import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import { quizValidation } from '../../common/validations';
 import { setMeta, setQuizzes } from './action';
 
+const getQueryString = query => (
+  Object.keys(query)
+   .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+   .join('&')
+   .replace(/%20/g, '+')
+);
 const postReqTemplate = {
   method: 'POST',
   headers: {
@@ -19,6 +25,7 @@ const getReqTemplate = {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
+    Accept: 'application/json',
   },
 };
 
@@ -69,11 +76,14 @@ export function* getPageCountAndGetFirstPage() {
   const req = new Request(
     `${SERVER_URL}/functions/quiz/pageCount`,
     {
-      ...getReqTemplate,
-      body: JSON.stringify({
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         cookieId: getCid(),
-      }),
-    });
+      },
+    }
+  );
   yield call(authorizedOperation, {
     req,
     operationName: 'getPageCount',
@@ -98,15 +108,20 @@ export function* getPageCountAndGetFirstPage() {
 }
 
 export function* getPageContent({ pageNumber }) {
+  const query = {
+    pageNumber: pageNumber - 1,
+  };
   const req = new Request(
-    `${SERVER_URL}/functions/quiz/page/content`,
+    `${SERVER_URL}/functions/quiz/page/content?${getQueryString(query)}`,
     {
-      ...getReqTemplate,
-      body: JSON.stringify({
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         cookieId: getCid(),
-        pageNumber: pageNumber - 1,
-      }),
-    });
+      },
+    }
+  );
   yield call(authorizedOperation, {
     req,
     operationName: 'getPageContent',
@@ -119,6 +134,7 @@ export function* getPageContent({ pageNumber }) {
         const content = [];
         quizzes.forEach(q => {
           const _id = q._id;
+
           // eslint-disable-next-line no-param-reassign
           delete q._id;
           pages.push(_id);
@@ -145,6 +161,7 @@ export function* getPageContent({ pageNumber }) {
 
 function* watch() {
   yield takeLatest('NEW_QESTION', newQuestion);
+  yield takeLatest('GET_QUIZ_PAGE_COUNT', getPageCountAndGetFirstPage);
 }
 
 export default [watch];

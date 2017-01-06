@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import AppBar from '../../common/components/appBar';
 import Item from './item';
+
 // import Pagination from './pagination';
 
 const m = ({ preview, intl: { formatMessage: fm } }) => (
@@ -41,7 +42,7 @@ const menu = connect(
   })
 )(injectIntl(m));
 
-const List = () => (
+const List = ({ pageCount, pageNumber }) => (
   <div >
     <AppBar
       Menu = { menu }
@@ -51,12 +52,20 @@ const List = () => (
     <Item />
     <Item />
     <Pagination
-      total = { 100 }
+      total = { pageCount }
       display = { 7 }
-      current = { 13 }
+      current = { pageNumber }
       onChange = { v => console.info(v) }
     />
   </div>
 );
+List.propTypes = {
+  pageCount: PropTypes.number,
+  pageNumber: PropTypes.number,
+};
 
-export default List;
+export default connect(
+  state => ({
+    pageCount: state.app.quiz.meta.get('pageCount'),
+    pageNumber: state.app.quiz.meta.get('pageNumber'),
+  }))(List);

@@ -40,6 +40,12 @@ const sagaTestHelper = (saga, store) => {
   return task.done.then(() => actions);
 };
 
+const reqheaders = {
+  Accept: 'application/json',
+  'Content-type': 'application/json',
+  cookieid: 'fake cookie id',
+};
+
 describe('getPageCountAndGetFirstPage: get page number', () => {
   let store;
 
@@ -56,7 +62,9 @@ describe('getPageCountAndGetFirstPage: get page number', () => {
     });
   });
   it('status: 500', async () => {
-    nock(SERVER_URL)
+    nock(SERVER_URL, {
+      reqheaders,
+    })
     .get('/functions/quiz/pageCount')
     .reply(500);
     await sagaTestHelper(getPageCountAndGetFirstPage(), store);
@@ -69,7 +77,9 @@ describe('getPageCountAndGetFirstPage: get page number', () => {
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getPageCount' });
   });
   it('status: 200', async () => {
-    nock(SERVER_URL)
+    nock(SERVER_URL, {
+      reqheaders,
+    })
     .get('/functions/quiz/pageCount')
     .reply(200, { pageNumber: 10086 });
     const actions = await sagaTestHelper(getPageCountAndGetFirstPage(), store);
@@ -103,8 +113,13 @@ describe('getPageContent: get one page of quizzes', () => {
     });
   });
   it('status: 500', async () => {
-    nock(SERVER_URL)
+    nock(SERVER_URL, {
+      reqheaders,
+    })
     .get(path)
+    .query({
+      pageNumber: 0,
+    })
     .reply(500);
     await sagaTestHelper(getPageContent({ pageNumber: 1 }), store);
     const { app } = store.getState();
@@ -125,8 +140,11 @@ describe('getPageContent: get one page of quizzes', () => {
       });
     }
 
-    nock(SERVER_URL)
-    .get(path, {
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .get(path)
+    .query({
       pageNumber: 0,
     })
     .reply(200, {
