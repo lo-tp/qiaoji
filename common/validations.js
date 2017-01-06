@@ -4,6 +4,17 @@ import Ramda from 'ramda';
 const hasWhiteSpace = s => /\s/g.test(s);
 
 const validations = {
+  pageNumber: ({ errors, values }) => {
+    if (values.pageNumber === undefined ||
+        !validator.isNumeric(values.pageNumber)) {
+      return {
+        values,
+        errors: { ...errors, pageNumber: { id: 'validation.pageNumberInvalid' } },
+      };
+    }
+    return { errors, values };
+  },
+
   content: ({ errors, values }) => {
     if (values.content === undefined ||
         validator.isEmpty(values.content)) {
@@ -12,8 +23,10 @@ const validations = {
         errors: { ...errors, content: { id: 'validation.contentInvalid' } },
       };
     }
+
     return { errors, values };
   },
+
   title: ({ errors, values }) => {
     if (values.title === undefined ||
         validator.isEmpty(values.title)) {
@@ -25,6 +38,7 @@ const validations = {
 
     return { errors, values };
   },
+
   lastName: ({ errors, values }) => {
     if (values.lastName === undefined ||
         hasWhiteSpace(values.lastName) ||

@@ -1,8 +1,10 @@
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import { PAGE_NUMBER } from 'app-config';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import chai from 'chai';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import chaiHttp from 'chai-http';
 import app from '../server';
@@ -11,7 +13,6 @@ import Question from '../model/question';
 import User from '../model/user';
 import Cookie from '../model/cookie';
 import { dbSetupTest, dbClose } from '../setup/db';
-
 
 chai.use(chaiHttp);
 
@@ -107,27 +108,75 @@ describe('quiz services', () => {
     assert.equal(res.body.pageNumber, 2);
   });
 
-  it('unauthorized user should not be allowed to get quiz list', async () => {
-    try {
-      await chai.request(app)
-      .get(`${path}/list`)
-      .send({
-        content: 'content',
-        title: 'title',
-      });
-      assert.equal(1, 401);
-    } catch (e) {
-      assert.equal(e.status, 401);
+  after(done => {
+    dbClose();
+    done();
+  });
+});
+  // page number in req means how many page we want to skip
+  // while page number in res which page we are at
+describe('getPage', () => {
+  // eslint-disable-next-line no-unused-vars
+  let user;
+  let cookie;
+
+  before(async () => {
+    dbSetupTest();
+    const tem = await createUerAndCookie();
+    user = tem.user;
+    cookie = tem.cookie;
+    dataTemplate = {
+      cookieId: cookie._id,
+    };
+    for (let index = 0; index < PAGE_NUMBER + 1; index += 1) {
+      const q = new Quiz();
+      q.content = `content ${index}`;
+      q.title = `title ${index}`;
+      await q.save();
     }
   });
+  it('return first page when the page number is invalid', async () => {
+    const res = await chai.request(app)
+    .get(`${path}/page/content`)
+    .send({
+      ...dataTemplate,
+      pageNumber: 'abc',
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.pageNumber, 1);
+    res.body.quizzes.forEach((q, i) => {
+      assert.equal(q.content, `content ${i}`);
+      assert.equal(q.title, `title ${i}`);
+    });
+  });
+  it('get first page', async () => {
+    const res = await chai.request(app)
+    .get(`${path}/page/content`)
+    .send({
+      ...dataTemplate,
+      pageNumber: 0,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.pageNumber, 1);
+    res.body.quizzes.forEach((q, i) => {
+      assert.equal(q.content, `content ${i}`);
+      assert.equal(q.title, `title ${i}`);
+    });
+  });
 
-  // it('get quiz list', async () => {
-  // await Quiz.remove({});
-  // const res = await chai.request(app)
-  // .post(`${path}/list`)
-  // .send(dataTemplate);
-  // assert.equal(res.status, 200);
-  // });
+  it('get second page', async () => {
+    const res = await chai.request(app)
+    .get(`${path}/page/content`)
+    .send({
+      ...dataTemplate,
+      pageNumber: 1,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.pageNumber, 2);
+    assert.equal(res.body.quizzes.length, 1);
+    assert.equal(res.body.quizzes[0].content, `content ${PAGE_NUMBER}`);
+    assert.equal(res.body.quizzes[0].title, `title ${PAGE_NUMBER}`);
+  });
 
   after(done => {
     dbClose();

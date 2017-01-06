@@ -5,7 +5,7 @@ import express from 'express';
 
 import Quiz from '../model/quiz';
 import Question from '../model/question';
-import { quizValidation } from '../../common/validations';
+import validations, { quizValidation } from '../../common/validations';
 
 const initialRecord = {
   difficulty: 0.3,
@@ -55,6 +55,31 @@ router.get('/pageCount', async (req, res) => {
 
     res.json({
       pageNumber,
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.info(e.message);
+    res.status(500);
+  }
+
+  res.end();
+});
+
+router.get('/page/content', async (req, res) => {
+  try {
+    // pageNumber is how many pages we want to skip
+    let pageNumber = req.body.pageNumber;
+    if (validations.pageNumber({
+      errors: {},
+      values: { pageNumber: `${pageNumber}` },
+    }).errors.pageNumber !== undefined) {
+      pageNumber = 0;
+    }
+
+    res.json({
+      quizzes: await Quiz.find({})
+        .skip(pageNumber * PAGE_NUMBER).limit(PAGE_NUMBER),
+      pageNumber: pageNumber + 1,
     });
   } catch (e) {
     // eslint-disable-next-line no-console
