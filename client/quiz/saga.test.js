@@ -78,7 +78,7 @@ describe('getPageCountAndGetFirstPage: get page number', () => {
     assert.isFalse(app.ui.snackbarVisible);
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getPageCount' });
-    assert.deepEqual(actions[actions.length - 2], { type: 'GET_ONE_PAGE_QUIZ' });
+    assert.deepEqual(actions[actions.length - 2], { type: 'GET_ONE_PAGE_QUIZ', pageNumber: 0 });
     assert.equal(app.quiz.meta.get('pageCount'), 10086);
   });
   after(() => {
@@ -106,7 +106,7 @@ describe('getPageContent: get one page of quizzes', () => {
     nock(SERVER_URL)
     .get(path)
     .reply(500);
-    await sagaTestHelper(getPageContent(), store);
+    await sagaTestHelper(getPageContent({ pageNumber: 1 }), store);
     const { app } = store.getState();
 
     assert.isTrue(app.ui.snackbarVisible);
@@ -134,7 +134,7 @@ describe('getPageContent: get one page of quizzes', () => {
       pageNumber: 1,
       count: PAGE_NUMBER,
     });
-    await sagaTestHelper(getPageContent(), store);
+    await sagaTestHelper(getPageContent({ pageNumber: 1 }), store);
     const { app } = store.getState();
 
     assert.isFalse(app.ui.snackbarVisible);
@@ -144,7 +144,8 @@ describe('getPageContent: get one page of quizzes', () => {
     assert.deepEqual(app.quiz.meta.get('pages'), Immutable.List(quizzes.map(q => q._id)));
     quizzes.forEach(q => {
       const _id = q._id;
-          // eslint-disable-next-line no-param-reassign
+
+      // eslint-disable-next-line no-param-reassign
       delete q._id;
       assert.deepEqual(app.quiz.quizzes.get(_id), q);
     });

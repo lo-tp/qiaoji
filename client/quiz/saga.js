@@ -90,20 +90,21 @@ export function* getPageCountAndGetFirstPage() {
         );
         yield put({
           type: 'GET_ONE_PAGE_QUIZ',
+          pageNumber: 0,
         });
       }
     },
   });
 }
 
-export function* getPageContent() {
+export function* getPageContent({ pageNumber }) {
   const req = new Request(
     `${SERVER_URL}/functions/quiz/page/content`,
     {
       ...getReqTemplate,
       body: JSON.stringify({
         cookieId: getCid(),
-        pageNumber: yield select(state => state.app.quiz.meta.get('pageNumber') - 1),
+        pageNumber: pageNumber - 1,
       }),
     });
   yield call(authorizedOperation, {
@@ -113,13 +114,7 @@ export function* getPageContent() {
       if (res.status === 500) {
         yield closableSnackbarMsg('failure.getPageContent');
       } else {
-        const { count, quizzes, pageNumber } = yield res.json();
-        yield put(
-          setMeta({
-            name: 'pageNumber',
-            value: pageNumber,
-          })
-        );
+        const { count, quizzes } = yield res.json();
         const pages = [];
         const content = [];
         quizzes.forEach(q => {
