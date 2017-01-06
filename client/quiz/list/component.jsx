@@ -43,7 +43,7 @@ const menu = connect(
   })
 )(injectIntl(m));
 
-const List = ({ list, pageCount, pageNumber }) => (
+const List = ({ list, pageCount, pageNumber, turnPage }) => (
   <div
     style = { parentStyle }
   >
@@ -67,7 +67,7 @@ const List = ({ list, pageCount, pageNumber }) => (
         total = { pageCount }
         display = { 7 }
         current = { pageNumber }
-        onChange = { v => console.info(v) }
+        onChange = { turnPage }
       />
     </div>
   </div>
@@ -76,6 +76,7 @@ List.propTypes = {
   pageCount: PropTypes.number,
   pageNumber: PropTypes.number,
   list: PropTypes.array,
+  turnPage: PropTypes.func,
 };
 
 export default connect(
@@ -93,4 +94,13 @@ export default connect(
       pageCount: meta.get('pageCount'),
       pageNumber: meta.get('pageNumber'),
     };
-  })(List);
+  },
+
+  dispatch => ({
+    turnPage: value => {
+      dispatch({
+        type: 'GET_QUIZ_ONE_PAGE',
+        pageNumber: value,
+      });
+    },
+  }))(List);

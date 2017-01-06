@@ -152,6 +152,10 @@ export function* getPageContent({ pageNumber }) {
             value: Immutable.List(pages),
           })
         );
+        yield put(setMeta({
+          name: 'pageNumber',
+          value: pageNumber,
+        }));
       }
     },
   });
