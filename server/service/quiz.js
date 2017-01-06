@@ -68,12 +68,14 @@ router.get('/pageCount', async (req, res) => {
 router.get('/page/content', async (req, res) => {
   try {
     // pageNumber is how many pages we want to skip
-    let pageNumber = req.body.pageNumber;
+    let pageNumber = req.query.pageNumber;
     if (validations.pageNumber({
       errors: {},
       values: { pageNumber: `${pageNumber}` },
     }).errors.pageNumber !== undefined) {
       pageNumber = 0;
+    } else {
+      pageNumber = parseInt(pageNumber, 10);
     }
 
     const quizzes = await Quiz.find({})

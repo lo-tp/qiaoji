@@ -134,7 +134,7 @@ describe('getPage', () => {
     const res = await chai.request(app)
     .get(`${path}/page/content`)
     .set('cookieId', cookie._id)
-    .send({
+    .query({
       pageNumber: 'abc',
     });
     assert.equal(res.status, 200);
@@ -148,7 +148,7 @@ describe('getPage', () => {
     const res = await chai.request(app)
     .get(`${path}/page/content`)
     .set('cookieId', cookie._id)
-    .send({
+    .query({
       pageNumber: 0,
     });
     assert.equal(res.status, 200);
@@ -164,7 +164,7 @@ describe('getPage', () => {
     const res = await chai.request(app)
     .get(`${path}/page/content`)
     .set('cookieId', cookie._id)
-    .send({
+    .query({
       pageNumber: 1,
     });
     assert.equal(res.status, 200);
