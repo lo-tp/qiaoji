@@ -12,6 +12,7 @@ const validations = {
         errors: { ...errors, pageNumber: { id: 'validation.pageNumberInvalid' } },
       };
     }
+
     return { errors, values };
   },
 

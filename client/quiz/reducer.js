@@ -1,12 +1,23 @@
 import Immutable from 'immutable';
-import { META, PREVIEW, NEW_ITEM, TITLE, CONTENT } from './action';
+import { QUIZZES, META, PREVIEW, NEW_ITEM, TITLE, CONTENT } from './action';
 import { SET } from '../action';
 
 export const quizInitialState = {
   newItem: { preview: false, title: '', content: '' },
   meta: Immutable.Map({
     pageCount: 1,
+    pageNumber: 1,
   }),
+  quizzes: Immutable.Map(),
+};
+
+const quizzes = (state = {}, { flag, arg }) => {
+  switch (flag) {
+    case SET:
+      return state.set(arg.name, arg.value);
+    default:
+      return state;
+  }
 };
 
 const meta = (state = {}, { flag, arg }) => {
@@ -38,6 +49,8 @@ const reducer = (state = {}, action) => {
       return { ...state, newItem: newItem(state.newItem, action) };
     case META:
       return { ...state, meta: meta(state.meta, action) };
+    case QUIZZES:
+      return { ...state, quizzes: quizzes(state.quizzes, action) };
     default:
       return state;
   }

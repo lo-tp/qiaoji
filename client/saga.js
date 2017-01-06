@@ -76,6 +76,8 @@ export function* authorizedOperation({ req, operationName, successHandler }) {
       yield closableSnackbarMsg(`timeout.${operationName}`);
     }
   } catch (e) {
+    // eslint-disable-next-line no-console
+    console.info(e);
     yield closableSnackbarMsg(`failure.${operationName}`);
   } finally {
     yield put(setUi({

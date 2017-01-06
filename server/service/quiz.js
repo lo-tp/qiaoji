@@ -76,9 +76,11 @@ router.get('/page/content', async (req, res) => {
       pageNumber = 0;
     }
 
+    const quizzes = await Quiz.find({})
+        .skip(pageNumber * PAGE_NUMBER).limit(PAGE_NUMBER);
     res.json({
-      quizzes: await Quiz.find({})
-        .skip(pageNumber * PAGE_NUMBER).limit(PAGE_NUMBER),
+      quizzes,
+      count: quizzes.length,
       pageNumber: pageNumber + 1,
     });
   } catch (e) {
