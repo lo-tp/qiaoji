@@ -21,13 +21,6 @@ const postReqTemplate = {
     'Content-Type': 'application/json',
   },
 };
-const getReqTemplate = {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-};
 
 // eslint-disable-next-line require-yield
 function* validateItem(values) {
