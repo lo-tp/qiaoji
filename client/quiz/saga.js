@@ -46,6 +46,11 @@ function* newQuestion() {
           content,
           title,
         }),
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          cookieId: getCid(),
+        },
       },
     );
     yield call(authorizedOperation, {
@@ -92,8 +97,8 @@ export function* getPageCountAndGetFirstPage() {
           })
         );
         yield put({
-          type: 'GET_ONE_PAGE_QUIZ',
-          pageNumber: 0,
+          type: 'GET_QUIZ_ONE_PAGE',
+          pageNumber: 1,
         });
       }
     },
@@ -155,6 +160,7 @@ export function* getPageContent({ pageNumber }) {
 function* watch() {
   yield takeLatest('NEW_QESTION', newQuestion);
   yield takeLatest('GET_QUIZ_PAGE_COUNT', getPageCountAndGetFirstPage);
+  yield takeLatest('GET_QUIZ_ONE_PAGE', getPageContent);
 }
 
 export default [watch];

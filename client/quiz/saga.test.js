@@ -88,7 +88,7 @@ describe('getPageCountAndGetFirstPage: get page number', () => {
     assert.isFalse(app.ui.snackbarVisible);
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getPageCount' });
-    assert.deepEqual(actions[actions.length - 2], { type: 'GET_ONE_PAGE_QUIZ', pageNumber: 0 });
+    assert.deepEqual(actions[actions.length - 2], { type: 'GET_QUIZ_ONE_PAGE', pageNumber: 1 });
     assert.equal(app.quiz.meta.get('pageCount'), 10086);
   });
   after(() => {
