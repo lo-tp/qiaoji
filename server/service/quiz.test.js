@@ -17,7 +17,6 @@ import { dbSetupTest, dbClose } from '../setup/db';
 chai.use(chaiHttp);
 
 const path = '/functions/quiz';
-let dataTemplate;
 const assert = chai.assert;
 
 const createUerAndCookie = async () => {
@@ -43,9 +42,6 @@ describe('quiz services', () => {
     const tem = await createUerAndCookie();
     user = tem.user;
     cookie = tem.cookie;
-    dataTemplate = {
-      cookieId: cookie._id,
-    };
   });
   beforeEach(async () => {
     await Quiz.remove({});
@@ -66,10 +62,10 @@ describe('quiz services', () => {
   it('create new quiz', async () => {
     const res = await chai.request(app)
       .post(`${path}/new`)
+      .set('cookieId', cookie._id)
       .send({
         content: 'content',
         title: 'title',
-        cookieId: cookie._id,
       });
     assert.equal(res.status, 200);
     const count = await Quiz.count({});
@@ -103,7 +99,8 @@ describe('quiz services', () => {
 
     const res = await chai.request(app)
       .get(`${path}/pageCount`)
-      .send(dataTemplate);
+      .set('cookieId', cookie._id)
+      .send();
     assert.equal(res.status, 200);
     assert.equal(res.body.pageNumber, 2);
   });
@@ -113,8 +110,9 @@ describe('quiz services', () => {
     done();
   });
 });
-  // page number in req means how many page we want to skip
-  // while page number in res which page we are at
+
+// page number in req means how many page we want to skip
+// while page number in res which page we are at
 describe('getPage', () => {
   // eslint-disable-next-line no-unused-vars
   let user;
@@ -125,9 +123,6 @@ describe('getPage', () => {
     const tem = await createUerAndCookie();
     user = tem.user;
     cookie = tem.cookie;
-    dataTemplate = {
-      cookieId: cookie._id,
-    };
     for (let index = 0; index < PAGE_NUMBER + 1; index += 1) {
       const q = new Quiz();
       q.content = `content ${index}`;
@@ -138,8 +133,8 @@ describe('getPage', () => {
   it('return first page when the page number is invalid', async () => {
     const res = await chai.request(app)
     .get(`${path}/page/content`)
+    .set('cookieId', cookie._id)
     .send({
-      ...dataTemplate,
       pageNumber: 'abc',
     });
     assert.equal(res.status, 200);
@@ -152,8 +147,8 @@ describe('getPage', () => {
   it('get first page', async () => {
     const res = await chai.request(app)
     .get(`${path}/page/content`)
+    .set('cookieId', cookie._id)
     .send({
-      ...dataTemplate,
       pageNumber: 0,
     });
     assert.equal(res.status, 200);
@@ -168,8 +163,8 @@ describe('getPage', () => {
   it('get second page', async () => {
     const res = await chai.request(app)
     .get(`${path}/page/content`)
+    .set('cookieId', cookie._id)
     .send({
-      ...dataTemplate,
       pageNumber: 1,
     });
     assert.equal(res.status, 200);

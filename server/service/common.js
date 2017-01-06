@@ -5,7 +5,7 @@ const checkLoginStatus = async (req, res, next) => {
   let cookie = null;
   try {
     cookie = await Cookie.findOne({
-      _id: req.body.cookieId,
+      _id: req.get('cookieId'),
     });
   } catch (e) {
     // eslint-disable-next-line no-console
