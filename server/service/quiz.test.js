@@ -94,6 +94,7 @@ describe('quiz services', () => {
       const q = new Quiz();
       q.content = 'content';
       q.title = 'title';
+      q.user = user._id;
       await q.save();
     }
 
@@ -127,6 +128,7 @@ describe('getPage', () => {
       const q = new Quiz();
       q.content = `content ${index}`;
       q.title = `title ${index}`;
+      q.user = user._id;
       await q.save();
     }
   });

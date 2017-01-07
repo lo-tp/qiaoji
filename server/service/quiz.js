@@ -25,6 +25,7 @@ router.post('/new', async (req, res) => {
       quiz = await new Quiz({
         content: req.body.content,
         title: req.body.title,
+        user: req.user._id,
       });
       await quiz.save();
       question = new Question({
