@@ -98,10 +98,26 @@ describe('quiz services', () => {
       await q.save();
     }
 
-    const res = await chai.request(app)
+    for (let index = 0; index < PAGE_NUMBER; index += 1) {
+      const q = new Quiz();
+      q.content = 'content';
+      q.title = 'title';
+      q.user = 'your user id';
+      await q.save();
+    }
+
+    let res = await chai.request(app)
       .get(`${path}/pageCount`)
       .set('cookieId', cookie._id)
       .send();
+    assert.equal(res.status, 200);
+    assert.equal(res.body.pageNumber, 3);
+    res = await chai.request(app)
+      .get(`${path}/pageCount`)
+      .set('cookieId', cookie._id)
+      .query({
+        belong: 1,
+      });
     assert.equal(res.status, 200);
     assert.equal(res.body.pageNumber, 2);
   });
@@ -128,6 +144,14 @@ describe('getPage', () => {
       const q = new Quiz();
       q.content = `content ${index}`;
       q.title = `title ${index}`;
+      q.user = 'your id';
+      await q.save();
+    }
+
+    for (let index = 0; index < 2; index += 1) {
+      const q = new Quiz();
+      q.content = `content ${PAGE_NUMBER + index + 1}`;
+      q.title = `title ${PAGE_NUMBER + index + 1}`;
       q.user = user._id;
       await q.save();
     }
@@ -171,10 +195,28 @@ describe('getPage', () => {
     });
     assert.equal(res.status, 200);
     assert.equal(res.body.pageNumber, 2);
-    assert.equal(res.body.count, 1);
-    assert.equal(res.body.quizzes.length, 1);
+    assert.equal(res.body.count, PAGE_NUMBER);
+    assert.equal(res.body.quizzes.length, PAGE_NUMBER);
     assert.equal(res.body.quizzes[0].content, `content ${PAGE_NUMBER}`);
     assert.equal(res.body.quizzes[0].title, `title ${PAGE_NUMBER}`);
+  });
+
+  it('get first page filtered by user', async () => {
+    const res = await chai.request(app)
+    .get(`${path}/page/content`)
+    .set('cookieId', cookie._id)
+    .query({
+      pageNumber: 0,
+      belong: 1,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.pageNumber, 1);
+    assert.equal(res.body.count, 2);
+    assert.equal(res.body.quizzes.length, 2);
+    assert.equal(res.body.quizzes[0].content, `content ${PAGE_NUMBER + 1}`);
+    assert.equal(res.body.quizzes[0].title, `title ${PAGE_NUMBER + 1}`);
+    assert.equal(res.body.quizzes[1].content, `content ${PAGE_NUMBER + 2}`);
+    assert.equal(res.body.quizzes[1].title, `title ${PAGE_NUMBER + 2}`);
   });
 
   after(done => {

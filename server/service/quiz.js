@@ -48,7 +48,12 @@ router.post('/new', async (req, res) => {
 
 router.get('/pageCount', async (req, res) => {
   try {
-    const count = await Quiz.count();
+    const filter = {};
+    if (req.query.belong !== undefined && req.query.belong === '1') {
+      filter.user = req.user._id;
+    }
+
+    const count = await Quiz.count(filter);
     let pageNumber = Math.round(count / PAGE_NUMBER - 0.5);
     if (count % PAGE_NUMBER) {
       pageNumber += 1;
@@ -68,6 +73,11 @@ router.get('/pageCount', async (req, res) => {
 
 router.get('/page/content', async (req, res) => {
   try {
+    const filter = {};
+    if (req.query.belong !== undefined && req.query.belong === '1') {
+      filter.user = req.user._id;
+    }
+
     // pageNumber is how many pages we want to skip
     let pageNumber = req.query.pageNumber;
     if (validations.pageNumber({
@@ -79,7 +89,7 @@ router.get('/page/content', async (req, res) => {
       pageNumber = parseInt(pageNumber, 10);
     }
 
-    const quizzes = await Quiz.find({})
+    const quizzes = await Quiz.find(filter)
         .skip(pageNumber * PAGE_NUMBER).limit(PAGE_NUMBER);
     res.json({
       quizzes,
