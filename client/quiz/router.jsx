@@ -16,6 +16,20 @@ const Quiz = (
       component = { List }
     />
     <Route
+      path = 'list'
+      component = { List }
+    >
+      <IndexRedirect to = 'all' />
+      <Route
+        path = 'all'
+        onEnter = { onEnter.all }
+      />
+      <Route
+        path = 'filteredByUser'
+        onEnter = { onEnter.filteredByUser }
+      />
+    </Route>
+    <Route
       path = 'new'
       onLeave = { onLeave.newPage }
       component = { New }

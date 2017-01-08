@@ -66,8 +66,11 @@ describe('getPageCountAndGetFirstPage: get page number', () => {
       reqheaders,
     })
     .get('/functions/quiz/pageCount')
+    .query({
+      belong: 0,
+    })
     .reply(500);
-    await sagaTestHelper(getPageCountAndGetFirstPage(), store);
+    await sagaTestHelper(getPageCountAndGetFirstPage({ belong: 0 }), store);
     const { app } = store.getState();
 
     assert.isTrue(app.ui.snackbarVisible);
@@ -81,14 +84,37 @@ describe('getPageCountAndGetFirstPage: get page number', () => {
       reqheaders,
     })
     .get('/functions/quiz/pageCount')
+    .query({
+      belong: 0,
+    })
     .reply(200, { pageNumber: 10086 });
-    const actions = await sagaTestHelper(getPageCountAndGetFirstPage(), store);
+    const actions = await sagaTestHelper(
+      getPageCountAndGetFirstPage({ belong: 0 }), store);
     const { app } = store.getState();
 
     assert.isFalse(app.ui.snackbarVisible);
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getPageCount' });
-    assert.deepEqual(actions[actions.length - 2], { type: 'GET_QUIZ_ONE_PAGE', pageNumber: 1 });
+    assert.deepEqual(actions[actions.length - 2], { belong: 0, type: 'GET_QUIZ_ONE_PAGE', pageNumber: 1 });
+    assert.equal(app.quiz.meta.get('pageCount'), 10086);
+  });
+  it('status 200 filtered by user', async () => {
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .get('/functions/quiz/pageCount')
+    .query({
+      belong: 1,
+    })
+    .reply(200, { pageNumber: 10086 });
+    const actions = await sagaTestHelper(
+      getPageCountAndGetFirstPage({ belong: 1 }), store);
+    const { app } = store.getState();
+
+    assert.isFalse(app.ui.snackbarVisible);
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getPageCount' });
+    assert.deepEqual(actions[actions.length - 2], { belong: 1, type: 'GET_QUIZ_ONE_PAGE', pageNumber: 1 });
     assert.equal(app.quiz.meta.get('pageCount'), 10086);
   });
   after(() => {
@@ -119,6 +145,7 @@ describe('getPageContent: get one page of quizzes', () => {
     .get(path)
     .query({
       pageNumber: 0,
+      belong: 0,
     })
     .reply(500);
     await sagaTestHelper(getPageContent({ pageNumber: 1 }), store);
@@ -145,6 +172,7 @@ describe('getPageContent: get one page of quizzes', () => {
     })
     .get(path)
     .query({
+      belong: 0,
       pageNumber: 0,
     })
     .reply(200, {
@@ -153,6 +181,45 @@ describe('getPageContent: get one page of quizzes', () => {
       count: PAGE_NUMBER,
     });
     await sagaTestHelper(getPageContent({ pageNumber: 1 }), store);
+    const { app } = store.getState();
+
+    assert.isFalse(app.ui.snackbarVisible);
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getPageContent' });
+    assert.equal(app.quiz.meta.get('pageNumber'), 1);
+    assert.deepEqual(app.quiz.meta.get('pages'), Immutable.List(quizzes.map(q => q._id)));
+    quizzes.forEach(q => {
+      const _id = q._id;
+
+      // eslint-disable-next-line no-param-reassign
+      delete q._id;
+      assert.deepEqual(app.quiz.quizzes.get(_id), q);
+    });
+  });
+  it('status: 200: filtered by user', async () => {
+    const quizzes = [];
+    for (let i = 0; i < PAGE_NUMBER; i += 1) {
+      quizzes.push({
+        _id: i,
+        content: `content ${i}`,
+        title: `title ${i}`,
+      });
+    }
+
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .get(path)
+    .query({
+      pageNumber: 0,
+      belong: 1,
+    })
+    .reply(200, {
+      quizzes,
+      pageNumber: 1,
+      count: PAGE_NUMBER,
+    });
+    await sagaTestHelper(getPageContent({ pageNumber: 1, belong: 1 }), store);
     const { app } = store.getState();
 
     assert.isFalse(app.ui.snackbarVisible);

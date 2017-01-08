@@ -32,6 +32,8 @@ export default {
   'timeout.signup': '注册超时，请检查网络情况',
   'timeout.login': '登陆超时，请检查网络情况',
   'menu.frontEnd': '前端',
+  'menu.allQuizzes': '所有问题',
+  'menu.myQuizzes': '我的问题',
   'menu.logout': '注销',
   'menu.preview': '预览',
   'menu.add': '添加',

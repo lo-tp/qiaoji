@@ -70,9 +70,12 @@ function* newQuestion() {
   }
 }
 
-export function* getPageCountAndGetFirstPage() {
+export function* getPageCountAndGetFirstPage({ belong = 0 }) {
+  const query = {
+    belong,
+  };
   const req = new Request(
-    `${SERVER_URL}/functions/quiz/pageCount`,
+    `${SERVER_URL}/functions/quiz/pageCount?${getQueryString(query)}`,
     {
       method: 'GET',
       headers: {
@@ -99,15 +102,17 @@ export function* getPageCountAndGetFirstPage() {
         yield put({
           type: 'GET_QUIZ_ONE_PAGE',
           pageNumber: 1,
+          belong,
         });
       }
     },
   });
 }
 
-export function* getPageContent({ pageNumber }) {
+export function* getPageContent({ pageNumber, belong = 0 }) {
   const query = {
     pageNumber: pageNumber - 1,
+    belong,
   };
   const req = new Request(
     `${SERVER_URL}/functions/quiz/page/content?${getQueryString(query)}`,

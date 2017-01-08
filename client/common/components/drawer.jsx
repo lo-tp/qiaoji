@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Drawer from 'material-ui/Drawer';
@@ -15,7 +16,26 @@ const drawer = ({ close, open, intl: { formatMessage: fm }, children }) => (
       open = { open }
       onRequestChange = { close }
     >
-      <MenuItem>{ fm({ id: 'menu.frontEnd' }) }</MenuItem>
+      <MenuItem
+        onTouchTap = {
+          () => {
+            browserHistory.push('/functions/quiz/list/all');
+            close();
+          }
+        }
+      >
+        { fm({ id: 'menu.allQuizzes' }) }
+      </MenuItem>
+      <MenuItem
+        onTouchTap = {
+          () => {
+            browserHistory.push('/functions/quiz/list/filteredByUser');
+            close();
+          }
+          }
+      >
+        { fm({ id: 'menu.myQuizzes' }) }
+      </MenuItem>
       <MenuItem>{ fm({ id: 'menu.logout' }) }</MenuItem>
     </Drawer>
     {children}
