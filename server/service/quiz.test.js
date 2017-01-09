@@ -168,14 +168,14 @@ describe('getPage', () => {
         },
         answer: {
           user: user._id,
-          content: `content ${PAGE_NUMBER + 1 + index}`,
+          content: `answer ${PAGE_NUMBER + 1 + index}`,
         },
         question: {
           dueDate: 0,
           update: 0,
           interval: 0,
           difficulty: 0,
-          user: 0,
+          user: user._id,
         },
       });
     }
@@ -225,6 +225,14 @@ describe('getPage', () => {
     assert.equal(res.body.quizzes.length, PAGE_NUMBER);
     assert.equal(res.body.quizzes[0].content, `content ${PAGE_NUMBER}`);
     assert.equal(res.body.quizzes[0].title, `title ${PAGE_NUMBER}`);
+    assert.equal(res.body.quizzes[1].content, `content ${PAGE_NUMBER + 1}`);
+    assert.equal(res.body.quizzes[1].title, `title ${PAGE_NUMBER + 1}`);
+    assert.equal(res.body.quizzes[1].answer.content,
+                 `answer ${PAGE_NUMBER + 1}`);
+    assert.equal(res.body.quizzes[2].content, `content ${PAGE_NUMBER + 2}`);
+    assert.equal(res.body.quizzes[2].title, `title ${PAGE_NUMBER + 2}`);
+    assert.equal(res.body.quizzes[2].answer.content,
+                 `answer ${PAGE_NUMBER + 2}`);
   });
 
   it('get first page filtered by user', async () => {
