@@ -7,6 +7,7 @@ export const CONTENT = 'CONTENT';
 export const PREVIEW = 'PREVIEW';
 export const META = 'META';
 export const QUIZZES = 'QUIZZES';
+export const ANSWERS = 'ANSWERS';
 // defCstAct
 
 const action = action5(QUIZ);
@@ -17,3 +18,4 @@ export const setNewPreview = setNewItemAction(PREVIEW);
 
 export const setMeta = action(META, SET, 0);
 export const setQuizzes = action(QUIZZES, SET, 0);
+export const setAnswers = action(ANSWERS, SET, 0);

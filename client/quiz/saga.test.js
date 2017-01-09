@@ -19,7 +19,8 @@ import Immutable from 'immutable';
 import 'isomorphic-fetch';
 
 import Reducer from '../reducer';
-import { getPageContent, getPageCountAndGetFirstPage } from './saga';
+import { editOrCreateAnswer, getPageContent, getPageCountAndGetFirstPage } from './saga';
+import { setQuizzes } from './action';
 
 const tools = require('../common/utilities/tool');
 
@@ -234,5 +235,79 @@ describe('getPageContent: get one page of quizzes', () => {
       delete q._id;
       assert.deepEqual(app.quiz.quizzes.get(_id), q);
     });
+  });
+  after(() => {
+    tools.getCid.restore();
+  });
+});
+
+describe('editOrCreateAnswer', () => {
+  const path = '/functions/answer/new';
+  let store;
+
+  before(async () => {
+    store = createStore(Reducer);
+    sinon.stub(tools, 'getCid', () => (
+      'fake cookie id'
+    ));
+  });
+
+  beforeEach(async () => {
+    store.dispatch({
+      type: 'RESET_STATE',
+    });
+  });
+
+  it('create new answer:status 500', async () => {
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .put(path, {
+      content: 'answer content',
+      quizId: 'quiz id',
+    })
+    .reply(500);
+    await sagaTestHelper(editOrCreateAnswer({
+      create: true,
+      content: 'answer content',
+      quizId: 'quiz id',
+    }), store);
+    const { app } = store.getState();
+
+    assert.isTrue(app.ui.snackbarVisible);
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.snackbarBtnMessage, { id: 'btn.close' });
+    assert.deepEqual(app.ui.snackbarMessage, { id: 'failure.createAnswer' });
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.createAnswer' });
+  });
+  it('create new answer:status 200', async () => {
+    const quizId = 'quiz id';
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .put(path, {
+      content: 'answer content',
+      quizId,
+    })
+    .reply(200, { result: 1, answerId: 'answer' });
+    store.dispatch(setQuizzes({
+      name: quizId,
+      value: {},
+    }));
+    await sagaTestHelper(editOrCreateAnswer({
+      create: true,
+      content: 'answer content',
+      quizId: 'quiz id',
+    }), store);
+    const { app } = store.getState();
+    const { quiz: { quizzes, answers } } = app;
+
+    assert.isFalse(app.ui.snackbarVisible);
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.createAnswer' });
+
+    assert.equal(quizzes.get(quizId).answerId, 'answer');
+    assert.equal(answers.get('answer').content, 'answer content');
+    assert.equal(answers.get('answer')._id, 'answer');
   });
 });

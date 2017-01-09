@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 import New from './new';
+import AnswerEditor from './editAnswer';
 import List from './list/component';
 import onLeave from './onLeave';
 import onEnter from './onEnter';
@@ -27,6 +28,17 @@ const Quiz = (
       <Route
         path = 'filteredByUser'
         onEnter = { onEnter.filteredByUser }
+      />
+    </Route>
+    <Route
+      path = 'answer'
+      component = { AnswerEditor }
+    >
+      <Route
+        path = 'new'
+      />
+      <Route
+        path = 'edit'
       />
     </Route>
     <Route
