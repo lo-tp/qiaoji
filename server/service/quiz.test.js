@@ -12,6 +12,7 @@ import Quiz from '../model/quiz';
 import Question from '../model/question';
 import User from '../model/user';
 import Cookie from '../model/cookie';
+import mockData from '../testTools';
 import { dbSetupTest, dbClose } from '../setup/db';
 
 chai.use(chaiHttp);
@@ -90,21 +91,28 @@ describe('quiz services', () => {
 
   it('get page count', async () => {
     await Quiz.remove({});
+    const fakeData = [];
     for (let index = 0; index < PAGE_NUMBER + 1; index += 1) {
-      const q = new Quiz();
-      q.content = 'content';
-      q.title = 'title';
-      q.user = user._id;
-      await q.save();
+      fakeData.push({
+        quiz: {
+          content: 'content',
+          title: 'title',
+          user: user._id,
+        },
+      });
     }
 
     for (let index = 0; index < PAGE_NUMBER; index += 1) {
-      const q = new Quiz();
-      q.content = 'content';
-      q.title = 'title';
-      q.user = 'your user id';
-      await q.save();
+      fakeData.push({
+        quiz: {
+          content: 'content',
+          title: 'title',
+          user: 'your user id',
+        },
+      });
     }
+
+    await mockData(fakeData);
 
     let res = await chai.request(app)
       .get(`${path}/pageCount`)
@@ -140,21 +148,39 @@ describe('getPage', () => {
     const tem = await createUerAndCookie();
     user = tem.user;
     cookie = tem.cookie;
+    const fakeData = [];
     for (let index = 0; index < PAGE_NUMBER + 1; index += 1) {
-      const q = new Quiz();
-      q.content = `content ${index}`;
-      q.title = `title ${index}`;
-      q.user = 'your id';
-      await q.save();
+      fakeData.push({
+        quiz: {
+          content: `content ${index}`,
+          title: `title ${index}`,
+          user: 'your id',
+        },
+      });
     }
 
     for (let index = 0; index < 2; index += 1) {
-      const q = new Quiz();
-      q.content = `content ${PAGE_NUMBER + index + 1}`;
-      q.title = `title ${PAGE_NUMBER + index + 1}`;
-      q.user = user._id;
-      await q.save();
+      fakeData.push({
+        quiz: {
+          content: `content ${PAGE_NUMBER + 1 + index}`,
+          title: `title ${PAGE_NUMBER + 1 + index}`,
+          user: user._id,
+        },
+        answer: {
+          user: user._id,
+          content: `content ${PAGE_NUMBER + 1 + index}`,
+        },
+        question: {
+          dueDate: 0,
+          update: 0,
+          interval: 0,
+          difficulty: 0,
+          user: 0,
+        },
+      });
     }
+
+    await mockData(fakeData);
   });
   it('return first page when the page number is invalid', async () => {
     const res = await chai.request(app)
