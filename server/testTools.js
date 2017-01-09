@@ -6,10 +6,12 @@ import Cookie from './model/cookie';
 
 export const mockData = async data => {
   const length = data.length;
+  const ret = [];
   for (let i = 0; i < length; i += 1) {
     const d = data[i];
     let quiz;
     let answer;
+    let question;
     if (d.quiz) {
       quiz = new Quiz(d.quiz);
       await quiz.save();
@@ -21,11 +23,26 @@ export const mockData = async data => {
     }
 
     if (d.question) {
-      const q = new Question({
-        quiz: quiz._id, answer: answer._id, ...d.question });
-      await q.save();
+      const tem = {
+        ...d.question,
+        quiz: quiz._id,
+      };
+      if (answer) {
+        tem.answer = answer._id;
+      }
+
+      question = new Question(tem);
+      await question.save();
     }
+
+    ret.push({
+      question,
+      answer,
+      quiz,
+    });
   }
+
+  return ret;
 };
 
 export const createUerAndCookie = async () => {

@@ -8,6 +8,7 @@ import cors from 'cors';
 import userService from './service/user';
 import commonService from './service/common';
 import quizRouter from './service/quiz';
+import answerRouter from './service/answer';
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,6 +23,7 @@ if (DEV) {
 app.use(express.static('static'));
 app.use('/functions', commonService.checkLoginStatus);
 app.use('/functions/quiz', quizRouter);
+app.use('/functions/answer', answerRouter);
 
 app.post('/login', userService.login);
 
