@@ -9,7 +9,7 @@ const style = {
   margin: 12,
 };
 
-const item = ({ title, content, intl: { formatMessage: fm } }) =>
+const item = ({ answer, title, content, intl: { formatMessage: fm } }) =>
   (
     <Card>
       <CardHeader
@@ -40,7 +40,7 @@ const item = ({ title, content, intl: { formatMessage: fm } }) =>
           style = { style }
         />
         <RaisedButton
-          label = { fm({ id: 'btn.add' }) }
+          label = { fm({ id: answer === undefined ? 'btn.addAnswer' : 'btn.editAnswer' }) }
           secondary = { true }
           style = { style }
         />
@@ -49,6 +49,7 @@ const item = ({ title, content, intl: { formatMessage: fm } }) =>
   );
 
 item.propTypes = {
+  answer: PropTypes.object,
   intl: intlShape.isRequired,
   title: PropTypes.string,
   content: PropTypes.string,
