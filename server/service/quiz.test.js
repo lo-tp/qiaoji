@@ -10,29 +10,13 @@ import chaiHttp from 'chai-http';
 import app from '../server';
 import Quiz from '../model/quiz';
 import Question from '../model/question';
-import User from '../model/user';
-import Cookie from '../model/cookie';
-import mockData from '../testTools';
+import { mockData, createUerAndCookie } from '../testTools';
 import { dbSetupTest, dbClose } from '../setup/db';
 
 chai.use(chaiHttp);
 
 const path = '/functions/quiz';
 const assert = chai.assert;
-
-const createUerAndCookie = async () => {
-  const user = new User();
-  user.password = '12341234u';
-  user.firstName = 'first';
-  user.lastName = 'last';
-  user.userName = 'username';
-  await user.save();
-  const cookie = new Cookie();
-  cookie.expireAt = new Date();
-  cookie.uid = user._id;
-  await cookie.save();
-  return { cookie, user };
-};
 
 describe('quiz services', () => {
   let user;

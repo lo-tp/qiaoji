@@ -1,8 +1,10 @@
 import Quiz from './model/quiz';
 import Question from './model/question';
 import Answer from './model/answer';
+import User from './model/user';
+import Cookie from './model/cookie';
 
-const mockData = async data => {
+export const mockData = async data => {
   const length = data.length;
   for (let i = 0; i < length; i += 1) {
     const d = data[i];
@@ -26,4 +28,16 @@ const mockData = async data => {
   }
 };
 
-export default mockData;
+export const createUerAndCookie = async () => {
+  const user = new User();
+  user.password = '12341234u';
+  user.firstName = 'first';
+  user.lastName = 'last';
+  user.userName = 'username';
+  await user.save();
+  const cookie = new Cookie();
+  cookie.expireAt = new Date();
+  cookie.uid = user._id;
+  await cookie.save();
+  return { cookie, user };
+};
