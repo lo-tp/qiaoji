@@ -6,4 +6,5 @@ const SERVER_URL = 'http://localhost:3000';
 export const HOT_LOAD_URL = 'http://localhost:3200';
 export const DEV = true;
 export const PAGE_NUMBER = 3;
+export const QUALIFY_DIFFICULTY = 0.1;
 export default SERVER_URL;

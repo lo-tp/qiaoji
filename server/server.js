@@ -9,6 +9,7 @@ import userService from './service/user';
 import commonService from './service/common';
 import quizRouter from './service/quiz';
 import answerRouter from './service/answer';
+import questionRouter from './service/question';
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,6 +25,7 @@ app.use(express.static('static'));
 app.use('/functions', commonService.checkLoginStatus);
 app.use('/functions/quiz', quizRouter);
 app.use('/functions/answer', answerRouter);
+app.use('/functions/question', questionRouter);
 
 app.post('/login', userService.login);
 

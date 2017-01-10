@@ -1,6 +1,3 @@
-// eslint-disable-next-line max-len
-// eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
-import { PAGE_NUMBER } from 'app-config';
 import express from 'express';
 
 import Answer from '../model/answer';
