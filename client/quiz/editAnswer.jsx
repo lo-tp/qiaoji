@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { browserHistory } from 'react-router';
-import mkd from 'markdown';
+import Mkd from 'markdown-it';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -13,6 +13,8 @@ import AppBar from '../common/components/appBar';
 import Editor from '../common/components/markdown/editor';
 import { shrinkStyle, parentStyle } from '../common/styles';
 import { setItemPreview, setItemContent, setItemTitle } from './action';
+
+const mkd = new Mkd();
 
 const GoBack = () => (
   <Back
@@ -90,7 +92,7 @@ const Quiz = ({ title, content }) =>
 
         // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML = {
-          { __html: mkd.markdown.toHTML(content) }
+          { __html: mkd.render(content) }
         }
         />
       </CardText>

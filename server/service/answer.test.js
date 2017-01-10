@@ -24,9 +24,6 @@ describe('create new answer', () => {
     user = tem.user;
     cookie = tem.cookie;
   });
-  before(async () => {
-    dbSetupTest();
-  });
   beforeEach(async () => {
     await Quiz.remove({});
     await Answer.remove({});
