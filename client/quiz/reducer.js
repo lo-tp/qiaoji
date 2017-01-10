@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
-import { EDITING, QUIZ_ID, QUIZZES, META, PREVIEW, NEW_ITEM, ANSWERS, TITLE, CONTENT } from './action';
+import { EDITING, QUIZ_ID, QUIZZES, META, ANSWER_ID,
+  PREVIEW, NEW_ITEM, ANSWERS, TITLE, CONTENT } from './action';
 import { SET } from '../action';
 
 export const quizInitialState = {
@@ -57,6 +58,8 @@ const item = (state = {}, { flag_1, arg }) => {
       return { ...state, editing: arg };
     case QUIZ_ID:
       return { ...state, quizId: arg };
+    case ANSWER_ID:
+      return { ...state, answerId: arg };
     default:
       return state;
   }

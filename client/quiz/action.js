@@ -10,6 +10,7 @@ export const QUIZZES = 'QUIZZES';
 export const ANSWERS = 'ANSWERS';
 export const EDITING = 'EDITING';
 export const QUIZ_ID = 'QUIZ_ID';
+export const ANSWER_ID = 'ANSWER_ID';
 // defCstAct
 
 const action = action5(QUIZ);
@@ -18,6 +19,7 @@ export const setItemTitle = setItemAction(TITLE);
 export const setItemContent = setItemAction(CONTENT);
 export const setItemPreview = setItemAction(PREVIEW);
 export const setItemQuizId = setItemAction(QUIZ_ID);
+export const setItemAnswerId = setItemAction(ANSWER_ID);
 export const startEditing = setItemAction(EDITING, true);
 export const startCreating = setItemAction(EDITING, false);
 

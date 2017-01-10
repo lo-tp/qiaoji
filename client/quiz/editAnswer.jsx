@@ -45,11 +45,14 @@ m.propTypes = {
   save: PropTypes.func,
 };
 const menu = connect(
-  ({ app: { quiz: { item: { quizId, preview, content, editing } } } }) => ({
+  ({ app: { quiz:
+    { item: { answerId, quizId, preview, content, editing } } } }) =>
+  ({
     status: preview,
     content,
     editing,
     quizId,
+    answerId,
   }),
   dispatch => ({
     preview: status => dispatch(setItemPreview(status)),
@@ -65,6 +68,7 @@ const menu = connect(
         content: stateProps.content,
         create: !stateProps.editing,
         quizId: stateProps.quizId,
+        answerId: stateProps.answerId,
       }),
   })
 )(injectIntl(m));

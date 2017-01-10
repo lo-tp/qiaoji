@@ -8,6 +8,7 @@ const Editor = ({ preview, intl: { formatMessage: fm }, content,
 (
   <div >
     <TextField
+      value = { content }
       style = { {
         width: '100%',
         display: preview ? 'none' : 'inline-block',

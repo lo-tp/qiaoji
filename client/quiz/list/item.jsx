@@ -5,7 +5,7 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { injectIntl, intlShape } from 'react-intl';
 import mkd from 'markdown';
-import { setItemQuizId } from '../action';
+import { setItemAnswerId, setItemQuizId, setItemContent } from '../action';
 
 const style = {
   margin: 12,
@@ -66,6 +66,8 @@ export default connect(
   null,
   dispatch => ({
     setQuizId: id => dispatch(setItemQuizId(id)),
+    setAnswerId: id => dispatch(setItemAnswerId(id)),
+    setContent: content => dispatch(setItemContent(content)),
   }),
   (stateProps, dispatchProps, ownProps) => {
     const { quizId } = ownProps;
@@ -74,6 +76,8 @@ export default connect(
       editOrCreateAnswer: () => {
         dispatchProps.setQuizId(quizId);
         if (ownProps.answer) {
+          dispatchProps.setContent(ownProps.answer.content);
+          dispatchProps.setAnswerId(ownProps.answer._id);
           browserHistory.push('/functions/quiz/answer/edit');
         } else {
           browserHistory.push('/functions/quiz/answer/new');
