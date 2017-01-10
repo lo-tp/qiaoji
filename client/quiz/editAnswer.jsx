@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import AppBar from '../common/components/appBar';
 import Editor from '../common/components/markdown/editor';
 import { shrinkStyle, parentStyle } from '../common/styles';
-import { setNewPreview, setNewContent, setNewTitle } from './action';
+import { setItemPreview, setItemContent, setItemTitle } from './action';
 
 const GoBack = () => (
   <Back
@@ -45,11 +45,11 @@ m.propTypes = {
   save: PropTypes.func,
 };
 const menu = connect(
-  ({ app: { quiz: { newItem: { preview } } } }) => ({
+  ({ app: { quiz: { item: { preview } } } }) => ({
     status: preview,
   }),
   dispatch => ({
-    preview: status => dispatch(setNewPreview(status)),
+    preview: status => dispatch(setItemPreview(status)),
     save: () => dispatch({ type: 'NEW_QESTION' }),
   }),
   (stateProps, dispatchProps) => ({
@@ -120,13 +120,13 @@ n.propTypes = {
 };
 
 export default connect(
-  ({ app: { quiz: { newItem: { preview, title, content } } } }) => ({
+  ({ app: { quiz: { item: { preview, title, content } } } }) => ({
     title,
     preview,
     content,
   }),
   dispatch => ({
-    changeContent: event => dispatch(setNewContent(event.target.value.trim())),
-    changeTitle: event => dispatch(setNewTitle(event.target.value.trim())),
+    changeContent: event => dispatch(setItemContent(event.target.value.trim())),
+    changeTitle: event => dispatch(setItemTitle(event.target.value.trim())),
   }),
 )(injectIntl(n));

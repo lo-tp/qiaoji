@@ -32,7 +32,7 @@ function* validateItem(values) {
   return true;
 }
 
-const selectNewItem = state => state.app.quiz.newItem;
+const selectNewItem = state => state.app.quiz.item;
 const selectQuizzes = state => state.app.quiz.quizzes;
 
 function* newQuestion() {

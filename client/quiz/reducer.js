@@ -3,7 +3,7 @@ import { QUIZZES, META, PREVIEW, NEW_ITEM, ANSWERS, TITLE, CONTENT } from './act
 import { SET } from '../action';
 
 export const quizInitialState = {
-  newItem: { preview: false, title: '', content: '' },
+  item: { preview: false, title: '', content: '' },
   meta: Immutable.Map({
     pages: Immutable.List(),
     pageCount: -1,
@@ -40,7 +40,7 @@ const meta = (state = {}, { flag, arg }) => {
   }
 };
 
-const newItem = (state = {}, { flag_1, arg }) => {
+const item = (state = {}, { flag_1, arg }) => {
   switch (flag_1) {
     case TITLE:
       return { ...state, title: arg };
@@ -57,7 +57,7 @@ const reducer = (state = {}, action) => {
   const { target } = action;
   switch (target) {
     case NEW_ITEM:
-      return { ...state, newItem: newItem(state.newItem, action) };
+      return { ...state, item: item(state.item, action) };
     case META:
       return { ...state, meta: meta(state.meta, action) };
     case QUIZZES:

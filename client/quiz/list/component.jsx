@@ -32,7 +32,7 @@ m.propTypes = {
   preview: PropTypes.func,
 };
 const menu = connect(
-  ({ app: { quiz: { newItem: { preview } } } }) => ({
+  ({ app: { quiz: { item: { preview } } } }) => ({
     status: preview,
   }),
   () => ({
