@@ -60,5 +60,31 @@ router.put('/new', async (req, res) => {
     res.end();
   }
 });
+router.post('/edit', async (req, res) => {
+  try {
+    const errors = validations.content(
+      { errors: {}, values: req.body }).errors;
+    const { content, answerId } = req.body;
+    const answer = await Answer.findOne({ _id: answerId });
+    if (errors.content || answer === null) {
+      res.json({
+        result: 0,
+        reason: 0,
+      });
+    } else {
+      answer.content = content;
+      await answer.save();
+      res.json({
+        result: 1,
+      });
+    }
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.info(e.message);
+    res.status(500);
+  } finally {
+    res.end();
+  }
+});
 
 export default router;

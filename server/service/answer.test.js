@@ -14,11 +14,10 @@ chai.use(chaiHttp);
 
 const path = '/functions/answer';
 const assert = chai.assert;
+let user;
+let cookie;
 
 describe('create new answer', () => {
-  let user;
-  let cookie;
-
   before(async () => {
     dbSetupTest();
     const tem = await createUerAndCookie();
@@ -168,5 +167,72 @@ describe('create new answer', () => {
   after(done => {
     dbClose();
     done();
+  });
+});
+describe('Edit existing answer', () => {
+  let result;
+  before(async () => {
+    dbSetupTest();
+    const tem = await createUerAndCookie();
+    user = tem.user;
+    cookie = tem.cookie;
+  });
+  before(async () => {
+    dbSetupTest();
+  });
+  beforeEach(async () => {
+    await Quiz.remove({});
+    await Answer.remove({});
+    await Question.remove({});
+    result = await mockData([
+      {
+        quiz: {
+          content: 'content',
+          title: 'title',
+          user: user._id,
+        },
+        answer: {
+          content: 'content',
+          user: user._id,
+        },
+      },
+    ]);
+  });
+  it('500 when answerId is invalid', async () => {
+    try {
+      await chai.request(app)
+      .post(`${path}/edit`)
+      .set('cookieId', cookie._id)
+      .send({
+        create: true,
+        content: 'sdjfl',
+        answerId: 'isdfljsdfj',
+      });
+    } catch (e) {
+      assert.equal(e.status, 500);
+    }
+  });
+  it('refuse to edit when content is not valid', async () => {
+    const res = await chai.request(app)
+    .post(`${path}/edit`)
+    .set('cookieId', cookie._id)
+      .send({
+        content: '',
+        answerId: result[0].answer._id,
+      });
+    assert.equal(res.body.result, 0);
+    assert.equal(res.body.reason, 0);
+  });
+  it('status 200 when every is ok', async () => {
+    const res = await chai.request(app)
+    .post(`${path}/edit`)
+    .set('cookieId', cookie._id)
+      .send({
+        content: 'I am doing a test',
+        answerId: result[0].answer._id,
+      });
+    const answer = await Answer.findOne({ _id: result[0].answer._id });
+    assert.equal(res.body.result, 1);
+    assert.equal(answer.content, 'I am doing a test');
   });
 });
