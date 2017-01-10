@@ -307,7 +307,7 @@ describe('editOrCreateAnswer', () => {
       name: quizId,
       value: {},
     }));
-    await sagaTestHelper(editOrCreateAnswer({
+    const actions = await sagaTestHelper(editOrCreateAnswer({
       create: true,
       content: 'answer content',
       quizId: 'quiz id',
@@ -322,5 +322,6 @@ describe('editOrCreateAnswer', () => {
     assert.equal(quizzes.get(quizId).answerId, 'answer');
     assert.equal(answers.get('answer').content, 'answer content');
     assert.equal(answers.get('answer')._id, 'answer');
+    assert.deepEqual(actions[actions.length - 2], { type: 'BROWSER_HISTORY', purpose: 'GO_BACK' });
   });
 });

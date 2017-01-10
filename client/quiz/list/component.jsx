@@ -61,7 +61,7 @@ const List = ({ list, pageCount, pageNumber, turnPage }) => (
             title = { l.title }
             content = { l.content }
             quizId = { l.id }
-            answer = { l }
+            answer = { l.answer }
           />
         ))
       }

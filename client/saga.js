@@ -38,8 +38,16 @@ export function* tem({ arg: { msg, operation = closeSnackbar } }) {
   }));
 }
 
+// eslint-disable-next-line  require-yield
+function* browserHistoryOperation({ purpose }) {
+  if (purpose === 'GO_BACK') {
+    browserHistory.go(-1);
+  }
+}
+
 function* watch() {
   yield takeLatest(SHOW_CLOSABLE_SNAKBAR, tem);
+  yield takeLatest('BROWSER_HISTORY', browserHistoryOperation);
 }
 
 // eslint-disable-next-line require-yield
@@ -76,7 +84,7 @@ export function* authorizedOperation({ req, operationName, successHandler }) {
       yield closableSnackbarMsg(`timeout.${operationName}`);
     }
   } catch (e) {
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     console.info(e);
     yield closableSnackbarMsg(`failure.${operationName}`);
   } finally {

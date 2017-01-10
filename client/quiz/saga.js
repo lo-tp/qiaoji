@@ -217,6 +217,16 @@ export function* editOrCreateAnswer({ create, content, quizId }) {
               content,
             },
           }));
+          yield put(setAnswers({
+            name: answerId,
+            value: {
+              _id: answerId,
+              content,
+            },
+          }));
+          yield put({
+            type: 'BROWSER_HISTORY',
+            purpose: 'GO_BACK' });
         }
       },
     });

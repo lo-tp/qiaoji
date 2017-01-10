@@ -43,7 +43,7 @@ const item = ({ editOrCreateAnswer, answer,
           style = { style }
         />
         <RaisedButton
-          label = { fm({ id: answer ? 'btn.addAnswer' : 'btn.editAnswer' }) }
+          label = { fm({ id: answer ? 'btn.editAnswer' : 'btn.addAnswer' }) }
           secondary = { true }
           style = { style }
           onTouchTap = {
@@ -69,7 +69,6 @@ export default connect(
   }),
   (stateProps, dispatchProps, ownProps) => {
     const { quizId } = ownProps;
-    console.info(ownProps.answer);
     return {
       ...ownProps,
       editOrCreateAnswer: () => {
