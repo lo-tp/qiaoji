@@ -154,13 +154,6 @@ describe('getPage', () => {
           user: user._id,
           content: `answer ${PAGE_NUMBER + 1 + index}`,
         },
-        question: {
-          dueDate: 0,
-          update: 0,
-          interval: 0,
-          difficulty: 0,
-          user: user._id,
-        },
       });
     }
 

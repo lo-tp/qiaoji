@@ -93,13 +93,8 @@ router.get('/page/content', async (req, res) => {
     const quizzes = await Quiz.find(filter)
         .skip(pageNumber * PAGE_NUMBER).limit(PAGE_NUMBER);
     const quizIds = quizzes.map(quiz => quiz._id);
-    const questions = await Question.find({ user: req.user._id })
-    .where('quiz').in(quizIds);
-    const answerIds = questions
-      .filter(q => q.answer)
-      .map(q => q.answer);
-    const answers = await Answer.find({})
-      .where('_id').in(answerIds);
+    const answers = await Answer.find({user:req.user._id})
+      .where('quiz').in(quizIds);
     answers.forEach(a => {
       // eslint-disable-next-line eqeqeq
       const quiz = quizzes.find(q => q._id == a.quiz);
