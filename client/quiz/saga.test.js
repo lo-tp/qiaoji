@@ -258,6 +258,19 @@ describe('editOrCreateAnswer', () => {
     });
   });
 
+  it('validation: no request should be made when the content is invalid', async () => {
+    await sagaTestHelper(editOrCreateAnswer({
+      create: true,
+      content: '',
+      quizId: 'quiz id',
+    }), store);
+    const { app:{ui} } = store.getState();
+
+    assert.isTrue(ui.snackbarVisible);
+    assert.isFalse(ui.progressDialogVisible);
+    assert.deepEqual(ui.snackbarBtnMessage, { id: 'btn.close' });
+    assert.deepEqual(ui.snackbarMessage, { id: 'validation.general' });
+  });
   it('create new answer:status 500', async () => {
     nock(SERVER_URL, {
       reqheaders,

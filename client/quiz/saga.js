@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router';
 import { put, select, call, takeLatest } from 'redux-saga/effects';
 import { getCid } from '../common/utilities/tool';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
-import { quizValidation } from '../../common/validations';
+import validations, { quizValidation } from '../../common/validations';
 import { setAnswers, setMeta, setQuizzes } from './action';
 
 const getQueryString = query => (
@@ -168,55 +168,59 @@ export function* getPageContent({ pageNumber, belong = 0 }) {
 }
 
 export function* editOrCreateAnswer({ create, content, quizId }) {
-  let path = 'edit';
-  let method = 'POST';
-  let operation = 'editAnswer';
-  if (create) {
-    path = 'new';
-    method = 'PUT';
-    operation = 'createAnswer';
-  }
-
-  const req = new Request(
-    `${SERVER_URL}/functions/answer/${path}`,
-    {
-      method,
-      body: JSON.stringify({
-        content,
-        quizId,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        cookieId: getCid(),
-      },
+  if (validations.content({ errors: {}, values: { content } }).errors.content) {
+    yield closableSnackbarMsg('validation.general');
+  } else {
+    let path = 'edit';
+    let method = 'POST';
+    let operation = 'editAnswer';
+    if (create) {
+      path = 'new';
+      method = 'PUT';
+      operation = 'createAnswer';
     }
-  );
-  yield call(authorizedOperation, {
-    req,
-    operationName: operation,
-    * successHandler(res) {
-      if (res.status === 500) {
-        yield closableSnackbarMsg(`failure.${operation}`);
-      } else {
-        const quizzes = yield select(selectQuizzes);
-        const quiz = quizzes.get(quizId);
-        const { answerId } = yield res.json();
-        quiz.answerId = answerId;
-        yield put(setQuizzes({
-          name: quizId,
-          value: quiz,
-        }));
-        yield put(setAnswers({
-          name: answerId,
-          value: {
-            _id: answerId,
-            content,
-          },
-        }));
+
+    const req = new Request(
+      `${SERVER_URL}/functions/answer/${path}`,
+      {
+        method,
+        body: JSON.stringify({
+          content,
+          quizId,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          cookieId: getCid(),
+        },
       }
-    },
-  });
+    );
+    yield call(authorizedOperation, {
+      req,
+      operationName: operation,
+      * successHandler(res) {
+        if (res.status === 500) {
+          yield closableSnackbarMsg(`failure.${operation}`);
+        } else {
+          const quizzes = yield select(selectQuizzes);
+          const quiz = quizzes.get(quizId);
+          const { answerId } = yield res.json();
+          quiz.answerId = answerId;
+          yield put(setQuizzes({
+            name: quizId,
+            value: quiz,
+          }));
+          yield put(setAnswers({
+            name: answerId,
+            value: {
+              _id: answerId,
+              content,
+            },
+          }));
+        }
+      },
+    });
+  }
 }
 
 function* watch() {
