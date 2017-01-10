@@ -167,27 +167,33 @@ export function* getPageContent({ pageNumber, belong = 0 }) {
   });
 }
 
-export function* editOrCreateAnswer({ create, content, quizId }) {
+export function* editOrCreateAnswer({ create, content, quizId, answerId }) {
   if (validations.content({ errors: {}, values: { content } }).errors.content) {
     yield closableSnackbarMsg('validation.general');
   } else {
     let path = 'edit';
     let method = 'POST';
     let operation = 'editAnswer';
+    let body = JSON.stringify({
+      content,
+      answerId,
+    });
+
     if (create) {
       path = 'new';
       method = 'PUT';
       operation = 'createAnswer';
+      body = JSON.stringify({
+        content,
+        quizId,
+      });
     }
 
     const req = new Request(
       `${SERVER_URL}/functions/answer/${path}`,
       {
         method,
-        body: JSON.stringify({
-          content,
-          quizId,
-        }),
+        body,
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -204,23 +210,16 @@ export function* editOrCreateAnswer({ create, content, quizId }) {
         } else {
           const quizzes = yield select(selectQuizzes);
           const quiz = quizzes.get(quizId);
-          const { answerId } = yield res.json();
-          quiz.answerId = answerId;
+          const { answerId: resultAnswerId } = yield res.json();
+          quiz.answerId = resultAnswerId;
           yield put(setQuizzes({
             name: quizId,
             value: quiz,
           }));
           yield put(setAnswers({
-            name: answerId,
+            name: resultAnswerId,
             value: {
-              _id: answerId,
-              content,
-            },
-          }));
-          yield put(setAnswers({
-            name: answerId,
-            value: {
-              _id: answerId,
+              _id: resultAnswerId,
               content,
             },
           }));

@@ -242,7 +242,7 @@ describe('getPageContent: get one page of quizzes', () => {
 });
 
 describe('editOrCreateAnswer', () => {
-  const path = '/functions/answer/new';
+  const path = '/functions/answer/';
   let store;
 
   before(async () => {
@@ -275,7 +275,7 @@ describe('editOrCreateAnswer', () => {
     nock(SERVER_URL, {
       reqheaders,
     })
-    .put(path, {
+    .put(`${path}new`, {
       content: 'answer content',
       quizId: 'quiz id',
     })
@@ -298,7 +298,7 @@ describe('editOrCreateAnswer', () => {
     nock(SERVER_URL, {
       reqheaders,
     })
-    .put(path, {
+    .put(`${path}new`, {
       content: 'answer content',
       quizId,
     })
@@ -323,5 +323,28 @@ describe('editOrCreateAnswer', () => {
     assert.equal(answers.get('answer').content, 'answer content');
     assert.equal(answers.get('answer')._id, 'answer');
     assert.deepEqual(actions[actions.length - 2], { type: 'BROWSER_HISTORY', purpose: 'GO_BACK' });
+  });
+
+  it('edit existing answer:status 500', async () => {
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .post(`${path}edit`, {
+      content: 'answer content',
+      answerId: 'answer id',
+    })
+    .reply(500);
+    await sagaTestHelper(editOrCreateAnswer({
+      create: false,
+      content: 'answer content',
+      answerId: 'answer id',
+    }), store);
+    const { app } = store.getState();
+
+    assert.isTrue(app.ui.snackbarVisible);
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.snackbarBtnMessage, { id: 'btn.close' });
+    assert.deepEqual(app.ui.snackbarMessage, { id: 'failure.editAnswer' });
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.editAnswer' });
   });
 });
