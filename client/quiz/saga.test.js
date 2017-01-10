@@ -337,6 +337,7 @@ describe('editOrCreateAnswer', () => {
     await sagaTestHelper(editOrCreateAnswer({
       create: false,
       content: 'answer content',
+      quizId: 'quiz id',
       answerId: 'answer id',
     }), store);
     const { app } = store.getState();
@@ -346,5 +347,39 @@ describe('editOrCreateAnswer', () => {
     assert.deepEqual(app.ui.snackbarBtnMessage, { id: 'btn.close' });
     assert.deepEqual(app.ui.snackbarMessage, { id: 'failure.editAnswer' });
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.editAnswer' });
+  });
+
+  it('edit existing answer:status 200', async () => {
+    const quizId = 'quiz id';
+    const answerId = 'answer id';
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .post(`${path}edit`, {
+      content: 'answer content',
+      answerId,
+    })
+    .reply(200, { result: 1, answerId });
+    store.dispatch(setQuizzes({
+      name: quizId,
+      value: {},
+    }));
+    const actions = await sagaTestHelper(editOrCreateAnswer({
+      create: false,
+      content: 'answer content',
+      quizId,
+      answerId,
+    }), store);
+    const { app } = store.getState();
+    const { quiz: { quizzes, answers } } = app;
+
+    assert.isFalse(app.ui.snackbarVisible);
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.editAnswer' });
+
+    assert.equal(quizzes.get(quizId).answerId, answerId);
+    assert.equal(answers.get(answerId).content, 'answer content');
+    assert.equal(answers.get(answerId)._id, answerId);
+    assert.deepEqual(actions[actions.length - 2], { type: 'BROWSER_HISTORY', purpose: 'GO_BACK' });
   });
 });
