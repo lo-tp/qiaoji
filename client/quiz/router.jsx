@@ -36,9 +36,11 @@ const Quiz = (
     >
       <Route
         path = 'new'
+        onEnter = { onEnter.newAnswer }
       />
       <Route
         path = 'edit'
+        onEnter = { onEnter.editAnswer }
       />
     </Route>
     <Route

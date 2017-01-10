@@ -264,7 +264,7 @@ describe('editOrCreateAnswer', () => {
       content: '',
       quizId: 'quiz id',
     }), store);
-    const { app:{ui} } = store.getState();
+    const { app: { ui } } = store.getState();
 
     assert.isTrue(ui.snackbarVisible);
     assert.isFalse(ui.progressDialogVisible);

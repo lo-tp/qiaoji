@@ -60,6 +60,8 @@ const List = ({ list, pageCount, pageNumber, turnPage }) => (
             key = { i }
             title = { l.title }
             content = { l.content }
+            quizId = { l.id }
+            answer = { l }
           />
         ))
       }

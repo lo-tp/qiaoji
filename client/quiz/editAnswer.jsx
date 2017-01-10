@@ -17,7 +17,7 @@ import { setItemPreview, setItemContent, setItemTitle } from './action';
 const GoBack = () => (
   <Back
     onTouchTap = {
-      () => browserHistory.push('/functions/quiz/list')
+      () => browserHistory.go(-1)
     }
     color = 'white'
   />
@@ -45,16 +45,27 @@ m.propTypes = {
   save: PropTypes.func,
 };
 const menu = connect(
-  ({ app: { quiz: { item: { preview } } } }) => ({
+  ({ app: { quiz: { item: { quizId, preview, content, editing } } } }) => ({
     status: preview,
+    content,
+    editing,
+    quizId,
   }),
   dispatch => ({
     preview: status => dispatch(setItemPreview(status)),
-    save: () => dispatch({ type: 'NEW_QESTION' }),
+    save: action => {
+      dispatch(action);
+    },
   }),
   (stateProps, dispatchProps) => ({
-    ...dispatchProps,
     preview: () => dispatchProps.preview(!stateProps.status),
+    save: () => dispatchProps.save(
+      {
+        type: 'EIDT_OR_CREATE_ANSWER',
+        content: stateProps.content,
+        create: !stateProps.editing,
+        quizId: stateProps.quizId,
+      }),
   })
 )(injectIntl(m));
 const Quiz = ({ title, content }) =>

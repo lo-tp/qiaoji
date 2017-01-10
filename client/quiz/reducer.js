@@ -1,9 +1,14 @@
 import Immutable from 'immutable';
-import { QUIZZES, META, PREVIEW, NEW_ITEM, ANSWERS, TITLE, CONTENT } from './action';
+import { EDITING, QUIZ_ID, QUIZZES, META, PREVIEW, NEW_ITEM, ANSWERS, TITLE, CONTENT } from './action';
 import { SET } from '../action';
 
 export const quizInitialState = {
-  item: { preview: false, title: '', content: '' },
+  item: {
+    preview: false,
+    title: '',
+    content: '',
+    editing: false,
+  },
   meta: Immutable.Map({
     pages: Immutable.List(),
     pageCount: -1,
@@ -48,6 +53,10 @@ const item = (state = {}, { flag_1, arg }) => {
       return { ...state, content: arg };
     case PREVIEW:
       return { ...state, preview: arg };
+    case EDITING:
+      return { ...state, editing: arg };
+    case QUIZ_ID:
+      return { ...state, quizId: arg };
     default:
       return state;
   }
