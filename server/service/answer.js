@@ -76,6 +76,7 @@ router.post('/edit', async (req, res) => {
       await answer.save();
       res.json({
         result: 1,
+        answerId,
       });
     }
   } catch (e) {

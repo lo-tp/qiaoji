@@ -233,6 +233,7 @@ describe('Edit existing answer', () => {
       });
     const answer = await Answer.findOne({ _id: result[0].answer._id });
     assert.equal(res.body.result, 1);
+    assert.equal(res.body.answerId, result[0].answer._id);
     assert.equal(answer.content, 'I am doing a test');
   });
 });
