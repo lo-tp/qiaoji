@@ -18,7 +18,8 @@ import 'isomorphic-fetch';
 
 import Reducer from '../reducer';
 import { sagaTestHelper } from '../common/utilities/testTool';
-import { getQuestion } from './saga';
+import { getQuestion, updateQuestion } from './saga';
+import { setQuestions } from './action';
 
 const tools = require('../common/utilities/tool');
 
@@ -30,6 +31,7 @@ const reqheaders = {
 
 const assert = chai.assert;
 const path = '/functions/question/';
+const questions = [];
 
 describe('getQuestion', () => {
   let store;
@@ -71,7 +73,6 @@ describe('getQuestion', () => {
     assert.notDeepEqual(actions[actions.length - 2], redirectAction);
   });
   it('status: 200', async () => {
-    const questions = [];
     for (let index = 0; index < 10; index += 1) {
       questions.push({
         id: index,
@@ -92,9 +93,6 @@ describe('getQuestion', () => {
       reqheaders,
     })
     .get(`${path}list`)
-    .query({
-      belong: 0,
-    })
     .reply(200, { questions });
     const actions = await sagaTestHelper(getQuestion({ belong: 0 }), store);
     const { app } = store.getState();
@@ -104,5 +102,72 @@ describe('getQuestion', () => {
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
     assert.deepEqual(actions[actions.length - 2], redirectAction);
     assert.deepEqual(questions, app.question.questions);
+  });
+  after(() => {
+    tools.getCid.restore();
+  });
+});
+describe('update questions', () => {
+  let store;
+  const goBackAction = {
+    type: 'BROWSER_HISTORY',
+    purpose: 'GO_BACK',
+  };
+
+  before(async () => {
+    store = createStore(Reducer);
+    sinon.stub(tools, 'getCid', () => (
+      'fake cookie id'
+    ));
+  });
+
+  beforeEach(async () => {
+    store.dispatch({
+      type: 'RESET_STATE',
+    });
+  });
+  it('status 500', async() => {
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .post(`${path}update`, {
+      questions,
+    })
+    .reply(500);
+    store.dispatch(setQuestions(questions));
+    await sagaTestHelper(updateQuestion({ questions }), store);
+    const { app: { ui, question } } = store.getState();
+    const { choiceDialog } = ui;
+
+    assert.isFalse(ui.snackbarVisible);
+    assert.isFalse(ui.progressDialogVisible);
+    assert.isTrue(choiceDialog.visible);
+    assert.deepEqual(choiceDialog.title, { id: 'dlgTitle.progressUpdateFailure' });
+    assert.deepEqual(choiceDialog.text, { id: 'dlgText.progressUpdateFailure' });
+    assert.deepEqual(choiceDialog.leftBtnText, { id: 'dlgBtnText.giveUp' });
+    assert.deepEqual(choiceDialog.rightBtnText, { id: 'dlgBtnText.retry' });
+    assert.deepEqual(choiceDialog.leftBtnAction, { type: 'BROWSER_HISTORY', purpose: 'GO_BACK' });
+    assert.deepEqual(choiceDialog.rightBtnAction, { type: 'UPLOAD_PROGRESS', questions });
+    assert.deepEqual(ui.progressDialogText, { id: 'ing.updateQuestion' });
+    assert.deepEqual(question.questions, questions);
+  });
+  it('status 200', async() => {
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .post(`${path}update`, {
+      questions,
+    })
+    .reply(200);
+    const actions = await sagaTestHelper(updateQuestion({ questions }), store);
+    const { app: { ui, question } } = store.getState();
+    const { choiceDialog } = ui;
+
+    assert.isFalse(ui.snackbarVisible);
+    assert.isFalse(ui.progressDialogVisible);
+    assert.deepEqual(ui.progressDialogText, { id: 'ing.updateQuestion' });
+    assert.isFalse(choiceDialog.visible);
+    assert.deepEqual(actions[actions.length - 2], goBackAction);
+    assert.deepEqual(question.questions, []);
   });
 });

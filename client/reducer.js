@@ -14,6 +14,13 @@ const uiInitialState = {
   snackbarBtnMessage: { id: 'failure.login' },
   progressDialogText: { id: 'ing.login' },
   drawerVisible: false,
+  choiceDialog: {
+    visible: false,
+    text: { id: 'failure.login' },
+    title: { id: 'failure.login' },
+    leftBtnText: { id: 'failure.login' },
+    righttBtnText: { id: 'failure.login' },
+  },
 };
 
 const tem = (state = {}, action) => {
