@@ -4,17 +4,11 @@ import SERVER_URL from 'app-config';
 import Immutable from 'immutable';
 import { browserHistory } from 'react-router';
 import { put, select, call, takeLatest } from 'redux-saga/effects';
-import { getCid } from '../common/utilities/tool';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import validations, { quizValidation } from '../../common/validations';
 import { setAnswers, setMeta, setQuizzes } from './action';
+import { getCid, getQueryString } from '../common/utilities/tool';
 
-const getQueryString = query => (
-  Object.keys(query)
-   .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
-   .join('&')
-   .replace(/%20/g, '+')
-);
 const postReqTemplate = {
   method: 'POST',
   headers: {

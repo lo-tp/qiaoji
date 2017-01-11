@@ -7,7 +7,6 @@ import SERVER_URL, { PAGE_NUMBER } from 'app-config';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import sinon from 'sinon';
-import { runSaga } from 'redux-saga';
 import { createStore } from 'redux';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -21,25 +20,11 @@ import 'isomorphic-fetch';
 import Reducer from '../reducer';
 import { editOrCreateAnswer, getPageContent, getPageCountAndGetFirstPage } from './saga';
 import { setQuizzes } from './action';
+import { sagaTestHelper } from '../common/utilities/testTool';
 
 const tools = require('../common/utilities/tool');
 
 const assert = chai.assert;
-
-const sagaTestHelper = (saga, store) => {
-  const actions = [];
-  const task = runSaga(saga, {
-    dispatch: action => {
-      if (store) {
-        store.dispatch(action);
-        actions.push(action);
-      }
-    },
-
-    getState: store.getState,
-  });
-  return task.done.then(() => actions);
-};
 
 const reqheaders = {
   Accept: 'application/json',
