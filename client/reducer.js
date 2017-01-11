@@ -2,7 +2,9 @@ import { combineReducers } from 'redux';
 import { reducer as reduxFormReducer } from 'redux-form';
 import { RESET_STATE, SET, UI, TEM } from './action';
 import { QUIZ } from './quiz/action';
+import { QUESTION } from './question/action';
 import quiz, { quizInitialState } from './quiz/reducer';
+import question, { questionInitialState } from './question/reducer';
 
 const uiInitialState = {
   tabValue: 0,
@@ -33,6 +35,7 @@ const ui = (state = { ...uiInitialState }, action) => {
 const initialiState = {
   ui: uiInitialState,
   quiz: quizInitialState,
+  question: questionInitialState,
 };
 
 const Reducer = (state = initialiState, action) => {
@@ -46,6 +49,8 @@ const Reducer = (state = initialiState, action) => {
       return { ...state, tem: tem(state.tem, action) };
     case QUIZ:
       return { ...state, quiz: quiz(state.quiz, action) };
+    case QUESTION:
+      return { ...state, question: question(state.question, action) };
     default:
       return state;
   }
