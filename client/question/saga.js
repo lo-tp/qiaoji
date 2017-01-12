@@ -3,15 +3,15 @@
 import SERVER_URL from 'app-config';
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
-import { getCid } from '../common/utilities/tool';
+import { getCid, getQueryString } from '../common/utilities/tool';
 import { setQuestions } from './action';
 import { setUi } from '../action';
 
 // const selectNewItem = state => state.app.quiz.item;
 
-export function* getQuestion() {
+export function* getQuestion({ goOver }) {
   const req = new Request(
-    `${SERVER_URL}/functions/question/list`,
+    `${SERVER_URL}/functions/question/list?${getQueryString({ goOver })}`,
     {
       method: 'GET',
       headers: {

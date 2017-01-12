@@ -59,10 +59,10 @@ describe('getQuestion', () => {
     })
     .get(`${path}list`)
     .query({
-      belong: 0,
+      goOver: 0,
     })
     .reply(500);
-    const actions = await sagaTestHelper(getQuestion({ belong: 0 }), store);
+    const actions = await sagaTestHelper(getQuestion({ goOver: 0 }), store);
     const { app } = store.getState();
 
     assert.isTrue(app.ui.snackbarVisible);
@@ -93,8 +93,45 @@ describe('getQuestion', () => {
       reqheaders,
     })
     .get(`${path}list`)
+    .query({
+      goOver: 0,
+    })
     .reply(200, { questions });
-    const actions = await sagaTestHelper(getQuestion({ belong: 0 }), store);
+    const actions = await sagaTestHelper(getQuestion({ goOver: 0 }), store);
+    const { app } = store.getState();
+
+    assert.isFalse(app.ui.snackbarVisible);
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
+    assert.deepEqual(actions[actions.length - 2], redirectAction);
+    assert.deepEqual(questions, app.question.questions);
+  });
+  it('status: 200 go over mode', async () => {
+    for (let index = 0; index < 10; index += 1) {
+      questions.push({
+        id: index,
+        dueDate: index,
+        update: index,
+        interval: index,
+        quiz: {
+          content: `content ${index}`,
+          title: `title ${index}`,
+        },
+        answer: {
+          content: `answer content ${index}`,
+        },
+      });
+    }
+
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .get(`${path}list`)
+    .query({
+      goOver: 1,
+    })
+    .reply(200, { questions });
+    const actions = await sagaTestHelper(getQuestion({ goOver: 1 }), store);
     const { app } = store.getState();
 
     assert.isFalse(app.ui.snackbarVisible);
