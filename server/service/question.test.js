@@ -21,6 +21,7 @@ let user;
 let cookie;
 
 describe('get questions for a specific user', () => {
+  let expectedForGoOver;
   before(async () => {
     dbSetupTest();
     const tem = await createUerAndCookie();
@@ -104,6 +105,7 @@ describe('get questions for a specific user', () => {
         update: 0,
         interval: 0,
         difficulty: QUALIFY_DIFFICULTY + 0.1,
+        goOver: true,
         user: user._id,
       },
     });
@@ -150,12 +152,35 @@ describe('get questions for a specific user', () => {
     results.slice(0, 4).forEach((r, i) => {
       expected[i].id = `${r.question._id}`;
     });
+    expectedForGoOver = [{
+      quiz: {
+        content: 'content 2',
+        title: 'title 2',
+      },
+      dueDate: getDaysSinceEpoch() + 1,
+      update: 0,
+      interval: 0,
+      difficulty: QUALIFY_DIFFICULTY + 0.1,
+      goOver: true,
+    }];
+    expectedForGoOver[0].id = `${results[4].question._id}`;
     const res = await chai.request(app)
     .get(`${path}/list`)
     .set('cookieId', cookie._id);
     const { questions } = res.body;
     assert.equal(res.status, 200);
     assert.deepEqual(expected, questions);
+  });
+  it('status 200: get go over', async () => {
+    const res = await chai.request(app)
+    .get(`${path}/list`)
+    .set('cookieId', cookie._id)
+    .query({
+      goOver: 1,
+    });
+    const { questions } = res.body;
+    assert.equal(res.status, 200);
+    assert.deepEqual(expectedForGoOver, questions);
   });
   after(done => {
     dbClose();
@@ -164,7 +189,6 @@ describe('get questions for a specific user', () => {
 });
 describe('update questions', () => {
   const data = [];
-  const expected = [];
   let results;
   before(async () => {
     dbSetupTest();
@@ -174,19 +198,6 @@ describe('update questions', () => {
 
     // questions below are allowed to be updated
     for (let index = 0; index < 3; index += 1) {
-      expected.push({
-        quiz: {
-          content: `content ${index}`,
-          title: `title ${index}`,
-        },
-        answer: {
-          content: `content ${index}`,
-        },
-        dueDate: getDaysSinceEpoch(),
-        update: 0,
-        interval: 0,
-        difficulty: QUALIFY_DIFFICULTY + 0.1,
-      });
       data.push({
         quiz: {
           content: `content ${index}`,
@@ -198,6 +209,7 @@ describe('update questions', () => {
           user: user._id,
         },
         question: {
+          goOver: true,
           dueDate: getDaysSinceEpoch(),
           update: 0,
           interval: 0,
@@ -261,6 +273,7 @@ describe('update questions', () => {
         ret.difficulty = 0.8;
         ret.interval = 165;
         ret.update = 399;
+        ret.goOver = false;
         return ret;
       });
     const res = await chai.request(app)
@@ -278,6 +291,7 @@ describe('update questions', () => {
       assert.equal(q.difficulty, 0.8);
       assert.equal(q.interval, 165);
       assert.equal(q.update, 399);
+      assert.equal(q.goOver, false);
     });
   });
 });

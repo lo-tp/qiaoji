@@ -9,19 +9,31 @@ import { getDaysSinceEpoch } from '../../common/tool';
 const router = express.Router();
 router.get('/list', async (req, res) => {
   try {
-    const questions = await Question.find({
-      user: req.user._id,
-    })
+    let questions;
+    if (req.query.goOver) {
+      questions = await Question.find({
+        user: req.user._id,
+        goOver: true,
+      })
+      .populate('answer')
+      .populate('quiz');
+    } else {
+      questions = await Question.find({
+        user: req.user._id,
+      })
     .where('difficulty').gte(QUALIFY_DIFFICULTY)
 
   // eslint-disable-next-line newline-per-chained-call
     .where('dueDate').lte(getDaysSinceEpoch())
     .populate('answer')
     .populate('quiz');
+    }
+
     const results = [];
     questions.forEach(q => {
       const {
         _id: id,
+        goOver,
         dueDate,
         update,
         interval,
@@ -33,6 +45,7 @@ router.get('/list', async (req, res) => {
         answer,
       } = q;
       const result = {
+        goOver,
         id,
         dueDate,
         update,
@@ -75,22 +88,27 @@ router.post('/update', async (req, res) => {
     } else {
       questions.forEach(q => {
         const dataInDb = qs.find(w =>
+
           // eslint-disable-next-line eqeqeq
           w._id == `${q.id}`);
-        if (q.difficulty) {
+        if (q.difficulty !== undefined) {
           dataInDb.difficulty = q.difficulty;
         }
 
-        if (q.update) {
+        if (q.update !== undefined) {
           dataInDb.update = q.update;
         }
 
-        if (q.dueDate) {
+        if (q.dueDate !== undefined) {
           dataInDb.dueDate = q.dueDate;
         }
 
-        if (q.interval) {
+        if (q.interval !== undefined) {
           dataInDb.interval = q.interval;
+        }
+
+        if (q.goOver !== undefined) {
+          dataInDb.goOver = q.goOver;
         }
       });
       const number = qs.length;

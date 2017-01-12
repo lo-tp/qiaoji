@@ -33,6 +33,9 @@ const questionScheme = mongoose.Schema({
   difficulty: {
     type: Number,
   },
+  goOver: {
+    type: Boolean,
+  },
 });
 
 // eslint-disable-next-line import/no-mutable-exports
