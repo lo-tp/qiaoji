@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as reduxFormReducer } from 'redux-form';
-import { RESET_STATE, SET, UI, TEM } from './action';
+import { CHOICE, RESET_STATE, SET, UI, TEM } from './action';
 import { QUIZ } from './quiz/action';
 import { QUESTION } from './question/action';
 import quiz, { quizInitialState } from './quiz/reducer';
@@ -16,11 +16,11 @@ const uiInitialState = {
   progressDialogText: { id: 'ing.login' },
   drawerVisible: false,
   choiceDialog: {
-    visible: false,
+    visible: true,
     text: { id: 'failure.login' },
     title: { id: 'failure.login' },
     leftBtnText: { id: 'failure.login' },
-    righttBtnText: { id: 'failure.login' },
+    rightBtnText: { id: 'failure.login' },
   },
 };
 
@@ -32,12 +32,20 @@ const tem = (state = {}, action) => {
   return state;
 };
 
-const ui = (state = { ...uiInitialState }, action) => {
-  if (action.type === UI && action.target === SET) {
-    return { ...state, ...action.arg };
+const ui = (state = { ...uiInitialState }, { target, arg }) => {
+  // if (action.type === UI && action.target === SET) {
+  // return { ...state, ...action.arg };
+  // }
+  switch (target) {
+    case SET:
+      return { ...state, ...arg };
+    case CHOICE:
+      return { ...state, choiceDialog: { ...state.choiceDialog, ...arg } };
+    default:
+      return state;
   }
 
-  return state;
+  // return state;
 };
 
 const initialiState = {

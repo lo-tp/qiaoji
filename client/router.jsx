@@ -7,12 +7,14 @@ import Drawer from './common/components/drawer';
 import onEnter from './onEnter';
 import ProgressDialog from './common/components/progressDialog';
 import ChoseStudyModeDialog from './common/components/choseStudyModeDialog';
+import ChoiceDialog from './common/components/twoChoiceDialog';
 import Snackbar from './common/components/snackbar';
 
 const msgComponent = ({ children }) => (
   <div
     style = { { height: '100%' } }
   >
+    <ChoiceDialog />
     <ChoseStudyModeDialog />
     <ProgressDialog />
     <Snackbar />

@@ -8,6 +8,7 @@ export default {
       goOver: false,
     }));
   }),
+  // eslint-disable-next-line no-unused-vars
   goOver: Ramda.curry((store, previousState) => {
     store.dispatch(setQuestionMeta({
       goOver: true,

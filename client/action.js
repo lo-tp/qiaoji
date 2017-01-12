@@ -5,7 +5,7 @@ export const UI = 'UI';
 export const TEM = 'TEM';
 export const SHOW_CLOSABLE_SNAKBAR = 'SHOW_CLOSABLE_SNAKBAR';
 export const RESET_STATE = 'RESET_STATE';
-
+export const CHOICE = 'CHOICE';
 // defCstAct
 
 const actionArg = Ramda.curry((type, target, flag, flag_1, arg) => (
@@ -22,3 +22,4 @@ export const action2 = action3(Ramda.__, 0, Ramda.__);
 export const setUi = action3(UI, SET, Ramda.__);
 export const setTem = action3(TEM, SET, Ramda.__);
 export const showClosableSnackBarMsg = action2(SHOW_CLOSABLE_SNAKBAR, Ramda.__);
+export const setChoiceDialog = action4(UI, CHOICE, SET, Ramda.__);

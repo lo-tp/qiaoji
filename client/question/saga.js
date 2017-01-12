@@ -5,7 +5,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import { getCid, getQueryString } from '../common/utilities/tool';
 import { setQuestions } from './action';
-import { setUi } from '../action';
+import { setUi, setChoiceDialog } from '../action';
 
 // const selectNewItem = state => state.app.quiz.item;
 
@@ -72,6 +72,7 @@ export function* updateQuestion({ questions }) {
           },
         }));
       } else {
+        yield put(setChoiceDialog({ visible: false }));
         yield put(setQuestions([]));
         yield put({
           type: 'BROWSER_HISTORY',
