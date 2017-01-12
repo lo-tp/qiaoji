@@ -31,7 +31,7 @@ const appBar = ({ LeftBtn = OpenDrawer, Menu, title,
     style = { { ...noShrinkStyle } }
     title = { fm({ id: title }) }
     iconElementLeft = { <IconButton><LeftBtn /></IconButton> }
-    iconElementRight = { <Menu /> }
+    iconElementRight = { Menu ? <Menu /> : null }
   />
 );
 

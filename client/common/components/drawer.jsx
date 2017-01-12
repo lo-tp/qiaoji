@@ -7,7 +7,9 @@ import MenuItem from 'material-ui/MenuItem';
 
 import { setUi } from '../../action';
 
-const drawer = ({ close, open, intl: { formatMessage: fm }, children }) => (
+const drawer = ({ choseStudyMode, close,
+                open, intl: { formatMessage: fm }, children }) =>
+(
   <div
     style = { { height: '100%' } }
   >
@@ -36,6 +38,16 @@ const drawer = ({ close, open, intl: { formatMessage: fm }, children }) => (
       >
         { fm({ id: 'menu.myQuizzes' }) }
       </MenuItem>
+      <MenuItem
+        onTouchTap = {
+          () => {
+            choseStudyMode();
+            close();
+          }
+          }
+      >
+        { fm({ id: 'menu.study' }) }
+      </MenuItem>
       <MenuItem>{ fm({ id: 'menu.logout' }) }</MenuItem>
     </Drawer>
     {children}
@@ -47,6 +59,7 @@ drawer.propTypes = {
   children: PropTypes.element,
   open: PropTypes.bool,
   close: PropTypes.func,
+  choseStudyMode: PropTypes.func,
 };
 
 export default connect(
@@ -55,5 +68,7 @@ export default connect(
   }),
   dispatch => ({
     close: () => dispatch(setUi({ drawerVisible: false })),
+    // eslint-disable-next-line max-len
+    choseStudyMode: () => dispatch(setUi({ choseStudyModeDialogVisible: true })),
   })
 )(injectIntl(drawer));

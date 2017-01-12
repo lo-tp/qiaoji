@@ -9,6 +9,7 @@ import question, { questionInitialState } from './question/reducer';
 const uiInitialState = {
   tabValue: 0,
   progressDialogVisible: false,
+  choseStudyModeDialogVisible: false,
   snackbarVisible: false,
   snackbarMessage: { id: 'failure.login' },
   snackbarBtnMessage: { id: 'failure.login' },

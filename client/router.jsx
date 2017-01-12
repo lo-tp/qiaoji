@@ -1,16 +1,19 @@
 import React, { PropTypes } from 'react';
 import { createRoutes, IndexRedirect, browserHistory, Router, Route } from 'react-router';
 import Account from './account/router';
+import Question from './question/router';
 import Quiz from './quiz/router';
 import Drawer from './common/components/drawer';
 import onEnter from './onEnter';
 import ProgressDialog from './common/components/progressDialog';
+import ChoseStudyModeDialog from './common/components/choseStudyModeDialog';
 import Snackbar from './common/components/snackbar';
 
 const msgComponent = ({ children }) => (
   <div
     style = { { height: '100%' } }
   >
+    <ChoseStudyModeDialog />
     <ProgressDialog />
     <Snackbar />
     {children}
@@ -48,6 +51,7 @@ const rawRoutes = (
         to = 'quiz'
       />
       {Quiz}
+      {Question}
     </Route>
   </Route>
 );

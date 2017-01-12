@@ -1,4 +1,4 @@
-import { QUESTION } from './action';
+import { QUESTION, QUESTIONS } from './action';
 
 export const questionInitialState = {
   questions: [],
@@ -7,8 +7,10 @@ export const questionInitialState = {
 const reducer = (state = {}, action) => {
   const { target, arg } = action;
   switch (target) {
-    case QUESTION:
+    case QUESTIONS:
       return { ...state, questions: arg };
+    case QUESTION:
+      return { ...state, ...arg };
     default:
       return state;
   }
