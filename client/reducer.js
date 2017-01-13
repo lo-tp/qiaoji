@@ -16,7 +16,7 @@ const uiInitialState = {
   progressDialogText: { id: 'ing.login' },
   drawerVisible: false,
   choiceDialog: {
-    visible: true,
+    visible: false,
     text: { id: 'failure.login' },
     title: { id: 'failure.login' },
     leftBtnText: { id: 'failure.login' },

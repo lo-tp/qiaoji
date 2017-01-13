@@ -1,5 +1,9 @@
 export default {
   'dlgTitle.choseStudyMode': '选择学习模式',
+  'dlgTitle.progressUpdateFailure': '进度上传未能成功',
+  'dlgText.progressUpdateFailure': '请检查网络链接后重试',
+  'dlgBtnText.giveUp': '取消',
+  'dlgBtnText.retry': '重试',
   'account.signup': '注册',
   'account.login': '登陆',
   'account.confirm': '确定',
@@ -33,6 +37,7 @@ export default {
   'success.editNewQuiz': '成功修改题目',
   'success.signup': '注册成功',
   'success.login': '登陆成功',
+  'ing.updateQuestion': '正在上传学习进度',
   'ing.signup': '注册中',
   'ing.login': '登陆中',
   'ing.editAnswer': '正在提交修改',
@@ -40,6 +45,7 @@ export default {
   'ing.createNewQuiz': '正在创建新题目',
   'ing.getPageContent': '正在从服务器下载题目信息',
   'ing.getPageCount': '正在从服务器题目信息',
+  'ing.getQuestion': '正在下载复习题目',
   'timeout.createNewQuiz': '题目创建超时，请检查网络情况',
   'timeout.createAnswer': '提交答案创建超时，请检查网络情况',
   'timeout.signup': '注册超时，请检查网络情况',
@@ -57,5 +63,6 @@ export default {
   'textField.quizContent': '请以Markdown格式输入问题内容',
   'textField.quizTitle': '标题',
   'notice.noAnswerYet': '您还未为此题添加解答',
+  'notice.zeroQuestion': '今日题目已全部复习',
   'appbar.study': '学习',
 };

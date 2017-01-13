@@ -93,7 +93,14 @@ class n extends React.Component {
 
   goOver(score) {
     const p = { id: this.props.questions[this.state.index].id };
-    p.goOver = score === BEST ? false : true;
+
+    // p.goOver = score === BEST ? false : true;
+    if (score === BEST) {
+      p.goOver = false;
+    } else {
+      p.goOver = true;
+    }
+
     this.progress.push(p);
   }
 
@@ -109,7 +116,7 @@ class n extends React.Component {
     this.process(choice);
     let index = this.state.index + 1;
     if (index === this.props.questions.length) {
-      console.info(this.progress);
+      this.props.finish(this.progress);
       index = 0;
     }
 
@@ -214,18 +221,23 @@ n.propTypes = {
   intl: intlShape.isRequired,
   questions: PropTypes.array,
   goOver: PropTypes.bool,
+  finish: PropTypes.func,
 };
 
 export default connect(
-  ({ app: { quiz: { item: { preview, title, content } } } }) => ({
-    title,
-    preview,
-    content,
+  ({ app: {
+    quiz: { item: { preview, title, content } },
+    question: { goOver },
+  } }) => ({
     questions: [testQuestion, { ...testQuestion, answer: undefined }],
-    goOver: false,
+    goOver,
   }),
   dispatch => ({
-    changeContent: event => dispatch(setItemContent(event.target.value.trim())),
-    changeTitle: event => dispatch(setItemTitle(event.target.value.trim())),
+    finish: questions => {
+      dispatch({
+        type: 'UPLOAD_PROGRESS',
+        questions,
+      });
+    },
   }),
 )(injectIntl(n));

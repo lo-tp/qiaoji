@@ -46,6 +46,9 @@ export function* getQuestion({ goOver }) {
 }
 
 export function* updateQuestion({ questions }) {
+  yield put(setChoiceDialog({
+    visible: false,
+  }));
   const req = new Request(
     `${SERVER_URL}/functions/question/update`,
     {
@@ -90,6 +93,8 @@ export function* updateQuestion({ questions }) {
 
 function* watch() {
   yield takeLatest('NEW_QESTION', getQuestion);
+  yield takeLatest('UPLOAD_PROGRESS', updateQuestion);
+  yield takeLatest('GET_QUESIONS', getQuestion);
 }
 
 export default [watch];

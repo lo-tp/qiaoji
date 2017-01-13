@@ -30,7 +30,7 @@ const Actions = [
   <Cancel />,
 ];
 
-const choseStudyModeDialog = ({ intl: { formatMessage: fm }, open }) =>
+const choseStudyModeDialog = ({ dispatch, intl: { formatMessage: fm }, open }) =>
 (
   <Dialog
     actions = { Actions }
@@ -45,9 +45,23 @@ const choseStudyModeDialog = ({ intl: { formatMessage: fm }, open }) =>
     <Menu>
       <MenuItem
         primaryText = { fm({ id: 'menu.normal' }) }
+        onTouchTap = { () => {
+          dispatch({
+            type: 'GET_QUESIONS',
+            goOver: 0,
+          });
+          dispatch(setUi({ choseStudyModeDialogVisible: false }));
+        } }
       />
       <MenuItem
         primaryText = { fm({ id: 'menu.goOver' }) }
+        onTouchTap = { () => {
+          dispatch({
+            type: 'GET_QUESIONS',
+            goOver: 1,
+          });
+          dispatch(setUi({ choseStudyModeDialogVisible: false }));
+        } }
       />
     </Menu>
   </Dialog>
@@ -55,10 +69,14 @@ const choseStudyModeDialog = ({ intl: { formatMessage: fm }, open }) =>
 choseStudyModeDialog.propTypes = {
   intl: intlShape.isRequired,
   open: PropTypes.bool,
+  dispatch: PropTypes.func,
 };
 
 export default connect(
   state => ({
     open: state.app.ui.choseStudyModeDialogVisible,
+  }),
+  dispatch => ({
+    dispatch: action => dispatch(action),
   }),
 )(injectIntl(choseStudyModeDialog));
