@@ -31,11 +31,15 @@ export function* getQuestion({ goOver }) {
       } else {
         const { questions } = yield res.json();
         yield put(setQuestions(questions));
-        yield put({
-          type: 'BROWSER_HISTORY',
-          purpose: 'REDIRECT',
-          url: `/functions/question/remember/${path}`,
-        });
+        if (questions.length) {
+          yield put({
+            type: 'BROWSER_HISTORY',
+            purpose: 'REDIRECT',
+            url: `/functions/question/remember/${path}`,
+          });
+        } else {
+          yield closableSnackbarMsg('notice.zeroQuestion');
+        }
       }
     },
   });

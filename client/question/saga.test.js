@@ -146,6 +146,28 @@ describe('getQuestion', () => {
     });
     assert.deepEqual(questions, app.question.questions);
   });
+  it('status 200: 0 question', async () => {
+    nock(SERVER_URL, {
+      reqheaders,
+    })
+    .get(`${path}list`)
+    .query({
+      goOver: 0,
+    })
+    .reply(200, { questions: [] });
+    const actions = await sagaTestHelper(getQuestion({ goOver: 0 }), store);
+    const { app } = store.getState();
+
+    assert.isTrue(app.ui.snackbarVisible);
+    assert.deepEqual(app.ui.snackbarBtnMessage, { id: 'btn.close' });
+    assert.deepEqual(app.ui.snackbarMessage, { id: 'notice.zeroQuestion' });
+    assert.isFalse(app.ui.progressDialogVisible);
+    assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
+    assert.notDeepEqual(actions[actions.length - 2], { ...redirectAction,
+      url: '/functions/question/remember/goOver',
+    });
+    assert.deepEqual([], app.question.questions);
+  });
   after(() => {
     tools.getCid.restore();
   });
