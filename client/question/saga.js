@@ -31,11 +31,12 @@ export function* getQuestion({ goOver }) {
       } else {
         const { questions } = yield res.json();
         yield put(setQuestions(questions));
+        console.info(questions);
         if (questions.length) {
           yield put({
             type: 'BROWSER_HISTORY',
             purpose: 'REDIRECT',
-            url: `/functions/question/remember/${path}`,
+            url: `/functions/question/study/${path}`,
           });
         } else {
           yield closableSnackbarMsg('notice.zeroQuestion');
@@ -81,7 +82,6 @@ export function* updateQuestion({ questions }) {
         }));
       } else {
         yield put(setChoiceDialog({ visible: false }));
-        yield put(setQuestions([]));
         yield put({
           type: 'BROWSER_HISTORY',
           purpose: 'GO_BACK',

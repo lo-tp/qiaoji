@@ -38,7 +38,7 @@ describe('getQuestion', () => {
   const redirectAction = {
     type: 'BROWSER_HISTORY',
     purpose: 'REDIRECT',
-    url: '/functions/question/remember/normal',
+    url: '/functions/question/study/normal',
   };
 
   before(async () => {
@@ -71,7 +71,7 @@ describe('getQuestion', () => {
     assert.deepEqual(app.ui.snackbarMessage, { id: 'failure.getQuestion' });
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
     assert.notDeepEqual(actions[actions.length - 2], { ...redirectAction,
-      url: '/functions/question/remember/normal',
+      url: '/functions/question/study/normal',
     });
   });
   it('status: 200', async () => {
@@ -106,7 +106,7 @@ describe('getQuestion', () => {
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
     assert.deepEqual(actions[actions.length - 2], { ...redirectAction,
-      url: '/functions/question/remember/normal',
+      url: '/functions/question/study/normal',
     });
     assert.deepEqual(questions, app.question.questions);
   });
@@ -142,7 +142,7 @@ describe('getQuestion', () => {
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
     assert.deepEqual(actions[actions.length - 2], { ...redirectAction,
-      url: '/functions/question/remember/goOver',
+      url: '/functions/question/study/goOver',
     });
     assert.deepEqual(questions, app.question.questions);
   });
@@ -164,7 +164,7 @@ describe('getQuestion', () => {
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
     assert.notDeepEqual(actions[actions.length - 2], { ...redirectAction,
-      url: '/functions/question/remember/goOver',
+      url: '/functions/question/study/goOver',
     });
     assert.deepEqual([], app.question.questions);
   });
@@ -233,6 +233,5 @@ describe('update questions', () => {
     assert.deepEqual(ui.progressDialogText, { id: 'ing.updateQuestion' });
     assert.isFalse(choiceDialog.visible);
     assert.deepEqual(actions[actions.length - 2], goBackAction);
-    assert.deepEqual(question.questions, []);
   });
 });
