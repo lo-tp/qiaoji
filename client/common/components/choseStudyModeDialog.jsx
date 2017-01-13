@@ -30,7 +30,8 @@ const Actions = [
   <Cancel />,
 ];
 
-const choseStudyModeDialog = ({ dispatch, intl: { formatMessage: fm }, open }) =>
+const choseStudyModeDialog =
+  ({ dispatch, intl: { formatMessage: fm }, open }) =>
 (
   <Dialog
     actions = { Actions }
@@ -52,6 +53,7 @@ const choseStudyModeDialog = ({ dispatch, intl: { formatMessage: fm }, open }) =
           });
           dispatch(setUi({ choseStudyModeDialogVisible: false }));
         } }
+
       />
       <MenuItem
         primaryText = { fm({ id: 'menu.goOver' }) }
@@ -62,6 +64,7 @@ const choseStudyModeDialog = ({ dispatch, intl: { formatMessage: fm }, open }) =
           });
           dispatch(setUi({ choseStudyModeDialogVisible: false }));
         } }
+
       />
     </Menu>
   </Dialog>

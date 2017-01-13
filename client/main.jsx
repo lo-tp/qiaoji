@@ -19,8 +19,8 @@ import sagaManager from './sagaManager';
 
 const sagaMiddleware = createSegaMiddleware();
 const logger = createLogger();
-const middlewares = applyMiddleware(logger, sagaMiddleware);
-// const middlewares = applyMiddleware(sagaMiddleware);
+// const middlewares = applyMiddleware(logger, sagaMiddleware);
+const middlewares = applyMiddleware(sagaMiddleware);
 const store = middlewares(createStore)(Reducer);
 addLocaleData(zhLocaleData);
 

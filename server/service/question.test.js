@@ -46,6 +46,7 @@ describe('get questions for a specific user', () => {
         update: 0,
         interval: 0,
         difficulty: QUALIFY_DIFFICULTY + 0.1,
+        goOver: false,
       });
       data.push({
         quiz: {
@@ -58,6 +59,7 @@ describe('get questions for a specific user', () => {
           user: user._id,
         },
         question: {
+          goOver: false,
           dueDate: getDaysSinceEpoch(),
           update: 0,
           interval: 0,
@@ -76,6 +78,7 @@ describe('get questions for a specific user', () => {
       update: 0,
       interval: 0,
       difficulty: QUALIFY_DIFFICULTY + 0.1,
+      goOver: false,
     });
     data.push({
       quiz: {
@@ -84,6 +87,7 @@ describe('get questions for a specific user', () => {
         user: user._id,
       },
       question: {
+        goOver: false,
         dueDate: getDaysSinceEpoch(),
         update: 0,
         interval: 0,
@@ -118,6 +122,7 @@ describe('get questions for a specific user', () => {
       },
       question: {
         dueDate: getDaysSinceEpoch(),
+        goOver: false,
         update: 0,
         interval: 0,
 
@@ -142,6 +147,7 @@ describe('get questions for a specific user', () => {
         },
         question: {
           dueDate: getDaysSinceEpoch(),
+          goOver: false,
           update: 0,
           interval: 0,
           difficulty: QUALIFY_DIFFICULTY + 0.1,

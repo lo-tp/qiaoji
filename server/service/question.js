@@ -10,7 +10,8 @@ const router = express.Router();
 router.get('/list', async (req, res) => {
   try {
     let questions;
-    if (req.query.goOver) {
+    // eslint-disable-next-line eqeqeq
+    if (req.query.goOver == 1) {
       questions = await Question.find({
         user: req.user._id,
         goOver: true,
@@ -56,7 +57,7 @@ router.get('/list', async (req, res) => {
           title,
         },
       };
-      if (answer) {
+      if (answer !== undefined) {
         result.answer = {
           content: answer.content,
         };
@@ -69,7 +70,7 @@ router.get('/list', async (req, res) => {
     });
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.info(e.message);
+    console.info(e);
     res.status(500);
   }
 

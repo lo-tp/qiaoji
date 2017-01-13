@@ -31,7 +31,6 @@ export function* getQuestion({ goOver }) {
       } else {
         const { questions } = yield res.json();
         yield put(setQuestions(questions));
-        console.info(questions);
         if (questions.length) {
           yield put({
             type: 'BROWSER_HISTORY',

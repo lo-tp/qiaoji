@@ -24,6 +24,7 @@ export default {
   'btn.preview': '预览',
   'btn.addAnswer': '添加答案',
   'btn.editAnswer': '编辑答案',
+  'failure.getQuestion': '未能成功下载问题',
   'failure.login': '登陆失败',
   'failure.loginWrongInfo': '登陆失败,请检查邮件地址和密码',
   'failure.createNewQuiz': '创建新题目失败',

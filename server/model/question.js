@@ -24,7 +24,7 @@ const questionScheme = mongoose.Schema({
   },
   update: {
     type: Number,
-    default: getDaysSinceEpoch(),
+    default: getDaysSinceEpoch() - 1,
     required: true,
   },
   interval: {
@@ -35,6 +35,7 @@ const questionScheme = mongoose.Schema({
   },
   goOver: {
     type: Boolean,
+    defualt: true,
   },
 });
 

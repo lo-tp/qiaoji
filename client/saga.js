@@ -39,9 +39,11 @@ export function* tem({ arg: { msg, operation = closeSnackbar } }) {
 }
 
 // eslint-disable-next-line  require-yield
-function* browserHistoryOperation({ purpose }) {
+function* browserHistoryOperation({ purpose, url }) {
   if (purpose === 'GO_BACK') {
     browserHistory.go(-1);
+  } else if (purpose === 'REDIRECT') {
+    browserHistory.push(url);
   }
 }
 

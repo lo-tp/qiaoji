@@ -225,7 +225,7 @@ describe('update questions', () => {
     })
     .reply(200);
     const actions = await sagaTestHelper(updateQuestion({ questions }), store);
-    const { app: { ui, question } } = store.getState();
+    const { app: { ui } } = store.getState();
     const { choiceDialog } = ui;
 
     assert.isFalse(ui.snackbarVisible);
