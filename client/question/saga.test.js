@@ -70,7 +70,9 @@ describe('getQuestion', () => {
     assert.deepEqual(app.ui.snackbarBtnMessage, { id: 'btn.close' });
     assert.deepEqual(app.ui.snackbarMessage, { id: 'failure.getQuestion' });
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
-    assert.notDeepEqual(actions[actions.length - 2], redirectAction);
+    assert.notDeepEqual(actions[actions.length - 2], { ...redirectAction,
+      url: '/functions/question/remember/normal',
+    });
   });
   it('status: 200', async () => {
     for (let index = 0; index < 10; index += 1) {
@@ -103,7 +105,9 @@ describe('getQuestion', () => {
     assert.isFalse(app.ui.snackbarVisible);
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
-    assert.deepEqual(actions[actions.length - 2], redirectAction);
+    assert.deepEqual(actions[actions.length - 2], { ...redirectAction,
+      url: '/functions/question/remember/normal',
+    });
     assert.deepEqual(questions, app.question.questions);
   });
   it('status: 200 go over mode', async () => {
@@ -137,7 +141,9 @@ describe('getQuestion', () => {
     assert.isFalse(app.ui.snackbarVisible);
     assert.isFalse(app.ui.progressDialogVisible);
     assert.deepEqual(app.ui.progressDialogText, { id: 'ing.getQuestion' });
-    assert.deepEqual(actions[actions.length - 2], redirectAction);
+    assert.deepEqual(actions[actions.length - 2], { ...redirectAction,
+      url: '/functions/question/remember/goOver',
+    });
     assert.deepEqual(questions, app.question.questions);
   });
   after(() => {

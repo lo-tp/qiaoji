@@ -10,6 +10,7 @@ import { setUi, setChoiceDialog } from '../action';
 // const selectNewItem = state => state.app.quiz.item;
 
 export function* getQuestion({ goOver }) {
+  const path = goOver ? 'goOver' : 'normal';
   const req = new Request(
     `${SERVER_URL}/functions/question/list?${getQueryString({ goOver })}`,
     {
@@ -33,7 +34,7 @@ export function* getQuestion({ goOver }) {
         yield put({
           type: 'BROWSER_HISTORY',
           purpose: 'REDIRECT',
-          url: '/functions/question/remember/normal',
+          url: `/functions/question/remember/${path}`,
         });
       }
     },
