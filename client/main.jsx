@@ -1,4 +1,4 @@
-  // eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { AppContainer } from 'react-hot-loader';
 import 'babel-polyfill';
 import createSegaMiddleware from 'redux-saga';

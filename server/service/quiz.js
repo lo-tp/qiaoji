@@ -33,6 +33,7 @@ router.post('/new', async (req, res) => {
         ...initialRecord,
         quiz: quiz._id,
         user: req.user._id,
+        goOver: true,
       });
       await question.save();
     } catch (e) {

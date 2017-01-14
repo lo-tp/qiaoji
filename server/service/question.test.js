@@ -249,7 +249,7 @@ describe('update questions', () => {
       });
     results = await mockData(data);
   });
-  it('500 when update questions not belonging to the user', async() => {
+  it('500 when update questions not belonging to the user', async () => {
     await assert.equal(1, 1);
     const updateTargets = results.map(r => {
       const ret = {};
@@ -269,7 +269,7 @@ describe('update questions', () => {
       assert.equal(e.status, 500);
     }
   });
-  it('status 200 when every is ok', async() => {
+  it('status 200 when every is ok', async () => {
     assert.equal(1, 1);
     const updateTargets = results.filter(r => r.question.user === `${user._id}`)
       .map(r => {

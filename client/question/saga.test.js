@@ -191,7 +191,7 @@ describe('update questions', () => {
       type: 'RESET_STATE',
     });
   });
-  it('status 500', async() => {
+  it('status 500', async () => {
     nock(SERVER_URL, {
       reqheaders,
     })
@@ -216,7 +216,7 @@ describe('update questions', () => {
     assert.deepEqual(ui.progressDialogText, { id: 'ing.updateQuestion' });
     assert.deepEqual(question.questions, questions);
   });
-  it('status 200', async() => {
+  it('status 200', async () => {
     nock(SERVER_URL, {
       reqheaders,
     })
