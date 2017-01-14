@@ -1,6 +1,7 @@
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import SERVER_URL from 'app-config';
+import 'whatwg-fetch';
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import { getCid, getQueryString } from '../common/utilities/tool';

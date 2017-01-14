@@ -1,3 +1,4 @@
+import 'whatwg-fetch';
 import { browserHistory } from 'react-router';
 import { race, call, put, takeLatest } from 'redux-saga/effects';
 import { delay } from 'redux-saga';

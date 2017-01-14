@@ -198,8 +198,8 @@ describe('getPage', () => {
     });
     assert.equal(res.status, 200);
     assert.equal(res.body.pageNumber, 2);
-    assert.equal(res.body.count, PAGE_NUMBER);
-    assert.equal(res.body.quizzes.length, PAGE_NUMBER);
+    assert.equal(res.body.count, 3);
+    assert.equal(res.body.quizzes.length, 3);
     assert.equal(res.body.quizzes[0].content, `content ${PAGE_NUMBER}`);
     assert.equal(res.body.quizzes[0].title, `title ${PAGE_NUMBER}`);
     assert.equal(res.body.quizzes[1].content, `content ${PAGE_NUMBER + 1}`);

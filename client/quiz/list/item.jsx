@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { injectIntl, intlShape } from 'react-intl';
-import Mkd from 'markdown-it';
+import showdown from 'showdown';
 import { setItemAnswerId, setItemQuizId, setItemContent } from '../action';
 
 const style = {
   margin: 12,
 };
-const mkd = new Mkd();
+const converter = new showdown.Converter();
 
 const item = ({ editOrCreateAnswer, answer,
               title, content, intl: { formatMessage: fm } }) =>
@@ -31,7 +31,7 @@ const item = ({ editOrCreateAnswer, answer,
 
         // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML = {
-          { __html: mkd.render(content) }
+        { __html: converter.makeHtml(content) }
         }
         />
       </CardText>

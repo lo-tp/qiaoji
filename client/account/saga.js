@@ -1,6 +1,7 @@
 import { race, put, call, takeLatest } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { browserHistory } from 'react-router';
+import 'whatwg-fetch';
 
 // eslint-disable-next-line max-len
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import Mkd from 'markdown-it';
+import showdown from 'showdown';
 
-const mkd = new Mkd();
+const converter = new showdown.Converter();
 
 const Preview = ({ content, preview }) => (
   <div
@@ -10,7 +10,7 @@ const Preview = ({ content, preview }) => (
     } }
     // eslint-disable-next-line react/no-danger
     dangerouslySetInnerHTML = {
-      { __html: mkd.render(content) }
+      { __html: converter.makeHtml(content) }
     }
   />
 );

@@ -19,7 +19,6 @@
     "express": "^4.14.0",
     "immutable": "^3.8.1",
     "lz-string": "^1.4.4",
-    "markdown-it": "^8.2.2",
     "material-ui": "^0.16.6",
     "material-ui-pagination": "^1.0.0",
     "mongoose": "^4.7.5",
@@ -34,8 +33,10 @@
     "redux-form": "^6.4.1",
     "redux-logger": "^2.7.4",
     "redux-saga": "^0.14.0",
+    "showdown": "^1.6.0",
     "sm2-plus": "^1.0.4",
-    "validator": "^6.2.0"
+    "validator": "^6.2.0",
+    "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
