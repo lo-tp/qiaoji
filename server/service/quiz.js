@@ -9,7 +9,7 @@ import Question from '../model/question';
 import validations, { quizValidation } from '../../common/validations';
 
 const initialRecord = {
-  difficulty: 0.3,
+  difficulty: 0.4,
   interval: 1,
 };
 const router = express.Router();
