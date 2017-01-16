@@ -13,11 +13,6 @@ const Quiz = (
     <IndexRedirect to = 'list' />
     <Route
       path = 'list'
-      onEnter = { onEnter.list }
-      component = { List }
-    />
-    <Route
-      path = 'list'
       component = { List }
     >
       <IndexRedirect to = 'all' />
