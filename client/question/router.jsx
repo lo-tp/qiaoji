@@ -12,6 +12,7 @@ const Question = (
       path = 'study'
       component = { Study }
     >
+      <IndexRedirect to = 'normal' />
       <Route
         path = 'goOver'
         onEnter = { onEnter.goOver }
