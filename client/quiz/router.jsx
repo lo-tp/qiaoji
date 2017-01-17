@@ -41,6 +41,7 @@ const Quiz = (
     <Route
       path = 'new'
       onLeave = { onLeave.newPage }
+      onEnter = { onEnter.newQuiz }
       component = { New }
     />
   </Route>
