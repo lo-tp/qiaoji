@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { injectIntl, intlShape } from 'react-intl';
 import showdown from 'showdown';
 import { setItemAnswerId, setItemQuizId, setItemContent } from '../action';
+import markdown from '../../common/markdown.scss';
 
 const style = {
   margin: 12,
@@ -24,6 +25,7 @@ const item = ({ editOrCreateAnswer, answer,
         expandable = { true }
       >
         <div
+          className = { markdown['markdown-body'] }
           style = { {
             overflowY: 'hidden',
             maxHeight: 300,

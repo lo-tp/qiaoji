@@ -23,7 +23,9 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader'],
+        loaders: ['style-loader',
+          'css-loader?modules=true&sourceMap=true&localIdentName=[name]__[local]--[hash:base64:5]',
+          'sass-loader'],
       },
       {
         test: /\.json$/,
@@ -37,7 +39,7 @@ module.exports = {
     ],
   },
   resolve: {
-    alias:{
+    alias: {
       'app-config': path.join(__dirname, 'config', 'development'),
     },
     extensions: ['', '.jsx', '.js', '.json'],

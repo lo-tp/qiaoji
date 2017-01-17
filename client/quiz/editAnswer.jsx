@@ -13,6 +13,7 @@ import AppBar from '../common/components/appBar';
 import Editor from '../common/components/markdown/editor';
 import { shrinkStyle, parentStyle } from '../common/styles';
 import { setItemPreview, setItemContent, setItemTitle } from './action';
+import markdown from '../common/markdown.scss';
 
 const converter = new showdown.Converter();
 
@@ -79,12 +80,14 @@ const Quiz = ({ title, content }) =>
     <Card>
       <CardHeader
         actAsExpander = { true }
-        title = { title } subtitle = 'Lotp'
+        title = { title }
+        subtitle = 'Lotp'
       />
       <CardText
         expandable = { true }
       >
         <div
+          className = { markdown['markdown-body'] }
           style = { {
             overflowY: 'hidden',
             maxHeight: 300,
