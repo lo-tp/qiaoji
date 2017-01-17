@@ -3,7 +3,6 @@
 import SERVER_URL from 'app-config';
 import 'whatwg-fetch';
 import Immutable from 'immutable';
-import { browserHistory } from 'react-router';
 import { put, select, call, takeLatest } from 'redux-saga/effects';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import validations, { quizValidation } from '../../common/validations';
@@ -56,7 +55,9 @@ function* newQuestion() {
         if (res.status === 500) {
           yield closableSnackbarMsg('failure.createNewQuiz');
         } else {
-          browserHistory.go(-1);
+          yield put({
+            type: 'BROWSER_HISTORY',
+            purpose: 'GO_BACK' });
           yield closableSnackbarMsg('success.createNewQuiz');
         }
       },
