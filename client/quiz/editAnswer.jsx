@@ -107,7 +107,7 @@ Quiz.propTypes = {
   content: PropTypes.string,
 };
 
-const n = ({ preview, content, changeContent }) =>
+const n = ({ quizTitle, quizContent, preview, content, changeContent }) =>
 (
   <div
     style = { parentStyle }
@@ -121,8 +121,8 @@ const n = ({ preview, content, changeContent }) =>
       style = { shrinkStyle }
     >
       <Quiz
-        title = 'title'
-        content = 'content'
+        title = { quizTitle }
+        content = { quizContent }
       />
       <Editor
         preview = { preview }
@@ -136,15 +136,25 @@ const n = ({ preview, content, changeContent }) =>
 n.propTypes = {
   preview: PropTypes.bool,
   content: PropTypes.string,
+  quizContent: PropTypes.string,
+  quizTitle: PropTypes.string,
   changeContent: PropTypes.func,
 };
 
 export default connect(
-  ({ app: { quiz: { item: { preview, title, content } } } }) => ({
-    title,
-    preview,
-    content,
-  }),
+  ({ app: { quiz: { item: {
+    quizId, preview, title, content },
+  quizzes } } }) => {
+    const { title: quizTitle, content: quizContent } = quizzes.get(quizId);
+    return {
+      quizTitle,
+      quizContent,
+      title,
+      preview,
+      content,
+    };
+  },
+
   dispatch => ({
     changeContent: event => dispatch(setItemContent(event.target.value.trim())),
     changeTitle: event => dispatch(setItemTitle(event.target.value.trim())),
