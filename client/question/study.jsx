@@ -47,9 +47,11 @@ class n extends React.Component {
 
   normal(score) {
     const question = this.props.questions[this.state.index];
+    const goOver = score !== BEST;
     this.progress.push({
       ...calculate(question, score, this.today),
       id: question.id,
+      goOver,
     });
   }
 
