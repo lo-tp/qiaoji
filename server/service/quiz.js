@@ -2,6 +2,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import { PAGE_NUMBER } from 'app-config';
 import express from 'express';
+import mongoose from 'mongoose';
 
 import Answer from '../model/answer';
 import Quiz from '../model/quiz';
@@ -55,14 +56,14 @@ router.get('/pageCount', async (req, res) => {
       filter.user = req.user._id;
     }
 
-    const count = await Quiz.count(filter);
-    let pageNumber = Math.round(count / PAGE_NUMBER - 0.5);
+    const totalNumber = await Quiz.count(filter);
+    let count = Math.round(totalNumber / PAGE_NUMBER - 0.5);
     if (count % PAGE_NUMBER) {
-      pageNumber += 1;
+      count += 1;
     }
 
     res.json({
-      pageNumber,
+      count,
     });
   } catch (e) {
     // eslint-disable-next-line no-console
@@ -114,6 +115,37 @@ router.get('/page/content', async (req, res) => {
   }
 
   res.end();
+});
+
+router.get('/page/count/:userId', async (req, res) => {
+  try {
+    const filter = {};
+    const { userId } = req.params;
+    if (userId !== 'all') {
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        filter.user = userId;
+      } else {
+        throw new Error('invalid user id');
+      }
+    }
+
+    const totalNumber = await Quiz.count(filter);
+    let count = Math.round(totalNumber / PAGE_NUMBER - 0.5);
+    if (totalNumber % PAGE_NUMBER) {
+      count += 1;
+    }
+
+    res.json({
+      count,
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.info(e.message);
+    res.status(500);
+  }
+  finally {
+    res.end();
+  }
 });
 
 export default router;
