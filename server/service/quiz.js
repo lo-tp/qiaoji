@@ -142,8 +142,65 @@ router.get('/page/count/:userId', async (req, res) => {
     // eslint-disable-next-line no-console
     console.info(e.message);
     res.status(500);
+  } finally {
+    res.end();
   }
-  finally {
+});
+
+router.get('/page/content/:userId/:pageNumber', async (req, res) => {
+  try {
+    const filter = {};
+    const fields = { user: 1, _id: 1, content: 1, title: 1 };
+    let { pageNumber } = req.params;
+    const { userId } = req.params;
+    if (userId !== 'all') {
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        filter.user = userId;
+      } else {
+        throw new Error('invalid user id');
+      }
+    }
+
+    if (validations.pageNumber({
+      errors: {},
+      values: { pageNumber: `${pageNumber}` },
+    }).errors.pageNumber !== undefined) {
+      pageNumber = 1;
+    } else {
+      pageNumber = parseInt(pageNumber, 10);
+    }
+
+    const skipPage = pageNumber - 1;
+    let quizzes = await Quiz.find(filter, fields)
+        .skip(skipPage * PAGE_NUMBER).limit(PAGE_NUMBER);
+    quizzes = quizzes.map(q => {
+      const { _id, user, content, title } = q;
+      return {
+        _id: `${_id}`,
+        user: `${user}`,
+        content,
+        title,
+      };
+    });
+    const quizIds = quizzes.map(quiz => quiz._id);
+    const answers = await Answer.find({ user: req.user._id })
+      .where('quiz').in(quizIds);
+    answers.forEach(a => {
+      // eslint-disable-next-line eqeqeq
+      const quiz = quizzes.find(q => q._id == a.quiz);
+      // eslint-disable-next-line no-underscore-dangle
+      quiz._doc.answer = a;
+    });
+    res.json({
+      quizzes,
+      count: quizzes.length,
+      pageNumber,
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(e.message);
+    res.status(500);
+  } finally {
     res.end();
   }
 });

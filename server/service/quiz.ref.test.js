@@ -12,7 +12,7 @@ import app from '../server';
 import Quiz from '../model/quiz';
 import Question from '../model/question';
 import { mockData, createUerAndCookie } from '../testTools';
-import { dbSetupTest, dbClose } from '../setup/db';
+import { dbSetupTest, dbClose, dbReset } from '../setup/db';
 
 chai.use(chaiHttp);
 
@@ -24,7 +24,7 @@ describe('page/count/:userId', () => {
   let cookie;
   let index;
   const minePageCount = 2;
-  const mineQuizzes = [];
+  const mineQuizzesFirstPage = [];
   const allQuizzes = [];
   const allPagecount = 3;
 
@@ -40,11 +40,11 @@ describe('page/count/:userId', () => {
     for (index = 0; index < PAGE_NUMBER; index += 1) {
       allQuizzes.push({ quiz: { ...fakeQuiz, user: 'kkkk' } });
       allQuizzes.push({ quiz: { ...fakeQuiz, user: user._id } });
-      mineQuizzes.push({ quiz: { ...fakeQuiz, user: user._id } });
+      mineQuizzesFirstPage.push({ quiz: { ...fakeQuiz, user: user._id } });
     }
 
     allQuizzes.push({ quiz: { ...fakeQuiz, user: user._id } });
-    mineQuizzes.push({ quiz: { ...fakeQuiz, user: user._id } });
+    mineQuizzesFirstPage.push({ quiz: { ...fakeQuiz, user: user._id } });
     await mockData(allQuizzes);
   });
   it('invalid userId', async () => {
@@ -52,6 +52,7 @@ describe('page/count/:userId', () => {
       await chai.request(app)
         .get(`${path}/page/count/sdfk`)
         .set('cookieId', cookie._id);
+      assert.equal(1, 500);
     } catch (e) {
       assert.equal(e.status, 500);
     }
@@ -74,7 +75,140 @@ describe('page/count/:userId', () => {
   });
 
   after(done => {
+    dbReset();
+    done();
+  });
+});
+
+describe('page/content/:userId/pageNumber', () => {
+  let user;
+  let cookie;
+  let index;
+  const minePageCount = 2;
+  const expectedMineQuizzesFirstPage = [];
+  const expectedMineQuizzesSecondPage = [];
+  const expectedAllQuizzesFirstTwoPage = [];
+  const expectedAllQuizzesLastPage = [];
+  let expectedAllQuizzesFirstPage;
+  const allQuizzes = [];
+  const allPagecount = 3;
+
+  before(async () => {
+    dbSetupTest();
+    const tem = await createUerAndCookie();
+    user = tem.user;
+    cookie = tem.cookie;
+    const fakeQuiz = {
+      content: 'content',
+      title: 'title',
+    };
+    for (index = 0; index < PAGE_NUMBER; index += 1) {
+      allQuizzes.push({ quiz: { ...fakeQuiz, content: `${index}kkk`, user: 'kkkk' } });
+      allQuizzes.push(
+        { quiz: { ...fakeQuiz, content: `${index}`, user: user._id } });
+      expectedAllQuizzesFirstTwoPage.push({ ...fakeQuiz, content: `${index}kkk`, user: 'kkkk' });
+      expectedAllQuizzesFirstTwoPage.push(
+        { ...fakeQuiz, content: `${index}`, user: `${user._id}` });
+      expectedMineQuizzesFirstPage.push(
+        { ...fakeQuiz, content: `${index}`, user: `${user._id}` });
+    }
+
+    allQuizzes.push({ quiz: { ...fakeQuiz, content: 'kk', user: `${user._id}` } });
+    expectedMineQuizzesSecondPage.push({ ...fakeQuiz, content: 'kk', user: `${user._id}` });
+    expectedAllQuizzesLastPage.push({ ...fakeQuiz, content: 'kk', user: `${user._id}` });
+    expectedAllQuizzesFirstPage = expectedAllQuizzesFirstTwoPage.slice(0, 20);
+    await mockData(allQuizzes);
+  });
+
+  after(done => {
     dbClose();
     done();
+  });
+  it('invalid userId', async () => {
+    try {
+      await chai.request(app)
+        .get(`${path}/page/content/sdfk/1231`)
+        .set('cookieId', cookie._id);
+    } catch (e) {
+      assert.equal(e.status, 500);
+    }
+  });
+  it('return first page if provide an invalid pageNumber', async () => {
+    // for a single user
+    let res = await chai.request(app)
+    .get(`${path}/page/content/${user._id}/kkk`)
+    .set('cookieId', cookie._id);
+    let retQuizzes = res.body.quizzes.map(q => {
+      const { user, content, title } = q;
+      return { user, content, title };
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.count, PAGE_NUMBER);
+    assert.deepEqual(retQuizzes, expectedMineQuizzesFirstPage);
+    assert.equal(res.body.pageNumber, 1);
+    // for all
+    res = await chai.request(app)
+    .get(`${path}/page/content/all/kkk`)
+    .set('cookieId', cookie._id);
+    retQuizzes = res.body.quizzes.map(q => {
+      const { user, content, title } = q;
+      return { user, content, title };
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.count, PAGE_NUMBER);
+    assert.deepEqual(retQuizzes, expectedAllQuizzesFirstPage);
+    assert.equal(res.body.pageNumber, 1);
+  });
+  it('get pages for a specific user', async () => {
+    // get first page
+    let res = await chai.request(app)
+    .get(`${path}/page/content/${user._id}/1`)
+    .set('cookieId', cookie._id);
+    let retQuizzes = res.body.quizzes.map(q => {
+      const { user, content, title } = q;
+      return { user, content, title };
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.count, PAGE_NUMBER);
+    assert.deepEqual(retQuizzes, expectedMineQuizzesFirstPage);
+    assert.equal(res.body.pageNumber, 1);
+    // get second page
+    res = await chai.request(app)
+    .get(`${path}/page/content/${user._id}/2`)
+    .set('cookieId', cookie._id);
+    retQuizzes = res.body.quizzes.map(q => {
+      const { user, content, title } = q;
+      return { user, content, title };
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.count, 1);
+    assert.deepEqual(retQuizzes, expectedMineQuizzesSecondPage);
+    assert.equal(res.body.pageNumber, 2);
+  });
+  it('get pages for all', async () => {
+    // get first page
+    let res = await chai.request(app)
+    .get(`${path}/page/content/all/1`)
+    .set('cookieId', cookie._id);
+    let retQuizzes = res.body.quizzes.map(q => {
+      const { user, content, title } = q;
+      return { user, content, title };
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.count, PAGE_NUMBER);
+    assert.deepEqual(retQuizzes, expectedAllQuizzesFirstPage);
+    assert.equal(res.body.pageNumber, 1);
+    // get second page
+    res = await chai.request(app)
+    .get(`${path}/page/content/all/3`)
+    .set('cookieId', cookie._id);
+    retQuizzes = res.body.quizzes.map(q => {
+      const { user, content, title } = q;
+      return { user, content, title };
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.count, 1);
+    assert.deepEqual(retQuizzes, expectedAllQuizzesLastPage);
+    assert.equal(res.body.pageNumber, 3);
   });
 });
