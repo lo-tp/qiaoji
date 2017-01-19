@@ -34,6 +34,7 @@ export default {
   'failure.signupAccountUsed': '邮件地址已被占用',
   'failure.unauthorized': '当前操作需要登陆',
   'failure.getPageCount': '与服务器链接中断,请检查网络情况',
+  'failure.getPageContent': '与服务器链接中断,请检查网络情况',
   'success.createNewQuiz': '成功添加新题目',
   'success.editNewQuiz': '成功修改题目',
   'success.signup': '注册成功',

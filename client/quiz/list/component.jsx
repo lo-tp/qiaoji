@@ -10,6 +10,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import AppBar from '../../common/components/appBar';
 import Item from './item';
 import { shrinkStyle, parentStyle } from '../../common/styles';
+import { PAGE_MINE, PAGE_ALL, setPageAllMeta, setPageMineMeta } from '../action';
 
 // import Pagination from './pagination';
 
@@ -85,24 +86,53 @@ export default connect(
   state => {
     const { app: { quiz: { meta, quizzes } } } = state;
     const list = [];
-    meta.get('pages').forEach(id => {
+    const { currentPage } = meta;
+    let pageMeta;
+    let setPageMeta;
+    let path;
+    switch (currentPage) {
+      case PAGE_MINE:
+        pageMeta = meta.mine;
+        setPageMeta = setPageMineMeta;
+        path = `/functions/quiz/list/${pageMeta.get('user')}/`;
+        break;
+      case PAGE_ALL:
+      default:
+        path = '/functions/quiz/list/all/';
+        pageMeta = meta.all;
+        setPageMeta = setPageAllMeta;
+    }
+    pageMeta.get('pages').forEach(id => {
       list.push({
         id,
         ...quizzes.get(id),
       });
     });
     return {
+      path,
+      setPageMeta,
+      pageMeta,
       list,
-      pageCount: meta.get('pageCount'),
-      pageNumber: meta.get('pageNumber'),
+      pageCount: pageMeta.get('count'),
+      pageNumber: pageMeta.get('pageNumber'),
     };
   },
 
   dispatch => ({
-    turnPage: value => {
+    turnPage: (setPageMeta, value, path) => {
+      dispatch(
+        setPageMeta({
+          key: 'pageNumber',
+          value,
+        }));
       dispatch({
-        type: 'GET_QUIZ_ONE_PAGE',
-        pageNumber: value,
+        type: 'BROWSER_HISTORY',
+        purpose: 'REDIRECT',
+        url: `${path}${value}`,
       });
     },
-  }))(List);
+  }),
+    (stateProps, dispatchProps) => ({
+      ...stateProps,
+      turnPage: value => dispatchProps.turnPage(stateProps.setPageMeta, value, stateProps.path),
+    }))(List);

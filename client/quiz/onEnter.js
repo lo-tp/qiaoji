@@ -1,31 +1,62 @@
 import Ramda from 'ramda';
-import { setItemTitle, setItemContent, startCreating, startEditing } from './action';
+import { setPageAllMeta, setMeta, setPageMineMeta, setItemTitle, setItemContent,
+  PAGE_ALL, PAGE_MINE, startCreating, startEditing } from './action';
+import validations from '../../common/validations';
 
 export default {
   // eslint-disable-next-line no-unused-vars
-  all: Ramda.curry((store, previousState) => {
+  all: Ramda.curry((store, nextState) => {
+    let { user, pageNumber } = nextState.params;
+    let setPageMeta = setPageAllMeta;
+    if (user === 'all') {
+      store.dispatch(
+        setMeta({
+          currentPage: PAGE_ALL,
+        }));
+    } else if(user === store.getState().app.quiz.meta.mine.get('user')) {
+      setPageMeta = setPageMineMeta;
+      store.dispatch(
+        setMeta({
+          currentPage: PAGE_ALL,
+        }));
+    }
+
+    if (validations.pageNumber({
+      errors: {},
+      values: { pageNumber: `${pageNumber}` },
+    }).errors.pageNumber !== undefined) {
+      pageNumber = 1;
+    } else {
+      pageNumber = parseInt(pageNumber, 10);
+    }
+
+    store.dispatch(
+      setPageMeta({
+        key: 'pageNumber',
+        value: pageNumber,
+      }));
     store.dispatch({
-      type: 'GET_QUIZ_PAGE_COUNT',
+      type: 'GO_TO_QUIZ_OAGE',
     });
   }),
   // eslint-disable-next-line no-unused-vars
-  filteredByUser: Ramda.curry((store, previousState) => {
-    store.dispatch({
-      type: 'GET_QUIZ_PAGE_COUNT',
-      belong: 1,
-    });
+  filteredByUser: Ramda.curry((store, nextState) => {
+    // store.dispatch({
+    // type: 'GET_QUIZ_PAGE_COUNT',
+    // belong: 1,
+    // });
   }),
   // eslint-disable-next-line no-unused-vars
-  newAnswer: Ramda.curry((store, previousState) => {
+  newAnswer: Ramda.curry((store, nextState) => {
     store.dispatch(startCreating);
     store.dispatch(setItemContent(''));
   }),
   // eslint-disable-next-line no-unused-vars
-  editAnswer: Ramda.curry((store, previousState) => {
+  editAnswer: Ramda.curry((store, nextState) => {
     store.dispatch(startEditing);
   }),
   // eslint-disable-next-line no-unused-vars
-  newQuiz: Ramda.curry((store, previousState) => {
+  newQuiz: Ramda.curry((store, nextState) => {
     store.dispatch(setItemContent(''));
     store.dispatch(setItemTitle(''));
   }),

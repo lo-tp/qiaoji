@@ -15,9 +15,9 @@ const Quiz = (
       path = 'list'
       component = { List }
     >
-      <IndexRedirect to = 'all' />
+      <IndexRedirect to = 'all/1' />
       <Route
-        path = 'all'
+        path = ':user/:pageNumber'
         onEnter = { onEnter.all }
       />
       <Route
