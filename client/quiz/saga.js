@@ -6,7 +6,8 @@ import Immutable from 'immutable';
 import { put, select, call, takeLatest } from 'redux-saga/effects';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import validations, { quizValidation } from '../../common/validations';
-import { setAnswers, setMeta, setQuizzes } from './action';
+import { setPageAllMeta, setPageMineMeta, PAGE_ALL, PAGE_MINE,
+  setAnswers, setMeta, setQuizzes } from './action';
 import { getCid, getQueryString } from '../common/utilities/tool';
 
 const postReqTemplate = {
@@ -28,6 +29,22 @@ function* validateItem(values) {
 
 const selectNewItem = state => state.app.quiz.item;
 const selectQuizzes = state => state.app.quiz.quizzes;
+const selectPageMeta = state => {
+  const { quiz: { meta } } = state.app;
+  switch (meta.currentPage) {
+    case PAGE_ALL:
+      return {
+        pageMeta: meta.all,
+        setPageMeta: setPageAllMeta,
+      };
+    default:
+    case PAGE_MINE:
+      return {
+        pageMeta: meta.mine,
+        setPageMeta: setPageMineMeta,
+      };
+  }
+};
 
 function* newQuestion() {
   const { content, title } = yield select(selectNewItem);
@@ -226,6 +243,111 @@ export function* editOrCreateAnswer({ create, content, quizId, answerId }) {
       },
     });
   }
+}
+
+export function* goToPage() {
+  const { pageMeta, setPageMeta } = yield select(selectPageMeta);
+  const count = pageMeta.get('count');
+  const pageNumber = pageMeta.get('pageNumber');
+  if (count === -1) {
+    yield put({
+      type: 'GET_QUIZ_PAGE_COUNT',
+    });
+  } else {
+    if (validations.pageNumber({
+      errors: {},
+      values: { pageNumber: `${pageNumber}` },
+    }).errors.pageNumber !== undefined || pageNumber > count) {
+      yield put(setPageMeta({
+        key: 'pageNumber',
+        value: 1,
+      }));
+    }
+
+    yield put({
+      type: 'GET_QUIZ_PAGE_CONTENT',
+    });
+  }
+}
+
+export function* getPageCount() {
+  const { pageMeta, setPageMeta } = yield select(selectPageMeta);
+  const user = pageMeta.get('user');
+  const req = new Request(
+    `${SERVER_URL}/functions/quiz/page/count/${user}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        cookieId: getCid(),
+      },
+    }
+  );
+  yield call(authorizedOperation, {
+    req,
+    operationName: 'getPageCount',
+    * successHandler(res) {
+      if (res.status === 500) {
+        yield closableSnackbarMsg('failure.getPageCount');
+      } else {
+        const { count } = yield res.json();
+        yield put(
+          setPageMeta({
+            key: 'count',
+            value: count,
+          }));
+        yield put(
+          {
+            type: 'GO_TO_QUIZ_OAGE',
+          });
+      }
+    },
+  });
+}
+
+export function* getPageContent1() {
+  const { pageMeta, setPageMeta } = yield select(selectPageMeta);
+  const user = pageMeta.get('user');
+  const pageNumber = pageMeta.get('pageNumber');
+  const req = new Request(
+    `${SERVER_URL}/functions/quiz/page/content/${user}/${pageNumber}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        cookieId: getCid(),
+      },
+    }
+  );
+  yield call(authorizedOperation, {
+    req,
+    operationName: 'getPageContent',
+    * successHandler(res) {
+      if (res.status === 500) {
+        yield closableSnackbarMsg('failure.getPageContent');
+      } else {
+        const { quizzes } = yield res.json();
+        const pages = [];
+        quizzes.forEach(q => {
+          pages.push(q._id);
+        });
+        const totalNumber = quizzes.length;
+        for (let i = 0; i < totalNumber; i += 1) {
+          yield put(setQuizzes({
+            key: pages[i],
+            value: quizzes[i],
+          }));
+        }
+
+        yield put(setPageMeta({
+          key: 'pages',
+          value: pages,
+        }));
+      }
+    },
+  });
 }
 
 function* watch() {

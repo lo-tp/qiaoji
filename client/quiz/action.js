@@ -11,6 +11,8 @@ export const ANSWERS = 'ANSWERS';
 export const EDITING = 'EDITING';
 export const QUIZ_ID = 'QUIZ_ID';
 export const ANSWER_ID = 'ANSWER_ID';
+export const PAGE_ALL = 'PAGE_ALL';
+export const PAGE_MINE = 'PAGE_MINE';
 // defCstAct
 
 const action = action5(QUIZ);
@@ -24,5 +26,7 @@ export const startEditing = setItemAction(EDITING, true);
 export const startCreating = setItemAction(EDITING, false);
 
 export const setMeta = action(META, SET, 0);
+export const setPageAllMeta = action(META, PAGE_ALL, 0);
+export const setPageMineMeta = action(META, PAGE_MINE, 0);
 export const setQuizzes = action(QUIZZES, SET, 0);
 export const setAnswers = action(ANSWERS, SET, 0);

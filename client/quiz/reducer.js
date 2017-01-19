@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
-import { EDITING, QUIZ_ID, QUIZZES, META, ANSWER_ID,
+import { PAGE_ALL, PAGE_MINE, EDITING,
+  QUIZ_ID, QUIZZES, META, ANSWER_ID,
   PREVIEW, NEW_ITEM, ANSWERS, TITLE, CONTENT } from './action';
 import { SET } from '../action';
 
@@ -10,11 +11,20 @@ export const quizInitialState = {
     content: '',
     editing: false,
   },
-  meta: Immutable.Map({
-    pages: Immutable.List(),
-    pageCount: -1,
-    pageNumber: 1,
-  }),
+  meta: {
+    currentPage: PAGE_ALL,
+    mine: Immutable.Map({
+      pages: [],
+      count: -1,
+      pageNumber: 1,
+    }),
+    all: Immutable.Map({
+      user: 'all',
+      pages: [],
+      count: -1,
+      pageNumber: 1,
+    }),
+  },
   quizzes: Immutable.Map(),
   answers: Immutable.Map(),
 };
@@ -31,16 +41,23 @@ const answers = (state = {}, { flag, arg }) => {
 const quizzes = (state = {}, { flag, arg }) => {
   switch (flag) {
     case SET:
-      return state.set(arg.name, arg.value);
+      return state.set(arg.key, arg.value);
     default:
       return state;
   }
 };
 
+const mine = (state, { arg }) => state.set(arg.key, arg.value);
+const all = (state, { arg }) => state.set(arg.key, arg.value);
+
 const meta = (state = {}, { flag, arg }) => {
   switch (flag) {
     case SET:
-      return state.set(arg.name, arg.value);
+      return { ...state, ...arg };
+    case PAGE_ALL:
+      return { ...state, all: all(state.all, { arg }) };
+    case PAGE_MINE:
+      return { ...state, mine: mine(state.mine, { arg }) };
     default:
       return state;
   }

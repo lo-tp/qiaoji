@@ -17,7 +17,7 @@ import AppRouter from './router';
 import Reducer from './reducer';
 import sagaManager from './sagaManager';
 
-"use strict";
+'use strict';
 
 const sagaMiddleware = createSegaMiddleware();
 const logger = createLogger();
