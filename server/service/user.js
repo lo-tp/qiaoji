@@ -62,6 +62,7 @@ const login = async (req, res) => {
       cookie.uid = user._id;
       cookie.save();
       res.json({
+        user: user._id,
         cid: cookie._id,
       });
 

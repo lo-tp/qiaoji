@@ -57,6 +57,7 @@ function* watch() {
 export function* unauthorizeHandler() {
   browserHistory.push('/account');
   removeCpsItem('cookieId');
+  removeCpsItem('user');
   yield call(closableSnackbarMsg, 'failure.unauthorized');
 }
 

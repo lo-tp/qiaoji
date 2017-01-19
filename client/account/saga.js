@@ -135,8 +135,9 @@ function* login(action) {
         yield closableSnackbarMsg('failure.loginWrongInfo');
         removeCpsItem('cookieId');
       } else {
-        const { cid } = yield res.json();
+        const { user, cid } = yield res.json();
         saveCpsItem('cookieId', cid);
+        saveCpsItem('user', user);
         browserHistory.push('/');
         yield closableSnackbarMsg('success.login');
       }
