@@ -255,19 +255,22 @@ export function* goToPage() {
       type: 'GET_QUIZ_PAGE_COUNT',
     });
   } else {
-    if (validations.pageNumber({
-      errors: {},
-      values: { pageNumber: `${pageNumber}` },
-    }).errors.pageNumber !== undefined || pageNumber > count) {
-      yield put(setPageMeta({
-        key: 'pageNumber',
-        value: 1,
-      }));
+    if (pageNumber > count) {
+      yield put({
+        type: 'BROWSER_HISTORY',
+        purpose: 'REDIRECT',
+        url: `/functions/quiz/list/${pageMeta.get('user')}/1`,
+      });
+    } else {
+      yield put(
+        setPageMeta({
+          key: 'pageNumber',
+          value: parseInt(pageNumber, 10),
+        }));
+      yield put({
+        type: 'GET_QUIZ_PAGE_CONTENT',
+      });
     }
-
-    yield put({
-      type: 'GET_QUIZ_PAGE_CONTENT',
-    });
   }
 }
 
@@ -363,7 +366,6 @@ function* redirect({ targetPage }) {
       purpose: 'REDIRECT',
       url: `/functions/quiz/list/${pageMeta.get('user')}/${pageMeta.get('pageNumber')}`,
     });
-    console.info( `/functions/quiz/list/${pageMeta.get('user')}/${pageMeta.get('pageNumber')}`);
   }
 }
 

@@ -83,8 +83,13 @@ describe('goToPage', () => {
     actions = await sagaTestHelper(goToPage(), store);
     assert.deepEqual(actions[actions.length - 1], { type: 'GET_QUIZ_PAGE_CONTENT' });
   });
-  it('set pageNumber to 1 if the original is invalid(>count or not an integer)', async () => {
+  it('set pageNumber to 1 if the original bigger than the page count', async () => {
     // for the logedin user
+    const lastAction = {
+      type: 'BROWSER_HISTORY',
+      purpose: 'REDIRECT',
+      url: '/functions/quiz/list/all/1'
+    };
     store.dispatch(setMeta({
       currentPage: PAGE_MINE,
     }));
@@ -94,12 +99,16 @@ describe('goToPage', () => {
     }));
     store.dispatch(setPageMineMeta({
       key: 'pageNumber',
-      value: 'aaa',
+      value:1234,
+    }));
+    store.dispatch(setPageMineMeta({
+      key: 'user',
+      value: 'user',
     }));
     let actions = await sagaTestHelper(goToPage(), store);
     let meta = store.getState().app.quiz.meta;
-    assert.deepEqual(actions[actions.length - 1], { type: 'GET_QUIZ_PAGE_CONTENT' });
-    assert.equal(meta.all.get('pageNumber'), 1);
+    assert.deepEqual(actions[actions.length - 1],
+                     {...lastAction, url:'/functions/quiz/list/user/1'});
     // for the all
     store.dispatch(setMeta({
       currentPage: PAGE_ALL,
@@ -114,8 +123,7 @@ describe('goToPage', () => {
     }));
     actions = await sagaTestHelper(goToPage(), store);
     meta = store.getState().app.quiz.meta;
-    assert.deepEqual(actions[actions.length - 1], { type: 'GET_QUIZ_PAGE_CONTENT' });
-    assert.equal(meta.mine.get('pageNumber'), 1);
+    assert.deepEqual(actions[actions.length - 1], lastAction);
   });
   after(() => {
     tools.getCid.restore();
@@ -387,4 +395,3 @@ describe('getPageContent', () => {
     tools.getCid.restore();
   });
 });
-

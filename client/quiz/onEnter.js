@@ -5,7 +5,7 @@ import validations from '../../common/validations';
 
 export default {
   // eslint-disable-next-line no-unused-vars
-  all: Ramda.curry((store, nextState) => {
+  all: Ramda.curry((store, nextState, replace) => {
     let { user, pageNumber } = nextState.params;
     let setPageMeta = setPageAllMeta;
     if (user === 'all') {
@@ -13,7 +13,7 @@ export default {
         setMeta({
           currentPage: PAGE_ALL,
         }));
-    } else if(user === store.getState().app.quiz.meta.mine.get('user')) {
+    } else if (user === store.getState().app.quiz.meta.mine.get('user')) {
       setPageMeta = setPageMineMeta;
       store.dispatch(
         setMeta({
@@ -25,19 +25,18 @@ export default {
       errors: {},
       values: { pageNumber: `${pageNumber}` },
     }).errors.pageNumber !== undefined) {
-      pageNumber = 1;
+      replace(`/functions/quiz/list/${user}/1`);
     } else {
       pageNumber = parseInt(pageNumber, 10);
+      store.dispatch(
+        setPageMeta({
+          key: 'pageNumber',
+          value: pageNumber,
+        }));
+      store.dispatch({
+        type: 'GO_TO_QUIZ_OAGE',
+      });
     }
-
-    store.dispatch(
-      setPageMeta({
-        key: 'pageNumber',
-        value: pageNumber,
-      }));
-    store.dispatch({
-      type: 'GO_TO_QUIZ_OAGE',
-    });
   }),
   // eslint-disable-next-line no-unused-vars
   filteredByUser: Ramda.curry((store, nextState) => {
