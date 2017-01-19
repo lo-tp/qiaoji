@@ -9,7 +9,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
 import Question from '../model/question';
-import { dbSetupTest, dbClose } from '../setup/db';
+import { dbSetupTest, dbReset } from '../setup/db';
 import { mockData, createUerAndCookie } from '../testTools';
 import { getDaysSinceEpoch } from '../../common/tool';
 
@@ -189,7 +189,7 @@ describe('get questions for a specific user', () => {
     assert.deepEqual(expectedForGoOver, questions);
   });
   after(done => {
-    dbClose();
+    dbReset();
     done();
   });
 });
@@ -299,5 +299,9 @@ describe('update questions', () => {
       assert.equal(q.update, 399);
       assert.equal(q.goOver, false);
     });
+  });
+  after(done => {
+    dbReset();
+    done();
   });
 });

@@ -7,7 +7,7 @@ import app from '../server';
 import Quiz from '../model/quiz';
 import Answer from '../model/answer';
 import Question from '../model/question';
-import { dbSetupTest, dbClose } from '../setup/db';
+import { dbSetupTest, dbReset } from '../setup/db';
 import { mockData, createUerAndCookie } from '../testTools';
 
 chai.use(chaiHttp);
@@ -162,7 +162,7 @@ describe('create new answer', () => {
   });
 
   after(done => {
-    dbClose();
+    dbReset();
     done();
   });
 });
