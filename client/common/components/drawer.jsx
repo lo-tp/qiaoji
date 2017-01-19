@@ -4,10 +4,11 @@ import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import { PAGE_ALL, PAGE_MINE } from '../../quiz/action';
 
 import { setUi } from '../../action';
 
-const drawer = ({ choseStudyMode, close,
+const drawer = ({goToQuizMine, goToQuizAll, choseStudyMode, close,
                 open, intl: { formatMessage: fm }, children }) =>
 (
   <div
@@ -21,7 +22,7 @@ const drawer = ({ choseStudyMode, close,
       <MenuItem
         onTouchTap = {
           () => {
-            browserHistory.push('/functions/quiz/list/all');
+            goToQuizAll();
             close();
           }
         }
@@ -31,7 +32,7 @@ const drawer = ({ choseStudyMode, close,
       <MenuItem
         onTouchTap = {
           () => {
-            browserHistory.push('/functions/quiz/list/filteredByUser');
+            goToQuizMine();
             close();
           }
           }
@@ -60,6 +61,8 @@ drawer.propTypes = {
   open: PropTypes.bool,
   close: PropTypes.func,
   choseStudyMode: PropTypes.func,
+  goToQuizMine: PropTypes.func,
+  goToQuizAll: PropTypes.func,
 };
 
 export default connect(
@@ -70,5 +73,7 @@ export default connect(
     close: () => dispatch(setUi({ drawerVisible: false })),
     // eslint-disable-next-line max-len
     choseStudyMode: () => dispatch(setUi({ choseStudyModeDialogVisible: true })),
+    goToQuizAll: () => dispatch({ type: 'QUIZ_REDIRECT', targetPage: PAGE_ALL }),
+    goToQuizMine: () => dispatch({ type: 'QUIZ_REDIRECT', targetPage: PAGE_MINE }),
   })
 )(injectIntl(drawer));

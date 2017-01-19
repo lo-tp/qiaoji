@@ -29,6 +29,7 @@ function* validateItem(values) {
 
 const selectNewItem = state => state.app.quiz.item;
 const selectQuizzes = state => state.app.quiz.quizzes;
+const selectCurrentPage = state => state.app.quiz.meta.currentPage;
 const selectPageMeta = state => {
   const { quiz: { meta } } = state.app;
   switch (meta.currentPage) {
@@ -350,15 +351,32 @@ export function* getPageContent1() {
   });
 }
 
+function* redirect({ targetPage }) {
+  const currentPage = yield select(selectCurrentPage);
+  if (targetPage !== currentPage) {
+    yield put(setMeta({
+      currentPage: targetPage,
+    }));
+    const { pageMeta } = yield select(selectPageMeta);
+    yield put({
+      type: 'BROWSER_HISTORY',
+      purpose: 'REDIRECT',
+      url: `/functions/quiz/list/${pageMeta.get('user')}/${pageMeta.get('pageNumber')}`,
+    });
+    console.info( `/functions/quiz/list/${pageMeta.get('user')}/${pageMeta.get('pageNumber')}`);
+  }
+}
+
 function* watch() {
   yield takeLatest('NEW_QESTION', newQuestion);
   // yield takeLatest('GET_QUIZ_PAGE_COUNT', getPageCountAndGetFirstPage);
-  yield takeLatest('GET_QUIZ_ONE_PAGE', getPageContent);
-  yield takeLatest('EIDT_OR_CREATE_ANSWER', editOrCreateAnswer);
+  // yield takeLatest('GET_QUIZ_ONE_PAGE', getPageContent);
+  // yield takeLatest('EIDT_OR_CREATE_ANSWER', editOrCreateAnswer);
 
   yield takeLatest('GO_TO_QUIZ_OAGE', goToPage);
   yield takeLatest('GET_QUIZ_PAGE_COUNT', getPageCount);
   yield takeLatest('GET_QUIZ_PAGE_CONTENT', getPageContent1);
+  yield takeLatest('QUIZ_REDIRECT', redirect);
 }
 
 export default [watch];

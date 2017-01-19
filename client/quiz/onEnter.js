@@ -17,7 +17,7 @@ export default {
       setPageMeta = setPageMineMeta;
       store.dispatch(
         setMeta({
-          currentPage: PAGE_ALL,
+          currentPage: PAGE_MINE,
         }));
     }
 
