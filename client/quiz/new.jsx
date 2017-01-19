@@ -16,7 +16,7 @@ import { setItemPreview, setItemContent, setItemTitle } from './action';
 const GoBack = () => (
   <Back
     onTouchTap = {
-      () => browserHistory.push('/functions/quiz/list')
+      () => browserHistory.go(-1)
     }
     color = 'white'
   />
