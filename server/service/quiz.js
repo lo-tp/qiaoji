@@ -189,7 +189,7 @@ router.get('/page/content/:userId/:pageNumber', async (req, res) => {
       // eslint-disable-next-line eqeqeq
       const quiz = quizzes.find(q => q._id == a.quiz);
       // eslint-disable-next-line no-underscore-dangle
-      quiz._doc.answer = a;
+      quiz.answer = a;
     });
     res.json({
       quizzes,
