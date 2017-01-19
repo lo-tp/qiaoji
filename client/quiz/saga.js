@@ -373,7 +373,7 @@ function* watch() {
   yield takeLatest('NEW_QESTION', newQuestion);
   // yield takeLatest('GET_QUIZ_PAGE_COUNT', getPageCountAndGetFirstPage);
   // yield takeLatest('GET_QUIZ_ONE_PAGE', getPageContent);
-  // yield takeLatest('EIDT_OR_CREATE_ANSWER', editOrCreateAnswer);
+  yield takeLatest('EIDT_OR_CREATE_ANSWER', editOrCreateAnswer);
 
   yield takeLatest('GO_TO_QUIZ_OAGE', goToPage);
   yield takeLatest('GET_QUIZ_PAGE_COUNT', getPageCount);
