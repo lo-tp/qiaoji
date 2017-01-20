@@ -124,63 +124,6 @@ export function* getPageCountAndGetFirstPage({ belong = 0 }) {
   });
 }
 
-export function* getPageContent({ pageNumber, belong = 0 }) {
-  const query = {
-    pageNumber: pageNumber - 1,
-    belong,
-  };
-  const req = new Request(
-    `${SERVER_URL}/functions/quiz/page/content?${getQueryString(query)}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        cookieId: getCid(),
-      },
-    }
-  );
-  yield call(authorizedOperation, {
-    req,
-    operationName: 'getPageContent',
-    * successHandler(res) {
-      if (res.status === 500) {
-        yield closableSnackbarMsg('failure.getPageContent');
-      } else {
-        const { count, quizzes } = yield res.json();
-        const pages = [];
-        const content = [];
-        quizzes.forEach(q => {
-          const _id = q._id;
-
-          // eslint-disable-next-line no-param-reassign
-          delete q._id;
-          pages.push(_id);
-          content.push(q);
-        });
-        for (let i = 0; i < count; i += 1) {
-          yield put(
-          setQuizzes({
-            name: pages[i],
-            value: content[i],
-          }));
-        }
-
-        yield put(
-          setMeta({
-            name: 'pages',
-            value: Immutable.List(pages),
-          })
-        );
-        yield put(setMeta({
-          name: 'pageNumber',
-          value: pageNumber,
-        }));
-      }
-    },
-  });
-}
-
 export function* editOrCreateAnswer({ create, content, quizId, answerId }) {
   if (validations.content({ errors: {}, values: { content } }).errors.content) {
     yield closableSnackbarMsg('validation.general');
@@ -308,7 +251,7 @@ export function* getPageCount() {
   });
 }
 
-export function* getPageContent1() {
+export function* getPageContent() {
   const { pageMeta, setPageMeta } = yield select(selectPageMeta);
   const user = pageMeta.get('user');
   const pageNumber = pageMeta.get('pageNumber');
@@ -375,7 +318,7 @@ function* watch() {
 
   yield takeLatest('GO_TO_QUIZ_OAGE', goToPage);
   yield takeLatest('GET_QUIZ_PAGE_COUNT', getPageCount);
-  yield takeLatest('GET_QUIZ_PAGE_CONTENT', getPageContent1);
+  yield takeLatest('GET_QUIZ_PAGE_CONTENT', getPageContent);
   yield takeLatest('QUIZ_REDIRECT', redirect);
 }
 
