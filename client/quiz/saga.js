@@ -254,23 +254,21 @@ export function* goToPage() {
     yield put({
       type: 'GET_QUIZ_PAGE_COUNT',
     });
+  } else if (pageNumber > count) {
+    yield put({
+      type: 'BROWSER_HISTORY',
+      purpose: 'REDIRECT',
+      url: `/functions/quiz/list/${pageMeta.get('user')}/1`,
+    });
   } else {
-    if (pageNumber > count) {
-      yield put({
-        type: 'BROWSER_HISTORY',
-        purpose: 'REDIRECT',
-        url: `/functions/quiz/list/${pageMeta.get('user')}/1`,
-      });
-    } else {
-      yield put(
+    yield put(
         setPageMeta({
           key: 'pageNumber',
           value: parseInt(pageNumber, 10),
         }));
-      yield put({
-        type: 'GET_QUIZ_PAGE_CONTENT',
-      });
-    }
+    yield put({
+      type: 'GET_QUIZ_PAGE_CONTENT',
+    });
   }
 }
 

@@ -18,7 +18,7 @@ import Immutable from 'immutable';
 import 'isomorphic-fetch';
 
 import Reducer from '../reducer';
-import { getPageCount, goToPage, editOrCreateAnswer, getPageContent1 as getPageContent } from './saga';
+import { getPageCount, goToPage, getPageContent1 as getPageContent } from './saga';
 import { setMeta, setPageMineMeta, setPageAllMeta,
   PAGE_ALL, PAGE_MINE } from './action';
 import { sagaTestHelper } from '../common/utilities/testTool';
@@ -88,7 +88,7 @@ describe('goToPage', () => {
     const lastAction = {
       type: 'BROWSER_HISTORY',
       purpose: 'REDIRECT',
-      url: '/functions/quiz/list/all/1'
+      url: '/functions/quiz/list/all/1',
     };
     store.dispatch(setMeta({
       currentPage: PAGE_MINE,
@@ -99,16 +99,15 @@ describe('goToPage', () => {
     }));
     store.dispatch(setPageMineMeta({
       key: 'pageNumber',
-      value:1234,
+      value: 1234,
     }));
     store.dispatch(setPageMineMeta({
       key: 'user',
       value: 'user',
     }));
     let actions = await sagaTestHelper(goToPage(), store);
-    let meta = store.getState().app.quiz.meta;
     assert.deepEqual(actions[actions.length - 1],
-                     {...lastAction, url:'/functions/quiz/list/user/1'});
+                     { ...lastAction, url: '/functions/quiz/list/user/1' });
     // for the all
     store.dispatch(setMeta({
       currentPage: PAGE_ALL,
@@ -122,7 +121,6 @@ describe('goToPage', () => {
       value: 1000,
     }));
     actions = await sagaTestHelper(goToPage(), store);
-    meta = store.getState().app.quiz.meta;
     assert.deepEqual(actions[actions.length - 1], lastAction);
   });
   after(() => {

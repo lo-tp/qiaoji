@@ -6,6 +6,7 @@ import validations from '../../common/validations';
 export default {
   // eslint-disable-next-line no-unused-vars
   all: Ramda.curry((store, nextState, replace) => {
+  // eslint-disable-next-line prefer-const
     let { user, pageNumber } = nextState.params;
     let setPageMeta = setPageAllMeta;
     if (user === 'all') {

@@ -134,5 +134,6 @@ export default connect(
   }),
     (stateProps, dispatchProps) => ({
       ...stateProps,
-      turnPage: value => dispatchProps.turnPage(stateProps.setPageMeta, value, stateProps.path),
+      turnPage: value => dispatchProps.turnPage(stateProps.setPageMeta,
+                                                value, stateProps.path),
     }))(List);

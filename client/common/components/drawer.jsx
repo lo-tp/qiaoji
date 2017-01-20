@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { browserHistory } from 'react-router';
 import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Drawer from 'material-ui/Drawer';
@@ -8,7 +7,7 @@ import { PAGE_ALL, PAGE_MINE } from '../../quiz/action';
 
 import { setUi } from '../../action';
 
-const drawer = ({goToQuizMine, goToQuizAll, choseStudyMode, close,
+const drawer = ({ goToQuizMine, goToQuizAll, choseStudyMode, close,
                 open, intl: { formatMessage: fm }, children }) =>
 (
   <div
