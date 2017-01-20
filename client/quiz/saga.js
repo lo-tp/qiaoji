@@ -2,7 +2,6 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions,import/no-extraneous-dependencies
 import SERVER_URL from 'app-config';
 import 'whatwg-fetch';
-import Immutable from 'immutable';
 import { put, select, call, takeLatest } from 'redux-saga/effects';
 import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import validations, { quizValidation } from '../../common/validations';

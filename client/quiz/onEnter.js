@@ -1,11 +1,11 @@
 import Ramda from 'ramda';
-import { setPageAllMeta, setMeta, setPageMineMeta, setItemTitle, setItemContent,
-  PAGE_ALL, PAGE_MINE, startCreating, startEditing } from './action';
+import { setPageAllMeta, setItemPreview, setMeta, setPageMineMeta, setItemTitle,
+  setItemContent, PAGE_ALL, PAGE_MINE, startCreating, startEditing } from './action';
 import validations from '../../common/validations';
 
 export default {
   // eslint-disable-next-line no-unused-vars
-  all: Ramda.curry((store, nextState, replace) => {
+  checkQuizzes: Ramda.curry((store, nextState, replace) => {
   // eslint-disable-next-line prefer-const
     let { user, pageNumber } = nextState.params;
     let setPageMeta = setPageAllMeta;
@@ -40,24 +40,20 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  filteredByUser: Ramda.curry((store, nextState) => {
-    // store.dispatch({
-    // type: 'GET_QUIZ_PAGE_COUNT',
-    // belong: 1,
-    // });
-  }),
-  // eslint-disable-next-line no-unused-vars
   newAnswer: Ramda.curry((store, nextState) => {
     store.dispatch(startCreating);
     store.dispatch(setItemContent(''));
+    store.dispatch(setItemPreview(false));
   }),
   // eslint-disable-next-line no-unused-vars
   editAnswer: Ramda.curry((store, nextState) => {
     store.dispatch(startEditing);
+    store.dispatch(setItemPreview(false));
   }),
   // eslint-disable-next-line no-unused-vars
   newQuiz: Ramda.curry((store, nextState) => {
     store.dispatch(setItemContent(''));
     store.dispatch(setItemTitle(''));
+    store.dispatch(setItemPreview(false));
   }),
 };

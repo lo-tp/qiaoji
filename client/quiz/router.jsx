@@ -18,11 +18,7 @@ const Quiz = (
       <IndexRedirect to = 'all/1' />
       <Route
         path = ':user/:pageNumber'
-        onEnter = { onEnter.all }
-      />
-      <Route
-        path = 'filteredByUser'
-        onEnter = { onEnter.filteredByUser }
+        onEnter = { onEnter.checkQuizzes }
       />
     </Route>
     <Route
