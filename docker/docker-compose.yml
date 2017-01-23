@@ -4,7 +4,8 @@ services:
     container_name: qjDb
     image: mongo:3.2.8
     volumes:
-      - ./db/ :/data/db/
+      - ./db/:/data/db/
+      - ./transfer/:/tmp/
     ports:
       - "27000:27017"
     command: [mongod]
