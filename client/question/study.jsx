@@ -5,9 +5,13 @@ import Error from 'material-ui/svg-icons/alert/error';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import Help from 'material-ui/svg-icons/action/help';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MenuItem from 'material-ui/MenuItem';
 import { injectIntl, intlShape } from 'react-intl';
 import Divider from 'material-ui/Divider';
 import { connect } from 'react-redux';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
 import AppBar from '../common/components/appBar';
 import { shrinkStyle, parentStyle } from '../common/styles';
 import Preview from '../common/components/markdown/preview';
@@ -17,6 +21,29 @@ const recentsIcon = <Visibility />;
 const favoritesIcon = <Error />;
 const nearbyIcon = <Star />;
 const unsure = <Help />;
+
+const m = ({ otherProp, intl: { formatMessage: fm } }) => (
+  <IconMenu
+    iconButtonElement = { <IconButton><MoreVertIcon color = 'white' /></IconButton> }
+    anchorOrigin = { { horizontal: 'right', vertical: 'top' } }
+    targetOrigin = { { horizontal: 'right', vertical: 'top' } }
+  >
+    <MenuItem
+      onTouchTap = { otherProp.save }
+      primaryText = { fm({ id: 'menu.save' }) }
+    />
+  </IconMenu>
+);
+
+m.propTypes = {
+  intl: intlShape.isRequired,
+  otherProp: PropTypes.object,
+};
+const menu = connect(
+  ({ app: { quiz: { item: { preview } } } }) => ({
+    status: preview,
+  }),
+)(injectIntl(m));
 
 class n extends React.Component {
   constructor(props) {
@@ -121,6 +148,10 @@ class n extends React.Component {
       >
         <AppBar
           title = 'appbar.study'
+          Menu = { menu }
+          menuProp = { {
+            save: () => this.props.finish(this.progress),
+          } }
         />
         <h4 >
           {this.props.questions[this.state.index].quiz.title }
