@@ -67,4 +67,5 @@ export default {
   'notice.noAnswerYet': '您还未为此题添加解答',
   'notice.zeroQuestion': '今日题目已全部复习',
   'appbar.study': '学习',
+  'appbar.remaining': '剩余: ',
 };

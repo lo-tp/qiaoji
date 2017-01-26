@@ -24,12 +24,12 @@ const OpenDrawer = connect(
   }),
 )(openDrawer);
 
-const appBar = ({ menuProp, LeftBtn = OpenDrawer, Menu, title,
+const appBar = ({ plainTitle, menuProp, LeftBtn = OpenDrawer, Menu, title,
   intl: { formatMessage: fm } }) =>
 (
   <AppBar
     style = { { ...noShrinkStyle } }
-    title = { fm({ id: title }) }
+    title = { plainTitle || fm({ id: title }) }
     iconElementLeft = { <IconButton><LeftBtn /></IconButton> }
     iconElementRight = { Menu ? <Menu otherProp = { menuProp } /> : null }
   />
@@ -38,6 +38,7 @@ const appBar = ({ menuProp, LeftBtn = OpenDrawer, Menu, title,
 appBar.propTypes = {
   LeftBtn: PropTypes.func,
   title: PropTypes.string,
+  plainTitle: PropTypes.string,
   intl: intlShape.isRequired,
   Menu: PropTypes.func,
   menuProp: PropTypes.object,

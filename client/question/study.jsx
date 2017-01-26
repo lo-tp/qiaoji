@@ -140,6 +140,7 @@ class n extends React.Component {
 
   render() {
     const { answer } = this.props.questions[this.state.index];
+    const plainTitle = `${this.fm({ id: 'appbar.remaining' })}${this.props.questions.length - this.state.index}`;
     return (
       <div
         style = { { ...parentStyle,
@@ -148,6 +149,7 @@ class n extends React.Component {
       >
         <AppBar
           title = 'appbar.study'
+          plainTitle = { plainTitle }
           Menu = { menu }
           menuProp = { {
             save: () => this.props.finish(this.progress),
