@@ -7,6 +7,7 @@ import { authorizedOperation, closableSnackbarMsg } from '../saga';
 import { getCid, getQueryString } from '../common/utilities/tool';
 import { setQuestions } from './action';
 import { setUi, setChoiceDialog } from '../action';
+import { shuffle } from '../../common/tool';
 
 // const selectNewItem = state => state.app.quiz.item;
 
@@ -31,6 +32,7 @@ export function* getQuestion({ goOver }) {
         yield closableSnackbarMsg('failure.getQuestion');
       } else {
         const { questions } = yield res.json();
+        shuffle(questions);
         yield put(setQuestions(questions));
         if (questions.length) {
           yield put({

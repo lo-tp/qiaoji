@@ -108,7 +108,9 @@ describe('getQuestion', () => {
     assert.deepEqual(actions[actions.length - 2], { ...redirectAction,
       url: '/functions/question/study/normal',
     });
-    assert.deepEqual(questions, app.question.questions);
+    app.question.questions.forEach(q => {
+      assert.notEqual(questions.findIndex(x => x.id === q.id), -1);
+    });
   });
   it('status: 200 go over mode', async () => {
     for (let index = 0; index < 10; index += 1) {
@@ -144,7 +146,9 @@ describe('getQuestion', () => {
     assert.deepEqual(actions[actions.length - 2], { ...redirectAction,
       url: '/functions/question/study/goOver',
     });
-    assert.deepEqual(questions, app.question.questions);
+    app.question.questions.forEach(q => {
+      assert.notEqual(questions.findIndex(x => x.id === q.id), -1);
+    });
   });
   it('status 200: 0 question', async () => {
     nock(SERVER_URL, {
