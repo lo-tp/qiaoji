@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { injectIntl, intlShape } from 'react-intl';
+import { setChoiceDialog } from '../../action';
 
 const Btn = ({ label, click }) => (
   <FlatButton
@@ -23,7 +24,11 @@ const dialog = ({ visible, text, title, leftBtnText, leftBtnAction,
       actions = { [
         <Btn
           label = { fm(leftBtnText) }
-          click = { () => dispatch(leftBtnAction) }
+          click = { () => {
+            dispatch(leftBtnAction);
+            dispatch(setChoiceDialog({ visible: false }));
+          } }
+
         />,
         <Btn
           label = { fm(rightBtnText) }
