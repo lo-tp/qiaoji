@@ -2,7 +2,7 @@
 --ignore-file=match:-yarn,lock
 --ignore-file=match:-*.js.js.map 
 --ignore-dir=test 
---ignore-dir=\static 
+--ignore-dir=static 
 --ignore-dir=node_modules 
 --ignore-dir=bin 
 --ignore-dir=\.git 

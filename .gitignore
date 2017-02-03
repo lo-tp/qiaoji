@@ -55,4 +55,5 @@ static/*.js
 static/themes/
 static/semantic.css
 docker/db/
+docker/db.bk/
 docker/transfer/
